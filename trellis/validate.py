@@ -1,10 +1,12 @@
-"""Cross-validation: every card must hang off the skeleton correctly."""
+"""Cross-validation: every card and reading must hang off the skeleton
+correctly."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 
 from .cards import Card
+from .readings import Reading
 from .skeleton import Skeleton
 
 
@@ -18,8 +20,21 @@ class Report:
         return not self.errors
 
 
-def validate(skeleton: Skeleton, cards: list[Card], card_errors: list[str]) -> Report:
-    report = Report(errors=list(card_errors))
+def validate(
+    skeleton: Skeleton,
+    cards: list[Card],
+    card_errors: list[str],
+    readings: list[Reading] | None = None,
+    reading_errors: list[str] | None = None,
+) -> Report:
+    report = Report(errors=list(card_errors) + list(reading_errors or []))
+
+    for reading in readings or []:
+        for node_id in reading.nodes:
+            if node_id not in skeleton.by_id:
+                report.errors.append(
+                    f"{reading.path}: node {node_id!r} not in skeleton"
+                )
 
     seen: dict[str, Card] = {}
     for card in cards:

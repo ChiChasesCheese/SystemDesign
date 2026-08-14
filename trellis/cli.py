@@ -17,6 +17,7 @@ from pathlib import Path
 
 from .build import build_package
 from .cards import load_cards
+from .readings import load_readings
 from .scaffold import import_cards, scaffold_prompt
 from .skeleton import Skeleton, SkeletonError, load_skeleton
 from .sync import sync
@@ -50,7 +51,11 @@ def _load(root: Path, domain: str):
         _fail(str(exc))
     cards_dir = root / "vault" / domain / "cards"
     cards, card_errors = load_cards(cards_dir) if cards_dir.exists() else ([], [])
-    return skeleton, cards, card_errors
+    readings_dir = root / "vault" / domain / "readings"
+    readings, reading_errors = (
+        load_readings(readings_dir) if readings_dir.exists() else ([], [])
+    )
+    return skeleton, cards, card_errors, readings, reading_errors
 
 
 def _print_report(report) -> None:
@@ -61,22 +66,23 @@ def _print_report(report) -> None:
 
 
 def cmd_validate(args) -> int:
-    skeleton, cards, card_errors = _load(args.root, args.domain)
-    report = validate(skeleton, cards, card_errors)
+    skeleton, cards, card_errors, readings, reading_errors = _load(args.root, args.domain)
+    report = validate(skeleton, cards, card_errors, readings, reading_errors)
     _print_report(report)
     nodes = len(skeleton.walk())
     print(f"{skeleton.title}: {nodes} nodes, {len(cards)} cards, "
+          f"{len(readings)} readings, "
           f"{len(report.errors)} error(s), {len(report.warnings)} warning(s)")
     return 0 if report.ok else 1
 
 
 def cmd_sync(args) -> int:
-    skeleton, cards, card_errors = _load(args.root, args.domain)
-    report = validate(skeleton, cards, card_errors)
+    skeleton, cards, card_errors, readings, reading_errors = _load(args.root, args.domain)
+    report = validate(skeleton, cards, card_errors, readings, reading_errors)
     if not report.ok:
         _print_report(report)
         _fail("fix validation errors before syncing")
-    result = sync(skeleton, cards, args.root / "vault" / skeleton.domain)
+    result = sync(skeleton, cards, args.root / "vault" / skeleton.domain, readings)
     print(f"updated {len(result['written'])} note(s)")
     for orphan in result["orphans"]:
         print(f"warning: orphan map note (node no longer in skeleton): {orphan}")
@@ -84,8 +90,8 @@ def cmd_sync(args) -> int:
 
 
 def cmd_build(args) -> int:
-    skeleton, cards, card_errors = _load(args.root, args.domain)
-    report = validate(skeleton, cards, card_errors)
+    skeleton, cards, card_errors, readings, reading_errors = _load(args.root, args.domain)
+    report = validate(skeleton, cards, card_errors, readings, reading_errors)
     if not report.ok:
         _print_report(report)
         _fail("fix validation errors before building")
@@ -98,9 +104,10 @@ def cmd_build(args) -> int:
 
 
 def cmd_stats(args) -> int:
-    skeleton, cards, card_errors = _load(args.root, args.domain)
+    skeleton, cards, card_errors, readings, _ = _load(args.root, args.domain)
     per_node = Counter(c.node for c in cards)
-    print(f"{skeleton.title} — {len(cards)} cards, {len(card_errors)} unparseable")
+    print(f"{skeleton.title} — {len(cards)} cards, {len(readings)} readings, "
+          f"{len(card_errors)} unparseable")
     for root_node in skeleton.roots:
         subtree = [root_node] + [n for n in skeleton.walk()
                                  if n.id.startswith(root_node.id + ".")]
@@ -113,7 +120,7 @@ def cmd_stats(args) -> int:
 
 
 def cmd_scaffold(args) -> int:
-    skeleton, cards, _ = _load(args.root, args.domain)
+    skeleton, cards, _, _, _ = _load(args.root, args.domain)
     if args.node not in skeleton.by_id:
         _fail(f"unknown node {args.node!r}")
     prompt = scaffold_prompt(skeleton, args.node, cards, count=args.count)
@@ -126,7 +133,7 @@ def cmd_scaffold(args) -> int:
 
 
 def cmd_import(args) -> int:
-    skeleton, cards, card_errors = _load(args.root, args.domain)
+    skeleton, cards, card_errors, _, _ = _load(args.root, args.domain)
     if card_errors:
         for e in card_errors:
             print(f"error: {e}", file=sys.stderr)

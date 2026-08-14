@@ -10,6 +10,7 @@ import pytest
 
 from trellis.build import build_package
 from trellis.cards import load_cards
+from trellis.readings import load_readings
 from trellis.scaffold import import_cards, scaffold_prompt
 from trellis.skeleton import load_skeleton
 from trellis.sync import BEGIN, END, sync
@@ -142,8 +143,27 @@ def test_import_is_all_or_nothing(project):
 def test_real_repo_content_validates_and_builds(tmp_path):
     skeleton = load_skeleton(REPO / "skeleton" / "system-design.yaml")
     cards, errors = load_cards(REPO / "vault" / "system-design" / "cards")
-    report = validate(skeleton, cards, errors)
+    readings, reading_errors = load_readings(REPO / "vault" / "system-design" / "readings")
+    report = validate(skeleton, cards, errors, readings, reading_errors)
     assert report.errors == []
     assert len(cards) >= 50
+    assert len(readings) >= 5
     result = build_package(skeleton, cards, tmp_path / "out.apkg")
     assert result["notes"] == len(cards)
+
+
+def test_real_repo_wikilinks_resolve():
+    """Every [[wikilink]] in cards and readings must point at an existing
+    card, reading, or map note."""
+    import re
+    cards, _ = load_cards(REPO / "vault" / "system-design" / "cards")
+    skeleton = load_skeleton(REPO / "skeleton" / "system-design.yaml")
+    readings, _ = load_readings(REPO / "vault" / "system-design" / "readings")
+    targets = ({c.id for c in cards} | {r.link_target for r in readings}
+               | {n.id for n in skeleton.walk()})
+    link_re = re.compile(r"\[\[([^\]|#]+)")
+    for path in (REPO / "vault" / "system-design").rglob("*.md"):
+        if "map" in path.parts:
+            continue
+        for target in link_re.findall(path.read_text(encoding="utf-8")):
+            assert target.strip() in targets, f"{path}: dangling link [[{target}]]"

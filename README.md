@@ -1,14 +1,22 @@
 # Trellis
 
-Skeleton-constrained knowledge cards. One YAML mind map defines the topics, their
-study order, and their prerequisite edges; flashcards are Obsidian-native markdown
-files attached to the map's leaves; the build compiles everything into an Anki
-`.apkg` you can re-import forever without duplicates.
+Skeleton-constrained knowledge base. One YAML mind map defines the topics, their
+study order, and their prerequisite edges. Two kinds of content attach to its
+nodes, both plain Obsidian markdown:
 
-Ships with a **System Design** domain: a 59-node map covering the classic
-interview canon plus what the 2017-era resources miss — consensus, delivery
-semantics, idempotency/outbox/saga/ledger patterns, SLOs, multi-region, and
-AI-serving infrastructure.
+- **Cards** — atomic Q&A / cloze fragments for spare-time review; the build
+  compiles them into an Anki `.apkg` you can re-import forever without duplicates.
+- **Readings** — long-form, authoritative material (papers, engineering-blog
+  essays, book chapters) for systematic study; a reading can span several nodes.
+
+Cards and readings reference each other with ordinary wikilinks, and every node's
+generated map note lists both — so the Obsidian graph connects topic ↔ reading ↔
+card.
+
+Ships with a **System Design** domain: a 59-node map (153 cards, 11 readings,
+every leaf covered) spanning the classic interview canon plus what the 2017-era
+resources miss — consensus, delivery semantics, idempotency/outbox/saga/ledger
+patterns, SLOs, multi-region, and AI-serving infrastructure.
 
 ## Why a skeleton
 
@@ -63,7 +71,22 @@ jittered/early refresh so keys never expire under full load.
 ```
 
 Cloze cards drop the Q/A sections and use Anki syntax in the body:
-`{{c1::W + R > N}}`.
+`{{c1::W + R > N}}`. Wikilinks are allowed and render as styled plain text in
+Anki.
+
+## Reading format
+
+One file per reading under `vault/<domain>/readings/`; `nodes` may list several
+topics:
+
+```markdown
+---
+nodes: [async.log, async.streaming]
+url: https://engineering.linkedin.com/...
+---
+# The Log: What every software engineer should know
+Why read, what to extract, and wikilinks to related cards.
+```
 
 ## Growing content with an LLM
 

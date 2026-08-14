@@ -11,6 +11,7 @@ Stability guarantees that make re-import safe:
 from __future__ import annotations
 
 import hashlib
+import re
 from pathlib import Path
 
 import genanki
@@ -48,6 +49,7 @@ hr#answer { border: none; border-top: 2px solid #7aa2f7; margin: 16px 0; }
 table { border-collapse: collapse; }
 td, th { border: 1px solid #999; padding: 4px 10px; }
 .cloze { font-weight: 600; color: #4576f5; }
+.ref { color: #7aa2f7; font-style: italic; }
 """
 
 
@@ -55,7 +57,13 @@ def _stable_id(name: str) -> int:
     return int(hashlib.md5(name.encode("utf-8")).hexdigest()[:8], 16)
 
 
+_WIKILINK_RE = re.compile(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]")
+
+
 def _html(text: str) -> str:
+    # Obsidian wikilinks have nowhere to point inside Anki; render the
+    # display text as a styled reference instead.
+    text = _WIKILINK_RE.sub(lambda m: f'<span class="ref">{m.group(2) or m.group(1)}</span>', text)
     _MD.reset()
     return _MD.convert(text)
 

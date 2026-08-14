@@ -18,6 +18,7 @@ import re
 from pathlib import Path
 
 from .cards import Card
+from .readings import Reading
 from .skeleton import Node, Skeleton
 
 BEGIN = "%% trellis:begin %%"
@@ -42,7 +43,9 @@ def _moc_body(skeleton: Skeleton) -> str:
     return "\n".join(lines)
 
 
-def _node_body(skeleton: Skeleton, node: Node, cards: list[Card]) -> str:
+def _node_body(
+    skeleton: Skeleton, node: Node, cards: list[Card], readings: list[Reading]
+) -> str:
     crumbs = " / ".join(n.title for n in node.path()[:-1])
     lines = [f"# {node.title}"]
     if crumbs:
@@ -59,6 +62,10 @@ def _node_body(skeleton: Skeleton, node: Node, cards: list[Card]) -> str:
     dependents = [n for n in skeleton.walk() if node.id in n.requires]
     if dependents:
         lines += ["", "**Unlocks:** " + ", ".join(_link(d) for d in dependents)]
+    node_readings = [r for r in readings if node.id in r.nodes]
+    if node_readings:
+        lines += ["", "## Readings"]
+        lines += [f"- [[{r.link_target}|{r.title}]]" for r in node_readings]
     node_cards = [c for c in cards if c.node == node.id]
     if node_cards:
         lines += ["", f"## Cards ({len(node_cards)})"]
@@ -85,8 +92,14 @@ def _write_managed(path: Path, body: str) -> bool:
     return True
 
 
-def sync(skeleton: Skeleton, cards: list[Card], vault_dir: str | Path) -> dict:
+def sync(
+    skeleton: Skeleton,
+    cards: list[Card],
+    vault_dir: str | Path,
+    readings: list[Reading] | None = None,
+) -> dict:
     """Regenerate map notes. Returns {'written': [...], 'orphans': [...]}."""
+    readings = readings or []
     vault = Path(vault_dir)
     map_dir = vault / "map"
     written: list[str] = []
@@ -97,7 +110,7 @@ def sync(skeleton: Skeleton, cards: list[Card], vault_dir: str | Path) -> dict:
 
     for node in skeleton.walk():
         path = map_dir / f"{node.id}.md"
-        if _write_managed(path, _node_body(skeleton, node, cards)):
+        if _write_managed(path, _node_body(skeleton, node, cards, readings)):
             written.append(str(path))
 
     known = {f"{n.id}.md" for n in skeleton.walk()}
