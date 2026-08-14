@@ -195,19 +195,24 @@ def test_real_repo_content_validates_and_builds(tmp_path):
 
 
 def test_real_repo_wikilinks_resolve():
-    """Every [[wikilink]] in cards and readings must point at an existing
-    card, reading, or map note."""
+    """Every [[wikilink]] in any domain's cards, readings, and drills must
+    point at an existing card, reading, drill, or map note. Targets are
+    pooled across domains because vault/ is one Obsidian vault."""
     import re
     from trellis.drills import load_drills
-    cards, _ = load_cards(REPO / "vault" / "system-design" / "cards")
-    skeleton = load_skeleton(REPO / "skeleton" / "system-design.yaml")
-    readings, _ = load_readings(REPO / "vault" / "system-design" / "readings")
-    drills, _ = load_drills(REPO / "vault" / "system-design" / "drills")
-    targets = ({c.id for c in cards} | {r.link_target for r in readings}
-               | {d.link_target for d in drills} | {n.id for n in skeleton.walk()})
+    targets: set[str] = set()
+    for skel_file in (REPO / "skeleton").glob("*.yaml"):
+        skeleton = load_skeleton(skel_file)
+        targets |= {n.id for n in skeleton.walk()}
+        vault = REPO / "vault" / skeleton.domain
+        for loader, sub in ((load_cards, "cards"), (load_readings, "readings"),
+                            (load_drills, "drills")):
+            if (vault / sub).exists():
+                items, _ = loader(vault / sub)
+                targets |= {getattr(i, "id", None) or i.link_target for i in items}
     link_re = re.compile(r"\[\[([^\]|#]+)")
-    for path in (REPO / "vault" / "system-design").rglob("*.md"):
-        if "map" in path.parts:
+    for path in (REPO / "vault").rglob("*.md"):
+        if "map" in path.parts or path.name in ("Study Path.md",):
             continue
         for target in link_re.findall(path.read_text(encoding="utf-8")):
             assert target.strip() in targets, f"{path}: dangling link [[{target}]]"
