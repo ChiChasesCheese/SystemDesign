@@ -87,6 +87,9 @@ nodes:
       - id: storage.search
         title: Search Indexes
         summary: Inverted indexes, relevance basics, and keeping a search cluster in sync with the source of truth.
+      - id: storage.encoding
+        title: Encoding & Evolution
+        summary: Data formats as contracts between code versions — JSON, Protobuf, Avro; forward and backward compatibility rules.
 
   - id: distributed
     title: Distributed Data
@@ -116,6 +119,10 @@ nodes:
       - id: distributed.time
         title: Clocks & Ordering
         summary: Why wall clocks lie, logical clocks, and detecting failure with timeouts you can defend.
+      - id: distributed.crdt
+        title: CRDTs & Local-First
+        summary: Conflict-free replicated data types, merge semantics, and offline-capable multi-writer apps.
+        requires: [distributed.replication]
 
   - id: async
     title: Async & Streaming
@@ -134,6 +141,26 @@ nodes:
       - id: async.streaming
         title: Stream Processing & CDC
         summary: Change data capture, materialized views, windows, and keeping derived data fresh.
+
+  - id: analytics
+    title: Analytics & Derived Data
+    summary: The OLAP side of the house — batch, warehouses, and every dataset derived from a system of record.
+    children:
+      - id: analytics.olap
+        title: OLTP vs OLAP & Columnar
+        summary: Why analytical scans want column layout, compression, and vectorized execution instead of B-trees.
+        requires: [storage.internals]
+      - id: analytics.warehouse
+        title: Warehouses & Lakehouses
+        summary: Warehouse vs data lake vs lakehouse; open table formats (Iceberg/Delta) over object storage.
+        requires: [storage.object]
+      - id: analytics.batch
+        title: Batch Processing
+        summary: MapReduce lineage to Spark; shuffles, distributed joins, idempotent reruns, and batch vs stream boundaries.
+      - id: analytics.derived
+        title: Derived Data & Materialized Views
+        summary: Treating caches, indexes, and views as recomputable projections of a log — and keeping them fresh.
+        requires: [async.log]
 
   - id: correctness
     title: Correctness Patterns
@@ -166,6 +193,7 @@ nodes:
       - id: architecture.discovery
         title: Service Discovery & Contracts
         summary: Registries, health checking, API versioning, and evolving schemas without breaking consumers.
+        requires: [storage.encoding]
       - id: architecture.serverless
         title: Serverless
         summary: FaaS execution model, cold starts, and where per-request pricing beats owning servers.

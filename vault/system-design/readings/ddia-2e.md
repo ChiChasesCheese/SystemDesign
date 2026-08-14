@@ -1,18 +1,27 @@
 ---
-nodes: [storage.internals, distributed.replication, distributed.transactions, async.streaming]
+nodes: [storage.internals, storage.encoding, distributed.replication, distributed.transactions, analytics.batch, async.streaming]
 url: https://dataintensive.net/
 tags: [book, canonical]
 ---
 # Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)
 
-The systematic backbone for the entire Storage / Distributed Data / Async
-region of this map — the cards are recall hooks for what these chapters
-explain properly. The 2nd edition adds cloud-native architecture
-(storage–compute separation, object storage) and AI-era data systems.
+The systematic backbone for the Storage / Distributed Data / Async / Analytics
+region of this map — the cards are recall hooks for what these chapters explain
+properly. The 2nd edition adds cloud-native architecture, CRDTs/local-first,
+and AI-era data systems.
 
-**Reading order against this map:**
-- Storage engines (B-trees vs LSM) → `storage.internals`
-- Replication + Partitioning → `distributed.replication`, `distributed.partitioning`
-- Transactions → `distributed.transactions`
-- The trouble with distributed systems → `distributed.time`
-- Derived data / stream processing → `async.streaming`
+**Chapter map against this skeleton:**
+
+| DDIA 2e | Node |
+|---|---|
+| Ch 1–2 Trade-offs, Nonfunctional Requirements | `foundations.tradeoffs`, `foundations.method` |
+| Ch 3 Data Models & Query Languages | `storage.nosql`, `storage.relational` |
+| Ch 4 Storage & Retrieval | `storage.internals`, `analytics.olap` |
+| Ch 5 Encoding & Evolution | `storage.encoding`, `architecture.discovery` |
+| Ch 6 Replication (incl. CRDTs/local-first) | `distributed.replication`, `distributed.crdt` |
+| Ch 7 Sharding | `distributed.partitioning` |
+| Ch 8 Transactions | `distributed.transactions` |
+| Ch 9–10 Failures, Consistency & Consensus | `distributed.time`, `distributed.consistency`, `distributed.consensus` |
+| Ch 11 Batch Processing | `analytics.batch` |
+| Ch 12 Stream Processing | `async.streaming`, `async.log` |
+| Ch 13–14 Derived State | `analytics.derived`, `analytics.warehouse` |
