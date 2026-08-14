@@ -1,0 +1,213 @@
+"""End-to-end tests over a tiny fixture project, plus a guard that the
+real repo content always validates and builds."""
+
+import json
+import sqlite3
+import zipfile
+from pathlib import Path
+
+import pytest
+
+from trellis.build import build_package
+from trellis.cards import load_cards
+from trellis.readings import load_readings
+from trellis.scaffold import import_cards, scaffold_prompt
+from trellis.skeleton import load_skeleton
+from trellis.sync import BEGIN, END, sync
+from trellis.validate import validate
+
+REPO = Path(__file__).resolve().parent.parent
+
+SKELETON = """
+domain: demo
+title: Demo
+nodes:
+  - id: beta
+    title: Beta
+  - id: alpha
+    title: Alpha
+    children:
+      - id: alpha.one
+        title: One
+        summary: First topic.
+      - id: alpha.two
+        title: Two
+        requires: [beta]
+"""
+
+CARD = """---
+id: alpha-sample
+node: alpha.one
+type: qa
+---
+## Q
+What is X?
+
+## A
+`X` is **Y**.
+"""
+
+
+@pytest.fixture
+def project(tmp_path):
+    (tmp_path / "skeleton").mkdir()
+    (tmp_path / "skeleton" / "demo.yaml").write_text(SKELETON, encoding="utf-8")
+    cards_dir = tmp_path / "vault" / "demo" / "cards" / "alpha"
+    cards_dir.mkdir(parents=True)
+    (cards_dir / "alpha-sample.md").write_text(CARD, encoding="utf-8")
+    return tmp_path
+
+
+def load(project):
+    skeleton = load_skeleton(project / "skeleton" / "demo.yaml")
+    cards, errors = load_cards(project / "vault" / "demo" / "cards")
+    return skeleton, cards, errors
+
+
+def test_validate_flags_unknown_node_and_filename_mismatch(project):
+    skeleton, cards, errors = load(project)
+    assert validate(skeleton, cards, errors).ok
+    bad = project / "vault" / "demo" / "cards" / "alpha" / "wrong-name.md"
+    bad.write_text(CARD.replace("alpha-sample", "other-id")
+                       .replace("alpha.one", "ghost.node"), encoding="utf-8")
+    report = validate(*load(project))
+    assert any("not in skeleton" in e for e in report.errors)
+    assert any("filename must equal card id" in e for e in report.errors)
+
+
+def test_sync_is_idempotent_and_preserves_user_text(project):
+    skeleton, cards, _ = load(project)
+    vault = project / "vault" / "demo"
+    first = sync(skeleton, cards, vault)
+    assert (vault / "Demo MOC.md").exists()
+    node_note = vault / "map" / "alpha.one.md"
+    body = node_note.read_text(encoding="utf-8")
+    assert BEGIN in body and END in body and "First topic." in body
+    assert "[[alpha-sample]]" in body
+
+    node_note.write_text(body + "\nmy own notes\n", encoding="utf-8")
+    second = sync(skeleton, cards, vault)
+    assert second["written"] == []  # nothing changed -> nothing rewritten
+    assert "my own notes" in node_note.read_text(encoding="utf-8")
+
+
+def test_build_produces_apkg_with_stable_guid(project):
+    skeleton, cards, _ = load(project)
+    out = project / "dist" / "demo.apkg"
+    result = build_package(skeleton, cards, out)
+    assert result["notes"] == 1
+    with zipfile.ZipFile(out) as z, open(project / "c.db", "wb") as f:
+        f.write(z.read("collection.anki2"))
+    db = sqlite3.connect(project / "c.db")
+    guids = [r[0] for r in db.execute("select guid from notes")]
+    decks = json.loads(db.execute("select decks from col").fetchone()[0])
+    names = {d["name"] for d in decks.values()}
+    assert len(guids) == 1
+    assert "Demo::02 Alpha::One" in names
+    # rebuild -> same guid (safe re-import)
+    build_package(skeleton, cards, out)
+    with zipfile.ZipFile(out) as z, open(project / "c2.db", "wb") as f:
+        f.write(z.read("collection.anki2"))
+    guids2 = [r[0] for r in sqlite3.connect(project / "c2.db").execute("select guid from notes")]
+    assert guids == guids2
+
+
+def test_scaffold_prompt_carries_context(project):
+    skeleton, cards, _ = load(project)
+    prompt = scaffold_prompt(skeleton, "alpha.two", cards)
+    assert "Beta" in prompt            # prerequisite surfaced
+    assert "One" in prompt             # sibling marked out of scope
+    assert '"node": "alpha.two"' in prompt
+
+
+def test_import_is_all_or_nothing(project):
+    skeleton, cards, _ = load(project)
+    cards_dir = project / "vault" / "demo" / "cards"
+    good = {"id": "alpha-new", "node": "alpha.two", "type": "qa", "q": "Q?", "a": "A."}
+    bad = {"id": "alpha-sample", "node": "alpha.two", "type": "qa", "q": "Q?", "a": "A."}
+
+    batch = project / "batch.json"
+    batch.write_text(json.dumps([good, bad]), encoding="utf-8")
+    written, errors = import_cards(skeleton, cards, batch, cards_dir)
+    assert written == [] and any("already exists" in e for e in errors)
+    assert not (cards_dir / "alpha" / "alpha-new.md").exists()
+
+    batch.write_text("```json\n" + json.dumps([good]) + "\n```", encoding="utf-8")
+    written, errors = import_cards(skeleton, cards, batch, cards_dir)
+    assert errors == [] and len(written) == 1
+    reloaded, parse_errors = load_cards(cards_dir)
+    assert parse_errors == []
+    assert {c.id for c in reloaded} == {"alpha-sample", "alpha-new"}
+
+
+DRILL = """---
+nodes: [alpha.one, beta]
+---
+# Drill: build the thing
+Constraints... [[alpha-sample]]
+"""
+
+
+def test_drills_and_path(project):
+    drills_dir = project / "vault" / "demo" / "drills"
+    drills_dir.mkdir(parents=True)
+    (drills_dir / "build-the-thing.md").write_text(DRILL, encoding="utf-8")
+
+    from trellis.cli import main
+    root = ["--root", str(project)]
+    assert main(root + ["validate"]) == 0
+    assert main(root + ["sync"]) == 0
+    node_note = (project / "vault" / "demo" / "map" / "alpha.one.md").read_text(encoding="utf-8")
+    assert "## Drills" in node_note and "[[build-the-thing|Drill: build the thing]]" in node_note
+
+    assert main(root + ["path", "--weeks", "2"]) == 0
+    path_note = (project / "vault" / "demo" / "Study Path.md").read_text(encoding="utf-8")
+    assert "Week 1" in path_note and "[[alpha.one|One]]" in path_note
+    assert "needs: Beta" in path_note
+
+    # bad drill node -> validate fails
+    (drills_dir / "bad.md").write_text(DRILL.replace("beta]", "ghost]"), encoding="utf-8")
+    assert main(root + ["validate"]) == 1
+
+
+def test_all_flag_iterates_domains(project):
+    second = (project / "skeleton" / "other.yaml")
+    second.write_text(SKELETON.replace("demo", "other"), encoding="utf-8")
+    from trellis.cli import main
+    root = ["--root", str(project)]
+    assert main(root + ["--all", "validate"]) == 0
+    # without --domain/--all, two domains must be an explicit error
+    import pytest as _pytest
+    with _pytest.raises(SystemExit):
+        main(root + ["validate"])
+
+
+def test_real_repo_content_validates_and_builds(tmp_path):
+    skeleton = load_skeleton(REPO / "skeleton" / "system-design.yaml")
+    cards, errors = load_cards(REPO / "vault" / "system-design" / "cards")
+    readings, reading_errors = load_readings(REPO / "vault" / "system-design" / "readings")
+    report = validate(skeleton, cards, errors, readings, reading_errors)
+    assert report.errors == []
+    assert len(cards) >= 50
+    assert len(readings) >= 5
+    result = build_package(skeleton, cards, tmp_path / "out.apkg")
+    assert result["notes"] == len(cards)
+
+
+def test_real_repo_wikilinks_resolve():
+    """Every [[wikilink]] in cards and readings must point at an existing
+    card, reading, or map note."""
+    import re
+    from trellis.drills import load_drills
+    cards, _ = load_cards(REPO / "vault" / "system-design" / "cards")
+    skeleton = load_skeleton(REPO / "skeleton" / "system-design.yaml")
+    readings, _ = load_readings(REPO / "vault" / "system-design" / "readings")
+    drills, _ = load_drills(REPO / "vault" / "system-design" / "drills")
+    targets = ({c.id for c in cards} | {r.link_target for r in readings}
+               | {d.link_target for d in drills} | {n.id for n in skeleton.walk()})
+    link_re = re.compile(r"\[\[([^\]|#]+)")
+    for path in (REPO / "vault" / "system-design").rglob("*.md"):
+        if "map" in path.parts:
+            continue
+        for target in link_re.findall(path.read_text(encoding="utf-8")):
+            assert target.strip() in targets, f"{path}: dangling link [[{target}]]"

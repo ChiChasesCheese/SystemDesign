@@ -1,0 +1,243 @@
+# The System Design skeleton: study order top-to-bottom, `requires` edges
+# mark real cross-topic prerequisites. Cards attach to leaf ids.
+domain: system-design
+title: System Design
+nodes:
+  - id: foundations
+    title: Foundations
+    summary: How to run a design conversation and reason in numbers before touching any component.
+    children:
+      - id: foundations.method
+        title: Interview Method
+        summary: Requirements clarification, scoping functional vs non-functional needs, driving the 40-minute structure yourself.
+      - id: foundations.estimation
+        title: Back-of-Envelope Estimation
+        summary: QPS, storage, and bandwidth sizing from DAU and access patterns; when an estimate changes the design.
+      - id: foundations.numbers
+        title: Latency Numbers
+        summary: Orders of magnitude every engineer should know — memory vs SSD vs disk vs same-DC network vs cross-region.
+      - id: foundations.tradeoffs
+        title: Core Trade-offs
+        summary: Performance vs scalability, latency vs throughput, availability vs consistency — the axes every later choice moves along.
+
+  - id: networking
+    title: Networking & APIs
+    summary: How clients reach services and how services talk to each other.
+    children:
+      - id: networking.protocols
+        title: Transport & HTTP
+        summary: TCP vs UDP guarantees and costs; HTTP semantics, keep-alive, HTTP/2 and 3 in one breath.
+      - id: networking.dns
+        title: DNS
+        summary: Resolution path, record types, TTL as a blunt failover and traffic-steering instrument.
+      - id: networking.api-styles
+        title: REST, gRPC & GraphQL
+        summary: Choosing an API style by coupling, payload shape, streaming needs, and who owns the clients.
+      - id: networking.realtime
+        title: Realtime Delivery
+        summary: Long polling vs SSE vs WebSockets; connection state as the scaling cost.
+      - id: networking.cdn
+        title: CDN
+        summary: Push vs pull CDNs, cache keys, and what belongs at the edge.
+
+  - id: traffic
+    title: Load Balancing & Traffic
+    summary: Spreading, shaping, and protecting request flow at the front door.
+    children:
+      - id: traffic.load-balancing
+        title: Load Balancers
+        summary: L4 vs L7, balancing algorithms, health checks, and LB high availability itself.
+      - id: traffic.gateways
+        title: Reverse Proxies & API Gateways
+        summary: What a gateway centralizes — TLS termination, auth, routing, quotas — and the single-point risks it adds.
+      - id: traffic.rate-limiting
+        title: Rate Limiting
+        summary: Token bucket vs sliding window, local vs distributed enforcement, and what to return when you shed.
+
+  - id: caching
+    title: Caching
+    summary: The highest-leverage latency tool, and the consistency debt it creates.
+    children:
+      - id: caching.strategies
+        title: Write & Read Strategies
+        summary: Cache-aside, read-through, write-through, write-behind, refresh-ahead — who populates the cache and when.
+      - id: caching.invalidation
+        title: Invalidation & Eviction
+        summary: TTLs, eviction policies, stale reads, and cache stampede protection.
+      - id: caching.placement
+        title: Cache Placement
+        summary: Client, CDN, gateway, application, and database layers — what each layer can and cannot absorb.
+
+  - id: storage
+    title: Storage
+    summary: Choosing and operating the systems of record.
+    children:
+      - id: storage.relational
+        title: Relational Databases
+        summary: Indexing, connection pooling, read replicas, federation, and when a single Postgres is the right answer.
+      - id: storage.internals
+        title: B-trees vs LSM-trees
+        summary: The two storage engine families; read, write, and space amplification trade-offs.
+      - id: storage.nosql
+        title: NoSQL Families
+        summary: Key-value, document, wide-column, graph — the access patterns each one exists to serve.
+      - id: storage.object
+        title: Object Storage & Separation
+        summary: S3-style object stores, storage-compute separation, and the modern default of parking cold and big data there.
+      - id: storage.search
+        title: Search Indexes
+        summary: Inverted indexes, relevance basics, and keeping a search cluster in sync with the source of truth.
+      - id: storage.encoding
+        title: Encoding & Evolution
+        summary: Data formats as contracts between code versions — JSON, Protobuf, Avro; forward and backward compatibility rules.
+
+  - id: distributed
+    title: Distributed Data
+    summary: What happens to data when one machine is no longer enough — the deep end of the interview.
+    children:
+      - id: distributed.cap
+        title: CAP & PACELC
+        summary: What the theorem actually constrains during a partition, and the latency trade-off the rest of the time.
+      - id: distributed.consistency
+        title: Consistency Models
+        summary: Linearizability, causal, read-your-writes, eventual — as contracts you promise the client.
+      - id: distributed.replication
+        title: Replication
+        summary: Leader-follower, multi-leader, leaderless quorums; replication lag and what it breaks.
+        requires: [distributed.consistency]
+      - id: distributed.partitioning
+        title: Partitioning
+        summary: Hash vs range sharding, consistent hashing, hot keys, and rebalancing without downtime.
+      - id: distributed.transactions
+        title: Transactions & Isolation
+        summary: ACID isolation levels, snapshot isolation, and why 2PC is avoided at scale.
+        requires: [storage.relational]
+      - id: distributed.consensus
+        title: Consensus
+        summary: Why single-leader systems need election, what Raft guarantees, fencing tokens, and the cost of quorum writes.
+        requires: [distributed.replication]
+      - id: distributed.time
+        title: Clocks & Ordering
+        summary: Why wall clocks lie, logical clocks, and detecting failure with timeouts you can defend.
+      - id: distributed.crdt
+        title: CRDTs & Local-First
+        summary: Conflict-free replicated data types, merge semantics, and offline-capable multi-writer apps.
+        requires: [distributed.replication]
+
+  - id: async
+    title: Async & Streaming
+    summary: Decoupling producers from consumers, and the delivery semantics that come with it.
+    children:
+      - id: async.queues
+        title: Message Queues
+        summary: Queues vs pub-sub, backpressure, consumer scaling, and when async is the wrong call.
+      - id: async.log
+        title: The Log & Kafka
+        summary: The append-only log as system of record; partitions, consumer groups, offsets, retention.
+        requires: [storage.internals]
+      - id: async.delivery
+        title: Delivery Semantics
+        summary: At-most-once, at-least-once, effectively-exactly-once; ordering guarantees and dead-letter queues.
+      - id: async.streaming
+        title: Stream Processing & CDC
+        summary: Change data capture, materialized views, windows, and keeping derived data fresh.
+
+  - id: analytics
+    title: Analytics & Derived Data
+    summary: The OLAP side of the house — batch, warehouses, and every dataset derived from a system of record.
+    children:
+      - id: analytics.olap
+        title: OLTP vs OLAP & Columnar
+        summary: Why analytical scans want column layout, compression, and vectorized execution instead of B-trees.
+        requires: [storage.internals]
+      - id: analytics.warehouse
+        title: Warehouses & Lakehouses
+        summary: Warehouse vs data lake vs lakehouse; open table formats (Iceberg/Delta) over object storage.
+        requires: [storage.object]
+      - id: analytics.batch
+        title: Batch Processing
+        summary: MapReduce lineage to Spark; shuffles, distributed joins, idempotent reruns, and batch vs stream boundaries.
+      - id: analytics.derived
+        title: Derived Data & Materialized Views
+        summary: Treating caches, indexes, and views as recomputable projections of a log — and keeping them fresh.
+        requires: [async.log]
+
+  - id: correctness
+    title: Correctness Patterns
+    summary: Patterns that keep money and state right when calls retry and services fail mid-flight.
+    children:
+      - id: correctness.idempotency
+        title: Idempotency
+        summary: Idempotency keys, dedup windows, and designing every mutation to survive a retry.
+        requires: [async.delivery]
+      - id: correctness.outbox
+        title: Dual Writes & Outbox
+        summary: Why writing DB-then-publish loses events, and how the transactional outbox closes the gap.
+        requires: [distributed.transactions, async.queues]
+      - id: correctness.saga
+        title: Sagas
+        summary: Long-running workflows via compensating actions when a distributed transaction is off the table.
+        requires: [distributed.transactions]
+      - id: correctness.ledger
+        title: Ledgers & Reconciliation
+        summary: Double-entry design, immutability, balance derivation, and reconciliation as the payments-grade safety net.
+        requires: [correctness.idempotency]
+
+  - id: architecture
+    title: Architecture
+    summary: Slicing a system into deployable parts, and the coordination tax of each cut.
+    children:
+      - id: architecture.services
+        title: Monoliths & Microservices
+        summary: When to split, service boundaries by data ownership, and the operational bill microservices arrive with.
+      - id: architecture.discovery
+        title: Service Discovery & Contracts
+        summary: Registries, health checking, API versioning, and evolving schemas without breaking consumers.
+        requires: [storage.encoding]
+      - id: architecture.serverless
+        title: Serverless
+        summary: FaaS execution model, cold starts, and where per-request pricing beats owning servers.
+
+  - id: reliability
+    title: Reliability & Operations
+    summary: Staying up, degrading gracefully, and proving it with numbers.
+    children:
+      - id: reliability.availability
+        title: Availability Math
+        summary: Nines, serial vs parallel composition, redundancy patterns, failover modes and their data-loss windows.
+      - id: reliability.resilience
+        title: Resilience Patterns
+        summary: Timeouts, retries with jitter, circuit breakers, bulkheads, load shedding — and how retries cause outages.
+      - id: reliability.slo
+        title: SLOs & Error Budgets
+        summary: SLIs worth measuring, percentiles over averages, and error budgets as a release throttle.
+      - id: reliability.observability
+        title: Observability
+        summary: Structured logs, metrics, distributed traces; correlation ids and cardinality costs.
+      - id: reliability.multi-region
+        title: Multi-Region
+        summary: Active-passive vs active-active, data residency, RPO/RTO, and why failover you never test doesn't exist.
+        requires: [distributed.replication, distributed.consensus]
+
+  - id: security
+    title: Security
+    summary: The authn/authz layer every design gets asked about once.
+    children:
+      - id: security.authn
+        title: Authentication
+        summary: Sessions vs JWTs, token lifetimes and revocation, OAuth2/OIDC flows in one diagram.
+      - id: security.authz
+        title: Authorization & API Security
+        summary: RBAC vs ABAC, API keys vs user tokens, TLS everywhere, secrets handling.
+
+  - id: ai
+    title: AI Systems
+    summary: The data-infrastructure side of serving models — the newest standard interview add-on.
+    children:
+      - id: ai.vector-search
+        title: Vector Search & RAG
+        summary: Embeddings, ANN indexes (HNSW), hybrid retrieval, and freshness of the underlying corpus.
+        requires: [storage.search]
+      - id: ai.inference
+        title: Inference Serving
+        summary: GPU batching, KV-cache reuse, streaming responses, and cost/latency levers unique to LLM backends.

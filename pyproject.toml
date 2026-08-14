@@ -1,0 +1,23 @@
+[project]
+name = "trellis-cards"
+version = "0.1.0"
+description = "Skeleton-constrained knowledge cards: one YAML mind map, Obsidian vault as source of truth, Anki .apkg as build output."
+requires-python = ">=3.10"
+dependencies = [
+    "PyYAML>=6.0",
+    "genanki>=0.13",
+    "Markdown>=3.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+trellis = "trellis.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["trellis*"]
