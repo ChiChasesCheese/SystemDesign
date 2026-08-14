@@ -6,10 +6,13 @@ At-most-once, at-least-once, effectively-exactly-once; ordering guarantees and d
 
 **Unlocks:** [[correctness.idempotency|Idempotency]]
 
-## Cards (3)
+## Cards (6)
 - [[async-delivery-semantics-cloze]]
 - [[async-dlq-poison-pill]]
 - [[async-exactly-once-myth]]
+- [[async-idempotent-producer]]
+- [[async-kafka-transactions-eos]]
+- [[async-producer-retry-reordering]]
 %% trellis:end %%
 
 ## Notes

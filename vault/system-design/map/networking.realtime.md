@@ -4,7 +4,10 @@
 
 Long polling vs SSE vs WebSockets; connection state as the scaling cost.
 
-## Cards (3)
+## Cards (6)
+- [[networking-heartbeats-idle-timeouts]]
+- [[networking-long-polling-costs]]
+- [[networking-realtime-backpressure]]
 - [[networking-realtime-transport-choice]]
 - [[networking-sse-mechanics]]
 - [[networking-websocket-scaling-cost]]

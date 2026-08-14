@@ -13,10 +13,13 @@ Cards and readings reference each other with ordinary wikilinks, and every node'
 generated map note lists both — so the Obsidian graph connects topic ↔ reading ↔
 card.
 
-Ships with a **System Design** domain: a 59-node map (153 cards, 11 readings,
-every leaf covered) spanning the classic interview canon plus what the 2017-era
-resources miss — consensus, delivery semantics, idempotency/outbox/saga/ledger
-patterns, SLOs, multi-region, and AI-serving infrastructure.
+Ships with a **System Design** domain: a 66-node map (318 cards, 13 readings,
+every leaf covered), structured against DDIA 2nd edition's chapter framework
+and spanning the classic interview canon plus what the 2017-era resources
+miss — consensus, CRDTs, encoding & schema evolution, delivery semantics,
+idempotency/outbox/saga/ledger patterns, OLAP/lakehouse/batch/derived data,
+SLOs, multi-region, and AI-serving infrastructure. The `ddia-2e` reading note
+maps every DDIA chapter to its skeleton nodes.
 
 ## Why a skeleton
 

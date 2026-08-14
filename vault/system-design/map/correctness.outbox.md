@@ -6,10 +6,13 @@ Why writing DB-then-publish loses events, and how the transactional outbox close
 
 **Requires:** [[distributed.transactions|Transactions & Isolation]], [[async.queues|Message Queues]]
 
-## Cards (3)
+## Cards (6)
 - [[correctness-dual-write-problem]]
+- [[correctness-outbox-cleanup]]
+- [[correctness-outbox-event-payload]]
 - [[correctness-outbox-mechanism]]
 - [[correctness-outbox-ordering-cloze]]
+- [[correctness-outbox-relay-lag]]
 %% trellis:end %%
 
 ## Notes

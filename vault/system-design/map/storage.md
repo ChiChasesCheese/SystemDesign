@@ -9,6 +9,7 @@ Choosing and operating the systems of record.
 - [[storage.nosql|NoSQL Families]]
 - [[storage.object|Object Storage & Separation]]
 - [[storage.search|Search Indexes]]
+- [[storage.encoding|Encoding & Evolution]]
 %% trellis:end %%
 
 ## Notes

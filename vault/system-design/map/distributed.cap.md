@@ -7,7 +7,9 @@ What the theorem actually constrains during a partition, and the latency trade-o
 ## Readings
 - [[jepsen-consistency-map|Jepsen: Consistency Models]]
 
-## Cards (3)
+## Cards (5)
+- [[distributed-cap-per-operation]]
+- [[distributed-cap-proof-sketch]]
 - [[distributed-cap-real-claim]]
 - [[distributed-cp-partition-behavior]]
 - [[distributed-pacelc]]

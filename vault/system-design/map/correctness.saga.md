@@ -6,9 +6,12 @@ Long-running workflows via compensating actions when a distributed transaction i
 
 **Requires:** [[distributed.transactions|Transactions & Isolation]]
 
-## Cards (3)
+## Cards (6)
 - [[correctness-saga-compensation-limits]]
+- [[correctness-saga-compensation-race]]
+- [[correctness-saga-isolation]]
 - [[correctness-saga-orchestration-choreography]]
+- [[correctness-saga-orchestrator-recovery]]
 - [[correctness-saga-vs-2pc]]
 %% trellis:end %%
 

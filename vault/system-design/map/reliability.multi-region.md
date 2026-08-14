@@ -6,9 +6,12 @@ Active-passive vs active-active, data residency, RPO/RTO, and why failover you n
 
 **Requires:** [[distributed.replication|Replication]], [[distributed.consensus|Consensus]]
 
-## Cards (3)
+## Cards (6)
 - [[reliability-active-active-vs-passive]]
+- [[reliability-async-rpo-math]]
+- [[reliability-data-residency-conflict]]
 - [[reliability-rpo-vs-rto]]
+- [[reliability-three-region-quorum]]
 - [[reliability-untested-failover]]
 %% trellis:end %%
 

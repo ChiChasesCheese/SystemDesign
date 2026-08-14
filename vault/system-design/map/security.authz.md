@@ -4,10 +4,13 @@
 
 RBAC vs ABAC, API keys vs user tokens, TLS everywhere, secrets handling.
 
-## Cards (3)
+## Cards (6)
 - [[security-api-keys-vs-user-tokens]]
+- [[security-confused-deputy]]
+- [[security-mtls-vs-tokens-s2s]]
 - [[security-rbac-vs-abac]]
 - [[security-secrets-handling]]
+- [[security-secrets-rotation-live]]
 %% trellis:end %%
 
 ## Notes

@@ -11,6 +11,7 @@ What happens to data when one machine is no longer enough — the deep end of th
 - [[distributed.transactions|Transactions & Isolation]]
 - [[distributed.consensus|Consensus]]
 - [[distributed.time|Clocks & Ordering]]
+- [[distributed.crdt|CRDTs & Local-First]]
 %% trellis:end %%
 
 ## Notes

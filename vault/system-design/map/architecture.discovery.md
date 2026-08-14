@@ -4,9 +4,13 @@
 
 Registries, health checking, API versioning, and evolving schemas without breaking consumers.
 
-## Cards (3)
+**Requires:** [[storage.encoding|Encoding & Evolution]]
+
+## Cards (5)
+- [[architecture-api-versioning-strategies]]
 - [[architecture-discovery-mechanisms]]
 - [[architecture-expand-contract]]
+- [[architecture-registry-compat-modes]]
 - [[architecture-schema-compat-rules]]
 %% trellis:end %%
 

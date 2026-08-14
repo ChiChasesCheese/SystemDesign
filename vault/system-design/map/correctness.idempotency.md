@@ -11,10 +11,13 @@ Idempotency keys, dedup windows, and designing every mutation to survive a retry
 ## Readings
 - [[stripe-idempotency|Designing robust and predictable APIs with idempotency (Stripe)]]
 
-## Cards (4)
+## Cards (7)
 - [[correctness-dedup-window]]
 - [[correctness-idempotency-concurrent-retries]]
 - [[correctness-idempotency-key-design]]
+- [[correctness-idempotency-partial-failure]]
+- [[correctness-idempotency-payload-hash]]
+- [[correctness-idempotency-response-replay]]
 - [[correctness-idempotent-consumer-patterns]]
 %% trellis:end %%
 

@@ -6,9 +6,12 @@ Queues vs pub-sub, backpressure, consumer scaling, and when async is the wrong c
 
 **Unlocks:** [[correctness.outbox|Dual Writes & Outbox]]
 
-## Cards (3)
+## Cards (6)
+- [[async-broker-selection]]
+- [[async-competing-consumers-ordering]]
 - [[async-queue-backpressure]]
 - [[async-queue-vs-pubsub]]
+- [[async-retry-delay-implementation]]
 - [[async-when-async-is-wrong]]
 %% trellis:end %%
 

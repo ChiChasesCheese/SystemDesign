@@ -7,7 +7,10 @@ Client, CDN, gateway, application, and database layers — what each layer can a
 ## Readings
 - [[cloudflare-cdn|How CDN caching actually works (Cloudflare docs)]]
 
-## Cards (3)
+## Cards (6)
+- [[caching-cache-shard-blast-radius]]
+- [[caching-hit-rate-outage-math]]
+- [[caching-hot-key-replication]]
 - [[caching-layer-absorption]]
 - [[caching-local-vs-remote]]
 - [[caching-placement-cost-of-depth]]
