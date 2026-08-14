@@ -4,6 +4,9 @@
 
 Token bucket vs sliding window, local vs distributed enforcement, and what to return when you shed.
 
+## Drills
+- [[design-rate-limiter|Drill: Design a distributed rate limiter]]
+
 ## Cards (6)
 - [[traffic-distributed-rate-limiting]]
 - [[traffic-rate-limit-key-choice]]

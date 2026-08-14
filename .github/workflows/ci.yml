@@ -12,10 +12,10 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .[dev]
-      - run: trellis validate
+      - run: trellis --all validate
       - run: pytest -q
-      - run: trellis build -o dist/system-design.apkg
+      - run: trellis --all build
       - uses: actions/upload-artifact@v4
         with:
-          name: system-design-apkg
-          path: dist/system-design.apkg
+          name: anki-decks
+          path: dist/*.apkg

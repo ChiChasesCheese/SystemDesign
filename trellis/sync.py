@@ -44,7 +44,11 @@ def _moc_body(skeleton: Skeleton) -> str:
 
 
 def _node_body(
-    skeleton: Skeleton, node: Node, cards: list[Card], readings: list[Reading]
+    skeleton: Skeleton,
+    node: Node,
+    cards: list[Card],
+    readings: list[Reading],
+    drills: list[Reading],
 ) -> str:
     crumbs = " / ".join(n.title for n in node.path()[:-1])
     lines = [f"# {node.title}"]
@@ -66,6 +70,10 @@ def _node_body(
     if node_readings:
         lines += ["", "## Readings"]
         lines += [f"- [[{r.link_target}|{r.title}]]" for r in node_readings]
+    node_drills = [d for d in drills if node.id in d.nodes]
+    if node_drills:
+        lines += ["", "## Drills"]
+        lines += [f"- [[{d.link_target}|{d.title}]]" for d in node_drills]
     node_cards = [c for c in cards if c.node == node.id]
     if node_cards:
         lines += ["", f"## Cards ({len(node_cards)})"]
@@ -97,9 +105,11 @@ def sync(
     cards: list[Card],
     vault_dir: str | Path,
     readings: list[Reading] | None = None,
+    drills: list[Reading] | None = None,
 ) -> dict:
     """Regenerate map notes. Returns {'written': [...], 'orphans': [...]}."""
     readings = readings or []
+    drills = drills or []
     vault = Path(vault_dir)
     map_dir = vault / "map"
     written: list[str] = []
@@ -110,7 +120,7 @@ def sync(
 
     for node in skeleton.walk():
         path = map_dir / f"{node.id}.md"
-        if _write_managed(path, _node_body(skeleton, node, cards, readings)):
+        if _write_managed(path, _node_body(skeleton, node, cards, readings, drills)):
             written.append(str(path))
 
     known = {f"{n.id}.md" for n in skeleton.walk()}

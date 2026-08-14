@@ -8,6 +8,9 @@ nodes, both plain Obsidian markdown:
   compiles them into an Anki `.apkg` you can re-import forever without duplicates.
 - **Readings** — long-form, authoritative material (papers, engineering-blog
   essays, book chapters) for systematic study; a reading can span several nodes.
+- **Drills** — output practice: design questions and exercises with constraints,
+  grading points, and an attempt log. Cards recall, readings feed in, drills
+  train the 40-minute performance.
 
 Cards and readings reference each other with ordinary wikilinks, and every node's
 generated map note lists both — so the Obsidian graph connects topic ↔ reading ↔
@@ -41,18 +44,24 @@ that: the skeleton is the source of truth, and everything is derived from it —
 
 ```bash
 pip install -e .
-trellis validate          # skeleton + all cards, structural checks
+trellis validate          # skeleton + cards/readings/drills, structural checks
 trellis build             # -> dist/system-design.apkg, import into Anki
 trellis sync              # regenerate Obsidian map notes
+trellis path --weeks 8    # write a week-by-week study plan into the vault
 trellis stats             # coverage per branch
 ```
+
+Validation also guarantees the study order is coherent: a node can never
+appear before one of its `requires` prerequisites — tree order in the
+skeleton is checked against the edges.
 
 - **Anki**: import `dist/system-design.apkg`. After editing or adding cards,
   rebuild and re-import — note GUIDs are stable, so edits update in place and
   your review history survives.
-- **Obsidian**: open `vault/system-design/` as a vault. `map/` holds the
-  generated topic notes (your own text outside the `%% trellis %%` markers is
-  preserved); `cards/` holds the cards. The graph view is the mind map.
+- **Obsidian**: open `vault/` as the vault (not a single domain folder), so
+  wikilinks work across domains. Each domain's `map/` holds the generated topic
+  notes (your own text outside the `%% trellis %%` markers is preserved). The
+  graph view is the mind map.
 
 ## Card format
 
@@ -100,11 +109,19 @@ trellis import batch.json                     # all-or-nothing validation, then 
 trellis sync && trellis build
 ```
 
+## Drill format
+
+One file per drill under `vault/<domain>/drills/`; same frontmatter as
+readings (`nodes` lists every topic the exercise exercises). Body: prompt,
+constraints, grading points, attempt log. Node map notes list their drills.
+
 ## Adding a domain
 
-Drop `skeleton/<domain>.yaml` (same shape as `system-design.yaml`), put cards
-under `vault/<domain>/cards/`, and pass `--domain <domain>`. Nothing else
-changes.
+Drop `skeleton/<domain>.yaml` (same shape as `system-design.yaml`), put content
+under `vault/<domain>/`, and pass `--domain <domain>` — or `--all` to run any
+command across every domain (CI builds all decks). Nothing else changes.
+Keep low-level design, domain knowledge, etc. as separate domains; bridge them
+with cross-domain wikilinks, which work because `vault/` is one Obsidian vault.
 
 ## Development
 

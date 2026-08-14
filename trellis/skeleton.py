@@ -174,6 +174,17 @@ def load_skeleton(path: str | Path) -> Skeleton:
     if cycle:
         errors.append("requires cycle: " + " -> ".join(cycle))
 
+    # Study order (tree order) must never contradict the requires edges:
+    # a prerequisite has to appear earlier in the walk.
+    order = {n.id: i for i, n in enumerate(skeleton.walk())}
+    for node in skeleton.walk():
+        for req in node.requires:
+            if req in order and req != node.id and order[req] >= order[node.id]:
+                errors.append(
+                    f"node {node.id!r} is ordered before its prerequisite {req!r} "
+                    "— move it later in the tree"
+                )
+
     if errors:
         raise SkeletonError(f"{path}:\n  " + "\n  ".join(errors))
     return skeleton

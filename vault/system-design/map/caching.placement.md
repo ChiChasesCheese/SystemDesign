@@ -7,6 +7,9 @@ Client, CDN, gateway, application, and database layers — what each layer can a
 ## Readings
 - [[cloudflare-cdn|How CDN caching actually works (Cloudflare docs)]]
 
+## Drills
+- [[design-rate-limiter|Drill: Design a distributed rate limiter]]
+
 ## Cards (6)
 - [[caching-cache-shard-blast-radius]]
 - [[caching-hit-rate-outage-math]]

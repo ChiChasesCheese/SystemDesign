@@ -12,6 +12,9 @@ The append-only log as system of record; partitions, consumer groups, offsets, r
 - [[the-log-jay-kreps|The Log: What every software engineer should know (Jay Kreps)]]
 - [[turning-the-database-inside-out|Turning the Database Inside-Out (Kleppmann)]]
 
+## Drills
+- [[design-payment-ledger|Drill: Design a payment ledger service]]
+
 ## Cards (6)
 - [[async-consumer-groups-offsets]]
 - [[async-log-backfill-reprocessing]]

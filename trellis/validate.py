@@ -26,14 +26,18 @@ def validate(
     card_errors: list[str],
     readings: list[Reading] | None = None,
     reading_errors: list[str] | None = None,
+    drills: list[Reading] | None = None,
+    drill_errors: list[str] | None = None,
 ) -> Report:
-    report = Report(errors=list(card_errors) + list(reading_errors or []))
+    report = Report(
+        errors=list(card_errors) + list(reading_errors or []) + list(drill_errors or [])
+    )
 
-    for reading in readings or []:
-        for node_id in reading.nodes:
+    for note in list(readings or []) + list(drills or []):
+        for node_id in note.nodes:
             if node_id not in skeleton.by_id:
                 report.errors.append(
-                    f"{reading.path}: node {node_id!r} not in skeleton"
+                    f"{note.path}: node {node_id!r} not in skeleton"
                 )
 
     seen: dict[str, Card] = {}

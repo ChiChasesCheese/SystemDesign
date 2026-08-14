@@ -22,6 +22,8 @@ SKELETON = """
 domain: demo
 title: Demo
 nodes:
+  - id: beta
+    title: Beta
   - id: alpha
     title: Alpha
     children:
@@ -31,8 +33,6 @@ nodes:
       - id: alpha.two
         title: Two
         requires: [beta]
-  - id: beta
-    title: Beta
 """
 
 CARD = """---
@@ -103,7 +103,7 @@ def test_build_produces_apkg_with_stable_guid(project):
     decks = json.loads(db.execute("select decks from col").fetchone()[0])
     names = {d["name"] for d in decks.values()}
     assert len(guids) == 1
-    assert "Demo::01 Alpha::One" in names
+    assert "Demo::02 Alpha::One" in names
     # rebuild -> same guid (safe re-import)
     build_package(skeleton, cards, out)
     with zipfile.ZipFile(out) as z, open(project / "c2.db", "wb") as f:
@@ -140,6 +140,48 @@ def test_import_is_all_or_nothing(project):
     assert {c.id for c in reloaded} == {"alpha-sample", "alpha-new"}
 
 
+DRILL = """---
+nodes: [alpha.one, beta]
+---
+# Drill: build the thing
+Constraints... [[alpha-sample]]
+"""
+
+
+def test_drills_and_path(project):
+    drills_dir = project / "vault" / "demo" / "drills"
+    drills_dir.mkdir(parents=True)
+    (drills_dir / "build-the-thing.md").write_text(DRILL, encoding="utf-8")
+
+    from trellis.cli import main
+    root = ["--root", str(project)]
+    assert main(root + ["validate"]) == 0
+    assert main(root + ["sync"]) == 0
+    node_note = (project / "vault" / "demo" / "map" / "alpha.one.md").read_text(encoding="utf-8")
+    assert "## Drills" in node_note and "[[build-the-thing|Drill: build the thing]]" in node_note
+
+    assert main(root + ["path", "--weeks", "2"]) == 0
+    path_note = (project / "vault" / "demo" / "Study Path.md").read_text(encoding="utf-8")
+    assert "Week 1" in path_note and "[[alpha.one|One]]" in path_note
+    assert "needs: Beta" in path_note
+
+    # bad drill node -> validate fails
+    (drills_dir / "bad.md").write_text(DRILL.replace("beta]", "ghost]"), encoding="utf-8")
+    assert main(root + ["validate"]) == 1
+
+
+def test_all_flag_iterates_domains(project):
+    second = (project / "skeleton" / "other.yaml")
+    second.write_text(SKELETON.replace("demo", "other"), encoding="utf-8")
+    from trellis.cli import main
+    root = ["--root", str(project)]
+    assert main(root + ["--all", "validate"]) == 0
+    # without --domain/--all, two domains must be an explicit error
+    import pytest as _pytest
+    with _pytest.raises(SystemExit):
+        main(root + ["validate"])
+
+
 def test_real_repo_content_validates_and_builds(tmp_path):
     skeleton = load_skeleton(REPO / "skeleton" / "system-design.yaml")
     cards, errors = load_cards(REPO / "vault" / "system-design" / "cards")
@@ -156,11 +198,13 @@ def test_real_repo_wikilinks_resolve():
     """Every [[wikilink]] in cards and readings must point at an existing
     card, reading, or map note."""
     import re
+    from trellis.drills import load_drills
     cards, _ = load_cards(REPO / "vault" / "system-design" / "cards")
     skeleton = load_skeleton(REPO / "skeleton" / "system-design.yaml")
     readings, _ = load_readings(REPO / "vault" / "system-design" / "readings")
+    drills, _ = load_drills(REPO / "vault" / "system-design" / "drills")
     targets = ({c.id for c in cards} | {r.link_target for r in readings}
-               | {n.id for n in skeleton.walk()})
+               | {d.link_target for d in drills} | {n.id for n in skeleton.walk()})
     link_re = re.compile(r"\[\[([^\]|#]+)")
     for path in (REPO / "vault" / "system-design").rglob("*.md"):
         if "map" in path.parts:
