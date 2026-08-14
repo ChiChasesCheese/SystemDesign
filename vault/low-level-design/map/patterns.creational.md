@@ -1,0 +1,22 @@
+%% trellis:begin %%
+# Creational Patterns
+*Design Patterns*
+
+Singleton, factory method, abstract factory, builder, prototype — who creates objects and how flexibly.
+
+## Readings
+- [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
+
+## Drills
+- [[parking-lot|Drill: Parking Lot]]
+
+## Cards (6)
+- [[patterns-builder-when]]
+- [[patterns-creational-cues]]
+- [[patterns-factory-method-vs-abstract-factory]]
+- [[patterns-prototype-when]]
+- [[patterns-simple-factory-enough]]
+- [[patterns-singleton-costs]]
+%% trellis:end %%
+
+## Notes
