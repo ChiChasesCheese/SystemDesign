@@ -130,24 +130,31 @@ def cmd_build(args, project: Project) -> int:
     if not project.cards:
         _fail(f"{project.skeleton.domain}: no cards to build")
     out = args.output or args.root / "dist" / f"{project.skeleton.domain}.apkg"
-    result = build_package(project.skeleton, project.cards, out)
+    result = build_package(project.skeleton, project.cards, out, project.readings)
     print(f"wrote {result['path']}: {result['notes']} notes in {result['decks']} decks")
     return 0
 
 
 def cmd_stats(args, project: Project) -> int:
+    from .links import coverage
     s = project.skeleton
     per_node = Counter(c.node for c in project.cards)
+    linked_all, total_all = coverage(s, project.cards, project.readings)
+    pct = f"{linked_all / total_all:.0%}" if total_all else "n/a"
     print(f"{s.title} — {len(project.cards)} cards, {len(project.readings)} readings, "
-          f"{len(project.drills)} drills, {len(project.card_errors)} unparseable")
+          f"{len(project.drills)} drills, link coverage {pct}, "
+          f"{len(project.card_errors)} unparseable")
     for root_node in s.roots:
         subtree = [root_node] + [n for n in s.walk()
                                  if n.id.startswith(root_node.id + ".")]
-        total = sum(per_node.get(n.id, 0) for n in subtree)
+        branch_cards = [c for c in project.cards
+                        if c.node in {n.id for n in subtree}]
         leaves = [n for n in subtree if n.is_leaf]
         covered = sum(1 for n in leaves if per_node.get(n.id))
+        linked, total = coverage(s, branch_cards, project.readings)
+        link_pct = f"{linked / total:>4.0%}" if total else " n/a"
         print(f"  {root_node.title:<28} {total:>4} cards   "
-              f"{covered}/{len(leaves)} leaves covered")
+              f"{covered:>2}/{len(leaves):<2} leaves   links {link_pct}")
     return 0
 
 

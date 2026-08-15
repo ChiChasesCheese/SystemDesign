@@ -1,6 +1,6 @@
 ---
 id: distributed-failover-mechanics
-node: distributed.replication
+node: distributed.replication.leader
 type: qa
 ---
 ## Q

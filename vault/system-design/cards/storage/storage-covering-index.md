@@ -1,6 +1,6 @@
 ---
 id: storage-covering-index
-node: storage.relational
+node: storage.relational.indexing
 type: qa
 ---
 ## Q

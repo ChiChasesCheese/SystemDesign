@@ -18,6 +18,8 @@ import genanki
 import markdown
 
 from .cards import Card
+from .links import sources_for
+from .readings import Reading
 from .skeleton import Skeleton
 
 _MD = markdown.Markdown(extensions=["fenced_code", "tables", "sane_lists"])
@@ -50,6 +52,9 @@ table { border-collapse: collapse; }
 td, th { border: 1px solid #999; padding: 4px 10px; }
 .cloze { font-weight: 600; color: #4576f5; }
 .ref { color: #7aa2f7; font-style: italic; }
+.sources { margin-top: 18px; padding-top: 8px; border-top: 1px solid rgba(140,140,140,0.3);
+           font-size: 14px; color: #888; }
+.sources a { color: #7aa2f7; text-decoration: none; }
 """
 
 
@@ -97,8 +102,26 @@ def _cloze_model() -> genanki.Model:
     )
 
 
-def build_package(skeleton: Skeleton, cards: list[Card], out_path: str | Path) -> dict:
+def _sources_html(skeleton: Skeleton, readings: list[Reading], node_id: str) -> str:
+    """Clickable further-reading footer from the node's (and ancestors')
+    readings — the card's road onward, tappable in Anki."""
+    sources = sources_for(skeleton, readings, node_id)
+    if not sources:
+        return ""
+    links = " · ".join(
+        f'<a href="{r.url}">{r.title}</a>' for r in sources
+    )
+    return f'<div class="sources">Go deeper: {links}</div>'
+
+
+def build_package(
+    skeleton: Skeleton,
+    cards: list[Card],
+    out_path: str | Path,
+    readings: list[Reading] | None = None,
+) -> dict:
     """Write the .apkg. Returns {'notes': int, 'decks': int, 'path': str}."""
+    readings = readings or []
     qa_model, cloze_model = _qa_model(), _cloze_model()
     decks: dict[str, genanki.Deck] = {}
 
@@ -116,17 +139,18 @@ def build_package(skeleton: Skeleton, cards: list[Card], out_path: str | Path) -
         tags = [skeleton.domain + "::" + card.node.replace(".", "::")] + card.tags
         if card.source:
             tags.append(f"src::{card.source}")
+        footer = _sources_html(skeleton, readings, card.node)
         if card.type == "qa":
             note = genanki.Note(
                 model=qa_model,
-                fields=[_html(card.question), _html(card.answer), crumb],
+                fields=[_html(card.question), _html(card.answer) + footer, crumb],
                 guid=genanki.guid_for(f"trellis:{card.id}"),
                 tags=tags,
             )
         else:
             note = genanki.Note(
                 model=cloze_model,
-                fields=[_html(card.text), crumb],
+                fields=[_html(card.text) + footer, crumb],
                 guid=genanki.guid_for(f"trellis:{card.id}"),
                 tags=tags,
             )

@@ -1,6 +1,6 @@
 ---
 id: reliability-config-deploy-risk
-node: reliability.resilience
+node: reliability.resilience.containment
 type: qa
 ---
 ## Q

@@ -55,6 +55,20 @@ Validation also guarantees the study order is coherent: a node can never
 appear before one of its `requires` prerequisites — tree order in the
 skeleton is checked against the edges.
 
+## Links are the product
+
+The vault is meant to be the definitive index: for every topic, the one
+authoritative, approachable resource — so studying never starts with a search.
+Mechanically:
+
+- Readings with a `url` become a clickable **"Go deeper"** footer on every Anki
+  card under their node (ancestors included — a branch-level reading covers the
+  whole branch).
+- `trellis stats` reports **link coverage** (cards with a road onward) per
+  branch; `trellis validate` warns when a domain drops below the 70% target.
+- `python3 scripts/check_links.py` verifies every archived URL still resolves
+  (run manually; network-bound).
+
 - **Anki**: import `dist/system-design.apkg`. After editing or adding cards,
   rebuild and re-import — note GUIDs are stable, so edits update in place and
   your review history survives.

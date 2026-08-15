@@ -1,6 +1,6 @@
 ---
 id: storage-scaling-ladder
-node: storage.relational
+node: storage.relational.operations
 type: qa
 ---
 ## Q

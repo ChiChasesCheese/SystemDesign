@@ -1,6 +1,6 @@
 ---
 id: storage-connection-pooling
-node: storage.relational
+node: storage.relational.operations
 type: qa
 ---
 ## Q

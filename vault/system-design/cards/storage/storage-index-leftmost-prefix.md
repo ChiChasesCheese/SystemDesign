@@ -1,6 +1,6 @@
 ---
 id: storage-index-leftmost-prefix
-node: storage.relational
+node: storage.relational.indexing
 type: qa
 ---
 ## Q

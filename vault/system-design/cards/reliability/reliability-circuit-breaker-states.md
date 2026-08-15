@@ -1,6 +1,6 @@
 ---
 id: reliability-circuit-breaker-states
-node: reliability.resilience
+node: reliability.resilience.containment
 type: qa
 ---
 ## Q

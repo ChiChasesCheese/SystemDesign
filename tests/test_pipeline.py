@@ -112,6 +112,36 @@ def test_build_produces_apkg_with_stable_guid(project):
     assert guids == guids2
 
 
+def test_sources_footer_and_link_coverage(project):
+    from trellis.links import coverage, sources_for
+    from trellis.readings import load_readings as load_r
+
+    readings_dir = project / "vault" / "demo" / "readings"
+    readings_dir.mkdir(parents=True)
+    (readings_dir / "alpha-guide.md").write_text(
+        "---\nnodes: [alpha]\nurl: https://example.com/guide\n---\n# The Alpha Guide\n",
+        encoding="utf-8",
+    )
+    skeleton, cards, _ = load(project)
+    readings, _ = load_r(readings_dir)
+
+    # reading attached to the parent branch covers the child's card
+    srcs = sources_for(skeleton, readings, "alpha.one")
+    assert [r.title for r in srcs] == ["The Alpha Guide"]
+    assert coverage(skeleton, cards, readings) == (1, 1)
+    assert coverage(skeleton, cards, []) == (0, 1)
+
+    # and the built card carries a clickable footer link
+    import sqlite3
+    import zipfile
+    out = project / "dist" / "demo.apkg"
+    build_package(skeleton, cards, out, readings)
+    with zipfile.ZipFile(out) as z, open(project / "f.db", "wb") as f:
+        f.write(z.read("collection.anki2"))
+    flds = sqlite3.connect(project / "f.db").execute("select flds from notes").fetchone()[0]
+    assert '<a href="https://example.com/guide">The Alpha Guide</a>' in flds
+
+
 def test_scaffold_prompt_carries_context(project):
     skeleton, cards, _ = load(project)
     prompt = scaffold_prompt(skeleton, "alpha.two", cards)

@@ -1,6 +1,6 @@
 ---
 id: reliability-bulkhead-vs-shedding
-node: reliability.resilience
+node: reliability.resilience.containment
 type: qa
 ---
 ## Q

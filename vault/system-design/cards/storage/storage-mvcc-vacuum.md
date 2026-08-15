@@ -1,6 +1,6 @@
 ---
 id: storage-mvcc-vacuum
-node: storage.relational
+node: storage.relational.operations
 type: qa
 ---
 ## Q
