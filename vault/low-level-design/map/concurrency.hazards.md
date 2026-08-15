@@ -10,9 +10,11 @@ The four deadlock conditions and their breakers, livelock, starvation, lock orde
 ## Drills
 - [[elevator-system|Drill: Elevator System]]
 
-## Cards (3)
+## Cards (5)
+- [[concurrency-deadlock-detect-vs-prevent]]
 - [[concurrency-deadlock-four-conditions]]
 - [[concurrency-livelock-vs-starvation]]
+- [[concurrency-lock-free-trap]]
 - [[concurrency-lock-ordering-transfer]]
 %% trellis:end %%
 

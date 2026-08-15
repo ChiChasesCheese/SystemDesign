@@ -3,3 +3,7 @@ __pycache__/
 dist/
 .pytest_cache/
 .obsidian/
+# Clipped article copies: personal offline reading, regenerate with
+# `trellis clip`. Not committed — this repo is public and the pages
+# belong to their authors.
+vault/*/clippings/

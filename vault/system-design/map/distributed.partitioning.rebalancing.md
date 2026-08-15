@@ -4,7 +4,10 @@
 
 Moving partitions without downtime; who knows where a key lives — routing tiers and coordination services.
 
-## Cards (2)
+## Cards (5)
+- [[distributed-dynamic-split-merge]]
+- [[distributed-fixed-partition-count]]
+- [[distributed-rebalance-throttling]]
 - [[distributed-rebalancing]]
 - [[distributed-request-routing]]
 %% trellis:end %%

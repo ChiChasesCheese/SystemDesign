@@ -6,9 +6,12 @@ Timeout budgets, deadline propagation, exponential backoff with jitter, retry st
 
 **Unlocks:** [[infra.mesh|Service Mesh]]
 
-## Cards (2)
+## Cards (5)
 - [[reliability-deadline-propagation]]
 - [[reliability-retry-storm]]
+- [[reliability-retryable-errors]]
+- [[reliability-server-driven-backoff]]
+- [[reliability-timeout-budget-arithmetic]]
 %% trellis:end %%
 
 ## Notes

@@ -22,12 +22,22 @@ from pathlib import Path
 
 from .build import build_package
 from .cards import Card, load_cards
+from .clippings import (
+    CLIPPINGS_DIRNAME,
+    Clipping,
+    ClipError,
+    canonical_url,
+    fetch_page,
+    load_clippings,
+    write_clipping,
+)
 from .drills import Drill, load_drills
+from .obsidian import vault_name
 from .path import study_path
 from .readings import Reading, load_readings
 from .scaffold import import_cards, scaffold_prompt
 from .skeleton import Skeleton, SkeletonError, load_skeleton
-from .sync import _write_managed, sync
+from .sync import sync, write_managed
 from .validate import validate
 
 
@@ -45,13 +55,16 @@ class Project:
     reading_errors: list[str] = field(default_factory=list)
     drills: list[Drill] = field(default_factory=list)
     drill_errors: list[str] = field(default_factory=list)
+    clippings: dict[str, Clipping] = field(default_factory=dict)
 
     def report(self):
         return validate(self.skeleton, self.cards, self.card_errors,
                         self.readings, self.reading_errors,
                         self.drills, self.drill_errors)
 
-    def vault(self, root: Path) -> Path:
+    def content_dir(self, root: Path) -> Path:
+        """This domain's folder inside the Obsidian vault. Not the vault
+        itself — `vault/` is one Obsidian vault holding every domain."""
         return root / "vault" / self.skeleton.domain
 
 
@@ -81,13 +94,15 @@ def _load(root: Path, domain: str) -> Project:
     except SkeletonError as exc:
         _fail(str(exc))
     project = Project(skeleton=skeleton)
-    vault = project.vault(root)
+    vault = project.content_dir(root)
     if (vault / "cards").exists():
         project.cards, project.card_errors = load_cards(vault / "cards")
     if (vault / "readings").exists():
         project.readings, project.reading_errors = load_readings(vault / "readings")
     if (vault / "drills").exists():
         project.drills, project.drill_errors = load_drills(vault / "drills")
+    if (vault / CLIPPINGS_DIRNAME).exists():
+        project.clippings = load_clippings(vault / CLIPPINGS_DIRNAME)
     return project
 
 
@@ -117,7 +132,7 @@ def cmd_validate(args, project: Project) -> int:
 
 def cmd_sync(args, project: Project) -> int:
     _checked(project, "syncing")
-    result = sync(project.skeleton, project.cards, project.vault(args.root),
+    result = sync(project.skeleton, project.cards, project.content_dir(args.root),
                   project.readings, project.drills)
     print(f"{project.skeleton.domain}: updated {len(result['written'])} note(s)")
     for orphan in result["orphans"]:
@@ -130,7 +145,13 @@ def cmd_build(args, project: Project) -> int:
     if not project.cards:
         _fail(f"{project.skeleton.domain}: no cards to build")
     out = args.output or args.root / "dist" / f"{project.skeleton.domain}.apkg"
-    result = build_package(project.skeleton, project.cards, out, project.readings)
+    vault_root = args.root / "vault"
+    result = build_package(
+        project.skeleton, project.cards, out, project.readings,
+        clippings=project.clippings,
+        vault=args.vault_name or vault_name(vault_root),
+        vault_root=vault_root,
+    )
     print(f"wrote {result['path']}: {result['notes']} notes in {result['decks']} decks")
     return 0
 
@@ -161,8 +182,8 @@ def cmd_stats(args, project: Project) -> int:
 def cmd_path(args, project: Project) -> int:
     _checked(project, "generating the path")
     body = study_path(project.skeleton, project.cards, weeks=args.weeks)
-    out = project.vault(args.root) / "Study Path.md"
-    changed = _write_managed(out, body)
+    out = project.content_dir(args.root) / "Study Path.md"
+    changed = write_managed(out, body)
     print(f"{'updated' if changed else 'unchanged'}: {out}")
     return 0
 
@@ -187,7 +208,7 @@ def cmd_import(args, project: Project) -> int:
         _fail("fix existing card errors before importing")
     written, errors = import_cards(
         project.skeleton, project.cards, args.file,
-        project.vault(args.root) / "cards",
+        project.content_dir(args.root) / "cards",
     )
     if errors:
         for e in errors:
@@ -196,6 +217,42 @@ def cmd_import(args, project: Project) -> int:
     for path in written:
         print(f"wrote {path}")
     print(f"imported {len(written)} card(s); run `trellis sync` to refresh map notes")
+    return 0
+
+
+def cmd_clip(args, project: Project) -> int:
+    """Archive readings' pages into the vault so they can be read in
+    Obsidian offline. Already-clipped readings are skipped, so this is
+    safe to re-run; pages the Web Clipper saved are recognised too."""
+    from datetime import date
+
+    dest = project.content_dir(args.root) / CLIPPINGS_DIRNAME
+    today = date.today().isoformat()
+    todo = [
+        r for r in project.readings
+        if r.url and canonical_url(r.url) not in project.clippings
+    ]
+    if args.node:
+        todo = [r for r in todo if any(n.startswith(args.node) for n in r.nodes)]
+    if not todo:
+        print(f"{project.skeleton.domain}: every reading is already clipped")
+        return 0
+
+    clipped, failed = 0, []
+    for reading in todo:
+        try:
+            page = fetch_page(reading.url)
+        except ClipError as exc:
+            failed.append((reading.path.stem, str(exc)))
+            continue
+        if not page.title:
+            page.title = reading.title
+        path = write_clipping(dest, reading.path.stem, reading.url, page, today)
+        print(f"clipped {path.name}  <- {reading.url}")
+        clipped += 1
+    print(f"{project.skeleton.domain}: {clipped} clipped, {len(failed)} skipped")
+    for slug, why in failed:
+        print(f"  skipped {slug}: {why}")
     return 0
 
 
@@ -213,6 +270,7 @@ def cmd_anki_align(args, project: Project) -> int:
 
 
 HANDLERS = {
+    "clip": cmd_clip,
     "anki-align": cmd_anki_align,
     "validate": cmd_validate,
     "sync": cmd_sync,
@@ -241,6 +299,17 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("sync", help="regenerate Obsidian map notes from the skeleton")
     p_build = sub.add_parser("build", help="compile vault into an Anki .apkg")
     p_build.add_argument("-o", "--output", type=Path)
+    p_build.add_argument(
+        "--vault-name",
+        help="Obsidian vault name used in obsidian:// links "
+             "(default: the vault directory's name)",
+    )
+    p_clip = sub.add_parser(
+        "clip",
+        help="archive readings' pages as markdown in the vault, so cards can "
+             "open them in Obsidian instead of a browser",
+    )
+    p_clip.add_argument("--node", help="only readings under this node id")
     sub.add_parser("stats", help="card counts and leaf coverage per branch")
     p_path = sub.add_parser("path", help="write the linear study path into the vault")
     p_path.add_argument("--weeks", type=int)

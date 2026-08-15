@@ -12,8 +12,10 @@ Association vs aggregation vs composition vs dependency; lifetime ownership and 
 ## Drills
 - [[parking-lot|Drill: Parking Lot]]
 
-## Cards (3)
+## Cards (5)
 - [[oop-association-vs-dependency]]
+- [[oop-bidirectional-association]]
+- [[oop-cascade-delete-decision]]
 - [[oop-composition-vs-aggregation]]
 - [[oop-uml-arrows]]
 %% trellis:end %%

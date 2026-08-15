@@ -10,8 +10,12 @@ authoritative index, so a card without a road onward is a gap.
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
+from pathlib import Path
 
 from .cards import Card
+from .clippings import Clipping, canonical_url
+from .obsidian import open_uri
 from .readings import Reading
 from .skeleton import Skeleton
 
@@ -40,6 +44,42 @@ def sources_for(skeleton: Skeleton, readings: list[Reading], node_id: str,
                 seen.add(reading.url)
                 out.append(reading)
     return out[:limit]
+
+
+@dataclass
+class GoDeeper:
+    """One entry of a card's further-reading footer."""
+
+    title: str
+    href: str            # obsidian:// when a clipping exists, else the web URL
+    web_href: str | None  # the original URL, kept as a fallback when href is local
+
+    @property
+    def is_local(self) -> bool:
+        return self.href.startswith("obsidian://")
+
+
+def go_deeper(
+    skeleton: Skeleton,
+    readings: list[Reading],
+    node_id: str,
+    clippings: dict[str, Clipping] | None = None,
+    vault: str | None = None,
+    vault_root: Path | None = None,
+) -> list[GoDeeper]:
+    """Footer links for a card on `node_id`. A reading whose page has been
+    clipped into the vault resolves to an obsidian:// link so it opens in
+    Obsidian; everything else stays a web link."""
+    clippings = clippings or {}
+    out: list[GoDeeper] = []
+    for reading in sources_for(skeleton, readings, node_id):
+        clip = clippings.get(canonical_url(reading.url)) if vault else None
+        if clip is not None and vault_root is not None:
+            note = clip.path.resolve().relative_to(Path(vault_root).resolve())
+            out.append(GoDeeper(reading.title, open_uri(vault, note), reading.url))
+        else:
+            out.append(GoDeeper(reading.title, reading.url, None))
+    return out
 
 
 def coverage(skeleton: Skeleton, cards: list[Card],

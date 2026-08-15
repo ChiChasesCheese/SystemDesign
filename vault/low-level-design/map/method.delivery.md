@@ -10,7 +10,9 @@ Requirement scoping, choosing core flows, time-boxing design vs code vs demo, dr
 ## Drills
 - [[elevator-system|Drill: Elevator System]]
 
-## Cards (3)
+## Cards (5)
+- [[method-design-pitch-before-coding]]
+- [[method-final-twenty-minutes]]
 - [[method-running-out-of-time]]
 - [[method-scope-first-move]]
 - [[method-time-budget]]
