@@ -2,6 +2,11 @@ name: release
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v1.0.0); created if it doesn't exist"
+        required: true
 
 permissions:
   contents: write
@@ -20,8 +25,10 @@ jobs:
       - name: Create release with decks attached
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/*.apkg \
+          gh release create "$TAG" dist/*.apkg \
             --repo "$GITHUB_REPOSITORY" \
-            --title "Trellis decks $GITHUB_REF_NAME" \
+            --target "$GITHUB_SHA" \
+            --title "Trellis decks $TAG" \
             --generate-notes
