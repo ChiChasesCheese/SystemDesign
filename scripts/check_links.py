@@ -32,16 +32,24 @@ def main() -> int:
             for item in items:
                 if item.url:
                     urls.setdefault(item.url, []).append(str(item.path))
-    bad = 0
+    bad = blocked = 0
     for url, files in sorted(urls.items()):
         ok, status = check(url)
-        mark = "ok " if ok else "BAD"
-        if not ok:
-            bad += 1
-            print(f"{mark} {status:>3} {url}  <- {', '.join(files)}")
+        # Bot walls (403, connection resets) and hosts our proxy can't
+        # reach are not dead links — flag but don't fail on them.
+        is_blocked = not ok and (
+            "403" in status or "reset" in status.lower()
+            or "web.archive.org" in url
+        )
+        if ok:
+            print(f"ok   {status:>3} {url}")
+        elif is_blocked:
+            blocked += 1
+            print(f"BLKD {status:>3} {url}  (bot wall / proxy — verify in a browser once)")
         else:
-            print(f"{mark} {status:>3} {url}")
-    print(f"\n{len(urls)} urls, {bad} broken")
+            bad += 1
+            print(f"BAD  {status:>3} {url}  <- {', '.join(files)}")
+    print(f"\n{len(urls)} urls, {bad} broken, {blocked} blocked")
     return 1 if bad else 0
 
 

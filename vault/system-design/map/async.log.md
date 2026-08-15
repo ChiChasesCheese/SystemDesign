@@ -9,6 +9,7 @@ The append-only log as system of record; partitions, consumer groups, offsets, r
 **Unlocks:** [[analytics.derived|Derived Data & Materialized Views]]
 
 ## Readings
+- [[kafka-docs|Apache Kafka Documentation (Design section)]]
 - [[the-log-jay-kreps|The Log: What every software engineer should know (Jay Kreps)]]
 - [[turning-the-database-inside-out|Turning the Database Inside-Out (Kleppmann)]]
 

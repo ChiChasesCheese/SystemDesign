@@ -1,10 +1,15 @@
 %% trellis:begin %%
-# Transactions & Isolation
+# Transactions
 *Distributed Data*
 
-ACID isolation levels, snapshot isolation, and why 2PC is avoided at scale.
+What the database promises around concurrent access — and what it charges for the promise.
 
 **Requires:** [[storage.relational|Relational Databases]]
+
+## Topics
+- [[distributed.transactions.isolation|Isolation Levels & Anomalies]]
+- [[distributed.transactions.concurrency-control|Concurrency Control]]
+- [[distributed.transactions.distributed|Distributed Transactions]]
 
 **Unlocks:** [[correctness.outbox|Dual Writes & Outbox]], [[correctness.saga|Sagas]]
 
@@ -13,15 +18,6 @@ ACID isolation levels, snapshot isolation, and why 2PC is avoided at scale.
 
 ## Drills
 - [[design-payment-ledger|Drill: Design a payment ledger service]]
-
-## Cards (7)
-- [[distributed-2pc-avoidance]]
-- [[distributed-2pl-vs-ssi]]
-- [[distributed-isolation-anomalies]]
-- [[distributed-mvcc-defaults]]
-- [[distributed-mvcc-visibility]]
-- [[distributed-phantoms-predicate-locks]]
-- [[distributed-write-skew]]
 %% trellis:end %%
 
 ## Notes

@@ -6,6 +6,9 @@ At-most-once, at-least-once, effectively-exactly-once; ordering guarantees and d
 
 **Unlocks:** [[correctness.idempotency|Idempotency]]
 
+## Readings
+- [[kafka-docs|Apache Kafka Documentation (Design section)]]
+
 ## Cards (6)
 - [[async-delivery-semantics-cloze]]
 - [[async-dlq-poison-pill]]

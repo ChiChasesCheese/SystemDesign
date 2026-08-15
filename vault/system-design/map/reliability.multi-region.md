@@ -6,6 +6,9 @@ Active-passive vs active-active, data residency, RPO/RTO, and why failover you n
 
 **Requires:** [[distributed.replication|Replication]], [[distributed.consensus|Consensus]]
 
+## Readings
+- [[aws-static-stability|Static stability using Availability Zones (AWS Builders' Library)]]
+
 ## Cards (6)
 - [[reliability-active-active-vs-passive]]
 - [[reliability-async-rpo-math]]

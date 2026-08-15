@@ -6,6 +6,9 @@ Why analytical scans want column layout, compression, and vectorized execution i
 
 **Requires:** [[storage.internals|B-trees vs LSM-trees]]
 
+## Readings
+- [[ddia-2e|Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)]]
+
 ## Cards (5)
 - [[analytics-column-store-writes]]
 - [[analytics-columnar-compression]]

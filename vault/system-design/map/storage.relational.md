@@ -2,17 +2,13 @@
 # Relational Databases
 *Storage*
 
-Indexing, connection pooling, read replicas, federation, and when a single Postgres is the right answer.
+The default system of record — used well before being scaled.
 
-**Unlocks:** [[distributed.transactions|Transactions & Isolation]]
+## Topics
+- [[storage.relational.indexing|Indexing]]
+- [[storage.relational.operations|Operating at Scale]]
 
-## Cards (6)
-- [[storage-connection-pooling]]
-- [[storage-covering-index]]
-- [[storage-index-leftmost-prefix]]
-- [[storage-mvcc-vacuum]]
-- [[storage-normalization-tradeoff]]
-- [[storage-scaling-ladder]]
+**Unlocks:** [[distributed.transactions|Transactions]]
 %% trellis:end %%
 
 ## Notes

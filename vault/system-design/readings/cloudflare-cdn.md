@@ -1,6 +1,6 @@
 ---
 nodes: [networking.cdn, caching.placement]
-url: https://developers.cloudflare.com/cache/concepts/how-cache-works/
+url: https://developers.cloudflare.com/cache/
 tags: [reference]
 ---
 # How CDN caching actually works (Cloudflare docs)

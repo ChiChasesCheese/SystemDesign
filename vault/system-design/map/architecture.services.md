@@ -4,6 +4,9 @@
 
 When to split, service boundaries by data ownership, and the operational bill microservices arrive with.
 
+## Readings
+- [[fowler-microservices|Microservices (Lewis & Fowler)]]
+
 ## Cards (6)
 - [[architecture-boundaries-data-ownership]]
 - [[architecture-conways-law]]

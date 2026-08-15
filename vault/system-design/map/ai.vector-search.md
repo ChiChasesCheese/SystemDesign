@@ -1,10 +1,15 @@
 %% trellis:begin %%
-# Vector Search & RAG
+# Vector Search
 *AI Systems*
 
-Embeddings, ANN indexes (HNSW), hybrid retrieval, and freshness of the underlying corpus.
+Embeddings as vectors, ANN indexes (HNSW/IVF), hybrid retrieval, and freshness of the indexed corpus.
 
-**Requires:** [[storage.search|Search Indexes]]
+**Requires:** [[storage.search|Search Indexes]], [[ai.foundations|LLM Foundations for Engineers]]
+
+**Unlocks:** [[ai.rag|RAG Pipelines]]
+
+## Readings
+- [[pinecone-learn|Pinecone Learning Center]]
 
 ## Cards (7)
 - [[ai-ann-tradeoff]]

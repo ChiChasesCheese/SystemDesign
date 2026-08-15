@@ -6,6 +6,9 @@ Queues vs pub-sub, backpressure, consumer scaling, and when async is the wrong c
 
 **Unlocks:** [[correctness.outbox|Dual Writes & Outbox]]
 
+## Readings
+- [[aws-queue-backlogs|Avoiding insurmountable queue backlogs (AWS Builders' Library)]]
+
 ## Cards (6)
 - [[async-broker-selection]]
 - [[async-competing-consumers-ordering]]

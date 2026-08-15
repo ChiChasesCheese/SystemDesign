@@ -4,6 +4,9 @@
 
 TCP vs UDP guarantees and costs; HTTP semantics, keep-alive, HTTP/2 and 3 in one breath.
 
+## Readings
+- [[high-performance-browser-networking|High Performance Browser Networking (Ilya Grigorik)]]
+
 ## Cards (6)
 - [[networking-connection-pooling]]
 - [[networking-connection-setup-cost]]

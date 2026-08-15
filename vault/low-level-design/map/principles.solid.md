@@ -4,6 +4,9 @@
 
 The five principles as concrete refactoring triggers, with the violation each one detects.
 
+## Readings
+- [[digitalocean-solid|SOLID: The First Five Principles of Object-Oriented Design (DigitalOcean)]]
+
 ## Cards (6)
 - [[principles-dip-trigger]]
 - [[principles-isp-trigger]]
