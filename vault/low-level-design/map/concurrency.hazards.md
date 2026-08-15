@@ -6,6 +6,7 @@ The four deadlock conditions and their breakers, livelock, starvation, lock orde
 
 ## Readings
 - [[java-concurrency-in-practice|Java Concurrency in Practice (Goetz et al.)]]
+- [[ostep-concurrency-bugs|Common Concurrency Problems (OSTEP, Arpaci-Dusseau — free chapter)]]
 
 ## Drills
 - [[elevator-system|Drill: Elevator System]]

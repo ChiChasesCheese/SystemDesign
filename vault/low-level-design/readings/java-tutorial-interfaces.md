@@ -1,7 +1,10 @@
 ---
-nodes: [oop.interfaces]
+nodes:
+- oop.interfaces
 url: https://docs.oracle.com/javase/tutorial/java/IandI/index.html
-tags: [reference]
+tags:
+- reference
+- index
 ---
 # Oracle Java Tutorial: Interfaces and Inheritance
 
@@ -19,7 +22,4 @@ answers the discrimination question interviewers actually ask.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://docs.oracle.com/javase/tutorial/java/IandI/index.html)
-
-## Archived copy
-![[java-tutorial-interfaces-clip]]
 %% trellis:end %%

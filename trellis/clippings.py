@@ -27,6 +27,10 @@ CLIPPINGS_DIRNAME = "clippings"
 # phone and a laptop that disagree about where the vault root is — but only
 # if the name is unique, so the clipping must not collide with its reading.
 CLIP_SUFFIX = "-clip"
+# A book's homepage or a docs index extracts cleanly and says nothing. The
+# point of a clipping is to lower the cost of getting the information, so a
+# page has to carry real prose to earn one.
+MIN_PROSE = 2500
 
 
 @dataclass
@@ -34,10 +38,18 @@ class Clipping:
     path: Path
     source_url: str
     title: str
+    prose: int = 0
+    is_pdf: bool = False
 
     @property
     def link_target(self) -> str:
         return self.path.stem
+
+    @property
+    def is_substantive(self) -> bool:
+        """A PDF holds its content in the attachment; anything else has to
+        carry the prose itself."""
+        return self.is_pdf or self.prose >= MIN_PROSE
 
 
 def canonical_url(url: str) -> str:
@@ -65,8 +77,13 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 def _download(url: str, timeout: int = 30) -> tuple[bytes, str, str]:
     """Returns (body, content-type, charset). Raises ClipError on failure."""
     import gzip
+    import socket
     import urllib.request
     import zlib
+
+    # urlopen's timeout does not always cover a connect that never answers,
+    # and one dead host must not stall a whole clip run.
+    socket.setdefaulttimeout(timeout)
 
     req = urllib.request.Request(
         url, headers={"User-Agent": _UA, "Accept-Encoding": "gzip, deflate"}
@@ -146,10 +163,10 @@ def fetch_page(url: str) -> FetchedPage:
         )
     body = re.sub(r"\n{3,}", "\n\n", body or "").strip()
     prose = _prose_length(body)
-    if prose < 400:
+    if prose < MIN_PROSE:
         raise ClipError(
-            f"only {prose} characters of prose extracted — "
-            "paywall, JS-only page, or a PDF/video page"
+            f"only {prose} characters of prose — a landing page, index, or "
+            "paywall, not an article worth archiving"
         )
 
     meta = extract_metadata(downloaded, default_url=url)
@@ -230,6 +247,7 @@ def load_clippings(clippings_dir: str | Path) -> dict[str, Clipping]:
             match = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
             title = match.group(1).strip() if match else path.stem
         out[canonical_url(source)] = Clipping(
-            path=path, source_url=source, title=title
+            path=path, source_url=source, title=title,
+            prose=_prose_length(body), is_pdf=".pdf]]" in body,
         )
     return out

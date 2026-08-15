@@ -1,7 +1,12 @@
 ---
-nodes: [quality.smells, quality.refactoring]
+nodes:
+- quality.smells
+- quality.refactoring
 url: https://refactoring.guru/refactoring/smells
-tags: [canonical, reference]
+tags:
+- canonical
+- reference
+- index
 ---
 # Code Smells & Refactoring Catalog (refactoring.guru)
 
@@ -17,7 +22,4 @@ machine-coding interviewer probes when they ask "what would you improve?"
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://refactoring.guru/refactoring/smells)
-
-## Archived copy
-![[refactoring-guru-smells-clip]]
 %% trellis:end %%

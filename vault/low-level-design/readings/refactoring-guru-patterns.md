@@ -1,7 +1,14 @@
 ---
-nodes: [patterns.creational, patterns.structural, patterns.behavioral, patterns.selection]
+nodes:
+- patterns.creational
+- patterns.structural
+- patterns.behavioral
+- patterns.selection
 url: https://refactoring.guru/design-patterns/catalog
-tags: [canonical, reference]
+tags:
+- canonical
+- reference
+- index
 ---
 # Design Patterns Catalog (refactoring.guru)
 

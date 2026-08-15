@@ -8,6 +8,7 @@ Sidecars and ambient meshes — mTLS, retries, and traffic policy moved out of a
 
 ## Readings
 - [[istio-docs|Istio Documentation (concepts pages)]]
+- [[service-mesh-manifesto|The Service Mesh: What Every Software Engineer Needs to Know]]
 
 ## Cards (4)
 - [[infra-mesh-sidecar-intercept]]

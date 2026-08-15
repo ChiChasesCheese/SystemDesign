@@ -77,6 +77,13 @@ The footer on a built card carrying its node's readings — as `obsidian://` lin
 when the reading has been clipped, and as web links otherwise.
 _Avoid_: sources, further reading, references
 
+**Readable source**:
+A reading whose page is archived in the vault as real prose (or as the paper
+itself) and that is not a pointer at a book or an index. Engineering blogs,
+company write-ups, papers, and single sections of a knowledge base qualify; a
+book's homepage does not, unless what is archived is the chapter itself.
+_Avoid_: good source, primary source
+
 **Link coverage**:
 The share of cards that have a road onward — an inline link, or a reading
 inherited from their node or its ancestors. Tracked because a card with no way

@@ -5,6 +5,7 @@
 Extract method/class, replace conditional with polymorphism, introduce parameter object, guard clauses.
 
 ## Readings
+- [[fowler-refactoring-video-store|Refactoring a JavaScript Video Store (Martin Fowler)]]
 - [[refactoring-guru-smells|Code Smells & Refactoring Catalog (refactoring.guru)]]
 
 ## Cards (4)

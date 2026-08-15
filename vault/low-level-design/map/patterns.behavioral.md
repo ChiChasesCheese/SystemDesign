@@ -7,6 +7,7 @@ Strategy, observer, command, state, template method, iterator, chain of responsi
 **Unlocks:** [[structure.state-machines|State Machines]]
 
 ## Readings
+- [[gpp-observer|Observer (Game Programming Patterns, Bob Nystrom)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
 ## Drills

@@ -7,6 +7,7 @@ Association vs aggregation vs composition vs dependency; lifetime ownership and 
 **Unlocks:** [[principles.composition|Composition over Inheritance]]
 
 ## Readings
+- [[uml-association|UML Association (uml-diagrams.org)]]
 - [[uml-distilled|UML Distilled (Martin Fowler)]]
 
 ## Drills

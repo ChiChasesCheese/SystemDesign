@@ -20,7 +20,4 @@ and Fowler's pragmatic advice on which distinctions matter (and which don't).
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://martinfowler.com/books/uml.html)
-
-## Archived copy
-![[uml-distilled-clip]]
 %% trellis:end %%

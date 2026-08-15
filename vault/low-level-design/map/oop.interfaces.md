@@ -5,6 +5,7 @@
 Program-to-interface, interface vs abstract class discrimination, default methods and their limits.
 
 ## Readings
+- [[gamma-program-to-interface|Design Principles from Design Patterns — A Conversation with Erich Gamma]]
 - [[java-tutorial-interfaces|Oracle Java Tutorial: Interfaces and Inheritance]]
 
 ## Cards (5)

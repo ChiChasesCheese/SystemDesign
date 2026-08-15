@@ -6,6 +6,7 @@ Push vs pull CDNs, cache keys, and what belongs at the edge.
 
 ## Readings
 - [[cloudflare-cdn|How CDN caching actually works (Cloudflare docs)]]
+- [[netflix-open-connect|Netflix Open Connect Overview]]
 
 ## Cards (6)
 - [[networking-cdn-cache-key]]

@@ -1,7 +1,11 @@
 ---
-nodes: [infra.containers]
+nodes:
+- infra.containers
 url: https://kubernetes.io/docs/concepts/
-tags: [reference, canonical]
+tags:
+- reference
+- canonical
+- index
 ---
 # Kubernetes Concepts (official docs)
 
@@ -18,7 +22,4 @@ reconciliation model behind them all. Read "Overview", "Workloads", and
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://kubernetes.io/docs/concepts/)
-
-## Archived copy
-![[kubernetes-docs-concepts-clip]]
 %% trellis:end %%

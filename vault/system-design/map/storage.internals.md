@@ -8,6 +8,7 @@ The two storage engine families; read, write, and space amplification trade-offs
 
 ## Readings
 - [[ddia-2e|Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)]]
+- [[lsm-vs-btree-stopford|Log Structured Merge Trees (Ben Stopford)]]
 
 ## Cards (6)
 - [[storage-amplification-triangle]]

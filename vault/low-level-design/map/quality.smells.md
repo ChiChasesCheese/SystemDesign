@@ -5,6 +5,7 @@
 Bloaters, OO abusers, change preventers, dispensables, couplers — and the refactoring each family calls for.
 
 ## Readings
+- [[codinghorror-code-smells|Code Smells (Jeff Atwood, Coding Horror)]]
 - [[refactoring-guru-smells|Code Smells & Refactoring Catalog (refactoring.guru)]]
 
 ## Cards (4)

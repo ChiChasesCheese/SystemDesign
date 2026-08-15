@@ -20,7 +20,4 @@ violation each principle detects.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design)
-
-## Archived copy
-![[digitalocean-solid-clip]]
 %% trellis:end %%

@@ -6,6 +6,7 @@ MapReduce lineage to Spark; shuffles, distributed joins, idempotent reruns, and 
 
 ## Readings
 - [[ddia-2e|Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)]]
+- [[spark-rdd-paper|Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing (NSDI 2012)]]
 
 ## Cards (5)
 - [[analytics-batch-vs-stream]]

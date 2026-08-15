@@ -5,6 +5,7 @@
 Small stable interfaces, fluent builders, method contracts, and evolving an API without breaking callers.
 
 ## Readings
+- [[ouster-modular-design|Modular Design (John Ousterhout, CS 190 lecture notes)]]
 - [[philosophy-of-software-design|A Philosophy of Software Design (John Ousterhout)]]
 
 ## Drills

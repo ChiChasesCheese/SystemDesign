@@ -1,7 +1,11 @@
 ---
-nodes: [security.authz]
+nodes:
+- security.authz
 url: https://owasp.org/API-Security/
-tags: [canonical, reference]
+tags:
+- canonical
+- reference
+- index
 ---
 # OWASP API Security Top 10
 
@@ -17,7 +21,4 @@ per-object, per-request work, not a gateway checkbox.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://owasp.org/API-Security/)
-
-## Archived copy
-![[owasp-api-security-clip]]
 %% trellis:end %%

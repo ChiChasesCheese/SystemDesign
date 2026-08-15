@@ -66,6 +66,13 @@ Mechanically:
   whole branch).
 - `trellis stats` reports **link coverage** (cards with a road onward) per
   branch; `trellis validate` warns when a domain drops below the 70% target.
+- A source only counts as **readable** when it is archived in the vault, has
+  real prose, and is not tagged `book` or `index`. Preference order, highest
+  first: an engineering-blog deep dive, a company write-up, a paper, or a
+  single section of a knowledge base — then anything else on the web — then
+  books and indexes, which rank last however cleanly their homepage happens to
+  archive. Tag a genuine full chapter `canonical`, not `book`. `validate`
+  names every leaf still stuck with a pointer, so this cannot regress quietly.
 - `python3 scripts/check_links.py` verifies every archived URL still resolves
   (run manually; network-bound).
 

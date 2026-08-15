@@ -5,6 +5,7 @@
 Encapsulation, abstraction, inheritance, polymorphism — each as a lever with a cost, not a virtue.
 
 ## Readings
+- [[holub-extends-is-evil|Why extends Is Evil (Allen Holub)]]
 - [[poodr|Practical Object-Oriented Design (Sandi Metz)]]
 
 ## Cards (5)

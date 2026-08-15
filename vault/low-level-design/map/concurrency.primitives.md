@@ -8,6 +8,8 @@ Mutex, semaphore, condition variable, reentrant and read-write locks, CAS and lo
 
 ## Readings
 - [[java-concurrency-in-practice|Java Concurrency in Practice (Goetz et al.)]]
+- [[jenkov-read-write-locks|Read / Write Locks in Java (Jakob Jenkov)]]
+- [[preshing-lock-free|An Introduction to Lock-Free Programming (Jeff Preshing)]]
 
 ## Drills
 - [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]

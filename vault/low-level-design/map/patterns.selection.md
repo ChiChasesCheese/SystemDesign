@@ -8,6 +8,7 @@ Mapping problem smells to patterns, pattern pairs that get confused, and over-en
 
 ## Readings
 - [[awesome-low-level-design|awesome-low-level-design (ashishps1)]]
+- [[gpp-architecture-performance|Architecture, Performance, and Games (Game Programming Patterns, Bob Nystrom)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
 ## Cards (4)

@@ -5,6 +5,7 @@
 TCP vs UDP guarantees and costs; HTTP semantics, keep-alive, HTTP/2 and 3 in one breath.
 
 ## Readings
+- [[cloudflare-road-to-quic|The Road to QUIC (Cloudflare)]]
 - [[high-performance-browser-networking|High Performance Browser Networking (Ilya Grigorik)]]
 
 ## Cards (6)

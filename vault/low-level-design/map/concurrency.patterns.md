@@ -8,6 +8,7 @@ Producer-consumer, bounded blocking queue, thread pool, reader-writer, safe lazy
 
 ## Readings
 - [[java-concurrency-in-practice|Java Concurrency in Practice (Goetz et al.)]]
+- [[ostep-semaphores|Semaphores (OSTEP, Arpaci-Dusseau — free chapter)]]
 
 ## Drills
 - [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]

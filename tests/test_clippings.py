@@ -142,3 +142,33 @@ def test_built_card_carries_the_obsidian_link_and_a_web_fallback(tmp_path):
         "select flds from notes").fetchone()[0]
     assert 'href="obsidian://open?vault=vault&file=the-alpha-guide"' in flds
     assert 'href="https://Example.com/Guide/" class="web"' in flds
+
+
+def test_a_book_pointer_does_not_count_as_a_readable_source(tmp_path):
+    """The guard behind 'go deeper' actually going somewhere useful: a
+    book's homepage is a pointer, not something you can read now."""
+    from trellis.clippings import MIN_PROSE
+    from trellis.links import is_readable_source, leaves_without_readable_source
+
+    skeleton, readings, clips = _project(tmp_path)
+    (tmp_path / "the-book.md").write_text(
+        "---\nnodes: [alpha.one]\nurl: https://example.com/book\ntags: [book]\n---\n# A Book\n",
+        encoding="utf-8",
+    )
+    book = parse_reading(tmp_path / "the-book.md")
+
+    # even fully archived, a `book` reading stays a pointer
+    write_clipping(clips, "the-book", "https://example.com/book",
+                   FetchedPage(title="A Book", markdown="prose. " * MIN_PROSE),
+                   "2026-08-15")
+    index = load_clippings(clips)
+    assert not is_readable_source(book, index)
+    assert leaves_without_readable_source(skeleton, [book], index) == ["alpha.one"]
+
+    # a plain article of real length does count
+    write_clipping(clips, "the-alpha-guide", "https://example.com/Guide",
+                   FetchedPage(title="The Alpha Guide", markdown="prose. " * MIN_PROSE),
+                   "2026-08-15")
+    index = load_clippings(clips)
+    assert is_readable_source(readings[0], index)
+    assert leaves_without_readable_source(skeleton, readings, index) == []

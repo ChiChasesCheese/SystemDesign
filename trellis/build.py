@@ -108,11 +108,12 @@ def _sources_html(
     readings: list[Reading],
     node_id: str,
     vault: str | None = None,
+    clippings: dict | None = None,
 ) -> str:
     """Clickable further-reading footer from the node's (and ancestors')
     readings — the card's road onward, tappable in Anki. Clipped readings
     open inside Obsidian; the web original stays available as ↗."""
-    links = go_deeper(skeleton, readings, node_id, vault)
+    links = go_deeper(skeleton, readings, node_id, vault, clippings)
     if not links:
         return ""
     rendered = []
@@ -130,6 +131,7 @@ def build_package(
     out_path: str | Path,
     readings: list[Reading] | None = None,
     vault: str | None = None,
+    clippings: dict | None = None,
 ) -> dict:
     """Write the .apkg. Returns {'notes': int, 'decks': int, 'path': str}."""
     readings = readings or []
@@ -150,7 +152,7 @@ def build_package(
         tags = [skeleton.domain + "::" + card.node.replace(".", "::")] + card.tags
         if card.source:
             tags.append(f"src::{card.source}")
-        footer = _sources_html(skeleton, readings, card.node, vault)
+        footer = _sources_html(skeleton, readings, card.node, vault, clippings)
         if card.type == "qa":
             note = genanki.Note(
                 model=qa_model,
