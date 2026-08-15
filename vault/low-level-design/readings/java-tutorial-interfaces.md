@@ -15,3 +15,11 @@ answers the discrimination question interviewers actually ask.
 - Default methods: evolving an interface without breaking implementors — and
   why they can't replace abstract classes (no state, no constructors).
 - Interface as type: program to the interface so implementations stay swappable.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://docs.oracle.com/javase/tutorial/java/IandI/index.html)
+
+## Archived copy
+![[java-tutorial-interfaces-clip]]
+%% trellis:end %%

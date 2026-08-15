@@ -15,3 +15,11 @@ interfaces→code pipeline, with worked deliveries of classic problems.
 - The requirements-to-objects drill: scope to 3–4 core flows out loud, extract
   entities and invariants, then write interfaces before bodies.
 - How to narrate trade-offs while coding so the evaluation happens in your favor.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.hellointerview.com/learn/low-level-design)
+
+## Archived copy
+![[hellointerview-lld-clip]]
+%% trellis:end %%

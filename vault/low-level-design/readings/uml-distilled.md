@@ -16,3 +16,11 @@ and Fowler's pragmatic advice on which distinctions matter (and which don't).
   with it; aggregation carries no such guarantee (Fowler: use it sparingly).
 - "UML as sketch" — draw only what supports the conversation, which is exactly
   the interview mode.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/books/uml.html)
+
+## Archived copy
+![[uml-distilled-clip]]
+%% trellis:end %%

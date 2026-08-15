@@ -15,3 +15,11 @@ the whole `analytics.derived` node and half of modern streaming architecture.
 - Where this breaks down: read-your-writes against async views.
 
 Related cards: [[async-cdc-mechanism]], [[async-materialized-view-refresh]]
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martin.kleppmann.com/2015/03/04/turning-the-database-inside-out.html)
+
+## Archived copy
+![[turning-the-database-inside-out-clip]]
+%% trellis:end %%

@@ -13,3 +13,11 @@ Still the best single artifact for explaining leaderless replication.
 - Consistent hashing with virtual nodes for rebalancing.
 - N/R/W tuning and what "eventually consistent" concretely meant for carts.
 - The cost: conflict resolution pushed to the application.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf)
+
+## Archived copy
+![[dynamo-paper-clip]]
+%% trellis:end %%

@@ -16,3 +16,11 @@ DI as the tool that turns hard-wired dependencies into swappable seams.
   immutable dependencies.
 - DI vs service locator: both decouple, but a locator leaves a hidden
   dependency on the locator itself — worse for tests.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/articles/injection.html)
+
+## Archived copy
+![[fowler-injection-clip]]
+%% trellis:end %%

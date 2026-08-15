@@ -13,3 +13,11 @@ as choosing storage by access pattern, not fashion.
 - Aggregate orientation: model around what you read/write together; joins become your job.
 - Key-value vs document vs wide-column as points on one axis; graph as the genuine outlier.
 - Choose NoSQL for scale-out or model fit — and default to relational absent either.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/nosql.html)
+
+## Archived copy
+![[fowler-nosql-clip]]
+%% trellis:end %%

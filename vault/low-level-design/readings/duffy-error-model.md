@@ -17,3 +17,11 @@ result types, from building a real OS (Midori) that bet on getting it right.
   errors buy at API boundaries.
 - Validate at boundaries so interior code can assume invariants instead of
   re-checking everywhere.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://joeduffyblog.com/2016/02/07/the-error-model/)
+
+## Archived copy
+![[duffy-error-model-clip]]
+%% trellis:end %%

@@ -13,3 +13,11 @@ your indexes. Nothing else teaches the leftmost-prefix rule this well.
 - B-tree lookup = tree walk + leaf scan; what each index column position buys.
 - Composite index column order: equality columns first, then range; one index serves many queries.
 - Index-only scans (covering indexes), and the write/space tax every index charges.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://use-the-index-luke.com/)
+
+## Archived copy
+![[use-the-index-luke-clip]]
+%% trellis:end %%

@@ -10,7 +10,7 @@ import pytest
 
 from trellis.build import build_package
 from trellis.cards import load_cards
-from trellis.clippings import CLIPPINGS_DIRNAME
+from trellis.clippings import CLIP_SUFFIX, CLIPPINGS_DIRNAME
 from trellis.readings import load_readings
 from trellis.scaffold import import_cards, scaffold_prompt
 from trellis.skeleton import load_skeleton
@@ -249,4 +249,42 @@ def test_real_repo_wikilinks_resolve():
                 or path.name == "Study Path.md"):
             continue
         for target in link_re.findall(path.read_text(encoding="utf-8")):
-            assert target.strip() in targets, f"{path}: dangling link [[{target}]]"
+            target = target.strip()
+            # embeds of clipped articles are expected to be missing here:
+            # clippings are gitignored, so a clean checkout has none
+            if target.endswith(CLIP_SUFFIX) or target.endswith(CLIP_SUFFIX + ".pdf"):
+                continue
+            assert target in targets, f"{path}: dangling link [[{target}]]"
+
+
+def test_every_deck_link_resolves_to_exactly_one_note(tmp_path):
+    """The property that makes card links work on both a phone (whose vault
+    root is the repo) and a laptop (whose vault root is vault/): each link
+    names a note, and that name is unique across the whole vault."""
+    import re
+    from collections import Counter
+    from urllib.parse import unquote
+
+    from trellis.clippings import load_clippings
+    from trellis.drills import load_drills
+    from trellis.obsidian import vault_name
+
+    vault_root = REPO / "vault"
+    names = Counter(p.stem for p in vault_root.rglob("*.md"))
+    for skel_file in (REPO / "skeleton").glob("*.yaml"):
+        skeleton = load_skeleton(skel_file)
+        content = vault_root / skeleton.domain
+        cards, _ = load_cards(content / "cards")
+        readings, _ = load_readings(content / "readings")
+        result = build_package(
+            skeleton, cards, tmp_path / f"{skeleton.domain}.apkg", readings,
+            vault=vault_name(vault_root),
+        )
+        assert result["notes"] == len(cards)
+
+        with zipfile.ZipFile(tmp_path / f"{skeleton.domain}.apkg") as z:
+            (tmp_path / "c.db").write_bytes(z.read("collection.anki2"))
+        for (flds,) in sqlite3.connect(tmp_path / "c.db").execute("select flds from notes"):
+            for match in re.finditer(r"obsidian://open\?vault=[^&]+&file=([^\"]+)", flds):
+                target = unquote(match.group(1))
+                assert names[target] == 1, f"{target!r} resolves to {names[target]} notes"

@@ -13,3 +13,8 @@ interview-relevant part; skip the UML.
 **Extract on read:**
 - For each pattern: the one-sentence intent and the smell that calls for it.
 - The confusable pairs pages (decorator vs proxy, strategy vs state, ...).
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://refactoring.guru/design-patterns/catalog)
+%% trellis:end %%

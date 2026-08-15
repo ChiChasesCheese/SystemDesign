@@ -22,6 +22,11 @@ from urllib.parse import urlsplit, urlunsplit
 import yaml
 
 CLIPPINGS_DIRNAME = "clippings"
+# A clipping is named after its reading plus this suffix. Obsidian resolves
+# a link given as a bare name, which is what makes card links work on a
+# phone and a laptop that disagree about where the vault root is — but only
+# if the name is unique, so the clipping must not collide with its reading.
+CLIP_SUFFIX = "-clip"
 
 
 @dataclass
@@ -184,11 +189,12 @@ def write_clipping(
     embedded, which Obsidian renders inline."""
     directory = Path(clippings_dir)
     directory.mkdir(parents=True, exist_ok=True)
-    path = directory / f"{slug}.md"
+    name = f"{slug}{CLIP_SUFFIX}"
+    path = directory / f"{name}.md"
 
     if page.is_pdf:
-        (directory / f"{slug}.pdf").write_bytes(page.pdf)
-        body = f"![[{slug}.pdf]]"
+        (directory / f"{name}.pdf").write_bytes(page.pdf)
+        body = f"![[{name}.pdf]]"
     else:
         body = page.markdown
 

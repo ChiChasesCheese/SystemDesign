@@ -13,3 +13,11 @@ Where SLI/SLO/error-budget vocabulary comes from. Free online; one chapter.
 - Error budgets as the release-velocity control loop between dev and ops.
 
 Related cards: [[reliability-error-budget-throttle]], [[reliability-percentiles-over-averages]], [[reliability-burn-rate-alerting]]
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://sre.google/sre-book/service-level-objectives/)
+
+## Archived copy
+![[google-sre-slo-clip]]
+%% trellis:end %%

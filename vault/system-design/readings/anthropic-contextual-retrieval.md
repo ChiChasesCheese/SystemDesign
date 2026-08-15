@@ -14,3 +14,11 @@ search, and reranking — each with quantified retrieval gains.
 - Chunks lose their document context; prepending generated context per chunk cuts retrieval failures sharply.
 - Embeddings + BM25 beat either alone — exact identifiers still need lexical match.
 - Retrieve wide then rerank to the top-k that fits the context window; and skip RAG entirely when the corpus fits.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.anthropic.com/news/contextual-retrieval)
+
+## Archived copy
+![[anthropic-contextual-retrieval-clip]]
+%% trellis:end %%

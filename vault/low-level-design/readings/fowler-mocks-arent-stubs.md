@@ -16,3 +16,11 @@ injected through constructors — is what makes code testable at all.
   never reached through statics or globals.
 - Classicist vs mockist styles and how each drives design (mockist testing
   pushes you toward interface-heavy, injected designs).
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/articles/mocksArentStubs.html)
+
+## Archived copy
+![[fowler-mocks-arent-stubs-clip]]
+%% trellis:end %%

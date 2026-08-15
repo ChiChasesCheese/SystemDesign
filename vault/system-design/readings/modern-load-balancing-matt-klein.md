@@ -13,3 +13,8 @@ sidecar topologies — with production judgment behind every claim.
 - Why L4 breaks down for multiplexed protocols (HTTP/2, gRPC) and L7 fixes it.
 - Algorithms in practice: round robin vs least-request vs power-of-two-choices.
 - LB high availability itself: DNS, anycast, and consistent-hash ECMP at the edge.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://blog.envoyproxy.io/introduction-to-modern-network-load-balancing-and-proxying-91ef79a71c8a)
+%% trellis:end %%

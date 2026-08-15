@@ -13,3 +13,11 @@ written by ex-FAANG interviewers, free and regularly updated.
 - Functional vs non-functional requirements as the first 5 minutes, with numbers attached.
 - The delivery framework: design to the requirements list, not to a memorized template.
 - Where interviews are won: proactively driven deep dives, not the boxes-and-arrows diagram.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.hellointerview.com/learn/system-design/in-a-hurry/introduction)
+
+## Archived copy
+![[hello-interview-in-a-hurry-clip]]
+%% trellis:end %%

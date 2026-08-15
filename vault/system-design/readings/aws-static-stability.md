@@ -14,3 +14,11 @@ active-passive, and why untested failover is fiction.
 - Static stability: keep running when a dependency fails, without needing to launch/scale anything mid-incident.
 - Data plane vs control plane — never put a control-plane dependency in your recovery path.
 - Over-provision N+1 across zones/regions; "failover automation" that must make changes under stress is the risk itself.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/static-stability-using-availability-zones/)
+
+## Archived copy
+![[aws-static-stability-clip]]
+%% trellis:end %%

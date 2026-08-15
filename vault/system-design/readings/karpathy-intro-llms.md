@@ -14,3 +14,8 @@ where tools/agents fit. Watch this before anything else in the AI branch.
 - An LLM is two files: weights + a small run loop; inference is next-token prediction over and over.
 - Pretraining (compress the internet, expensive) vs finetuning (shape the assistant, cheap).
 - The "LLM OS" frame: context window as RAM, tools/retrieval as peripherals — the system-design surface.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=zjkBMFhNj_g)
+%% trellis:end %%

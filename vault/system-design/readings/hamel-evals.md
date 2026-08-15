@@ -14,3 +14,11 @@ data, log traces, curate failure cases into regression tests) spelled out.
 - Level 1 unit-test assertions run on every change; Level 2 human/LLM-as-judge on samples; Level 3 online A/B.
 - LLM-as-judge must itself be validated against human labels before you trust it.
 - The flywheel: production traces -> reviewed failures -> new eval cases -> prompt/pipeline fixes, forever.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://hamel.dev/blog/posts/evals/)
+
+## Archived copy
+![[hamel-evals-clip]]
+%% trellis:end %%

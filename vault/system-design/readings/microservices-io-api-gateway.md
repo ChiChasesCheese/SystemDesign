@@ -13,3 +13,11 @@ interviewers expect you to volunteer.
 - What belongs at the gateway: TLS termination, authn, routing, quotas, aggregation.
 - BFF: one gateway per client type instead of one god-gateway.
 - The bill: extra hop latency, a new SPOF to make highly available, a bottleneck team.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://microservices.io/patterns/apigateway.html)
+
+## Archived copy
+![[microservices-io-api-gateway-clip]]
+%% trellis:end %%

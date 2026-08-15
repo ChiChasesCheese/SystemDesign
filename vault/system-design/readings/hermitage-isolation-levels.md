@@ -14,3 +14,11 @@ into observable behavior — the comparison table alone is worth the visit.
 - The anomaly zoo mapped to levels: dirty read, non-repeatable read, phantom, lost update, write skew.
 - "Repeatable read" means different things per vendor — snapshot isolation is not serializability.
 - How MVCC-based engines permit write skew that 2PL-based ones block.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martin.kleppmann.com/2014/11/25/hermitage-testing-the-i-in-acid.html)
+
+## Archived copy
+![[hermitage-isolation-levels-clip]]
+%% trellis:end %%

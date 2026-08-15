@@ -17,3 +17,11 @@ swappable and thread-safe.
   leaking the underlying map or its iterators.
 - The interview extensions the pattern isolates: id generation, secondary
   indexes for queries, and a lock or concurrent map for thread safety.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/eaaCatalog/repository.html)
+
+## Archived copy
+![[fowler-repository-clip]]
+%% trellis:end %%

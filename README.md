@@ -72,10 +72,16 @@ Mechanically:
 ### One app to read in
 
 A reading is a pointer; a **clipping** is the page itself, saved as markdown in
-the vault. When a reading has been clipped, its footer link becomes
-`obsidian://open?...` — tapping it in Anki opens the article *in Obsidian*, with
-your own typography, highlights and backlinks, online or not. The web original
-stays one ↗ away. See [ADR 0001](docs/adr/0001-obsidian-as-the-reader.md).
+the vault. Every card's footer links to its reading note with
+`obsidian://open?...` — tapping it in Anki opens that note *in Obsidian*, where
+`trellis sync` has embedded the clipped article, so you read with your own
+typography, highlights and backlinks, online or not. The web original stays one
+↗ away. See [ADR 0001](docs/adr/0001-obsidian-as-the-reader.md).
+
+Links name the note rather than its path, so the same card works on a laptop
+whose vault root is `vault/` and a phone whose git client cloned the whole
+repo. That requires unique names, which is why clippings are stored as
+`<reading>-clip`.
 
 ```bash
 trellis --all clip          # fetch every unclipped reading into vault/<domain>/clippings/

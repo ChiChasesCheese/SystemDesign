@@ -14,3 +14,11 @@ override hierarchies, tiered caching, and purge mechanics at a real edge.
 - Purge-by-tag vs purge-by-URL, and their propagation costs.
 
 Related cards: [[networking-cdn-cache-key]], [[networking-push-vs-pull-cdn]]
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://developers.cloudflare.com/cache/)
+
+## Archived copy
+![[cloudflare-cdn-clip]]
+%% trellis:end %%

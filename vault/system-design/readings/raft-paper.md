@@ -13,3 +13,11 @@ at https://thesecretlivesofdata.com/raft/ is the fastest first pass.
 - Leader election: randomized timeouts, term numbers as logical clocks.
 - Log replication and the commit rule (majority match).
 - Why a deposed leader can't corrupt state — and where fencing tokens fit.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://raft.github.io/raft.pdf)
+
+## Archived copy
+![[raft-paper-clip]]
+%% trellis:end %%

@@ -13,3 +13,11 @@ scoring) for exactly the depth a design conversation needs.
 - Inverted index: dictionary + postings lists; why it inverts the document→terms direction of a B-tree.
 - Relevance basics: term frequency × inverse document frequency, vector-space scoring (BM25's lineage).
 - Index construction and updating — why search clusters sync from the source of truth in near-real-time batches rather than transactionally.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://nlp.stanford.edu/IR-book/information-retrieval-book.html)
+
+## Archived copy
+![[stanford-ir-book-clip]]
+%% trellis:end %%

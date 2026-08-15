@@ -14,3 +14,8 @@ queues — the failure modes interviewers actually probe.
 - Queues turn availability problems into latency problems — until the backlog exceeds drain capacity.
 - Bounding queues and shedding at enqueue time beats unbounded "durability".
 - Per-tenant fairness: separate or shuffle-shard queues so one hot producer can't starve everyone.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/)
+%% trellis:end %%

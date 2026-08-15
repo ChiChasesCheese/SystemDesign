@@ -13,3 +13,11 @@ skeleton asks for, with hand-drawn actors instead of RFC prose.
 - OAuth 2.0 grants delegated *authorization* (access token); OIDC adds *authentication* (ID token).
 - Authorization code flow + PKCE, actor by actor — the only flow to reach for by default.
 - Access tokens are for APIs, ID tokens for the client; conflating them is the classic design error.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://developer.okta.com/blog/2019/10/21/illustrated-guide-to-oauth-and-oidc)
+
+## Archived copy
+![[okta-illustrated-oauth-oidc-clip]]
+%% trellis:end %%

@@ -14,3 +14,11 @@ everything an LLD round can throw at you.
 - The Java memory model as "visibility is not atomicity is not ordering."
 - @GuardedBy thinking: every mutable field owned by exactly one lock.
 - Chapter 10's deadlock taxonomy — lock-ordering vs resource deadlocks.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://jcip.net/)
+
+## Archived copy
+![[java-concurrency-in-practice-clip]]
+%% trellis:end %%

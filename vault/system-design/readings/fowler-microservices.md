@@ -13,3 +13,11 @@ with the same site's "MonolithFirst" bliki for the when-to-split judgment.
 - Decentralized data: one service, one database — shared databases recreate the monolith's coupling.
 - "Smart endpoints, dumb pipes" and design-for-failure as non-optional entry fees.
 - MonolithFirst: split along boundaries you've proven, because wrong service boundaries are the expensive mistake.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/articles/microservices.html)
+
+## Archived copy
+![[fowler-microservices-clip]]
+%% trellis:end %%
