@@ -1,6 +1,6 @@
 ---
 id: distributed-read-repair-anti-entropy
-node: distributed.replication
+node: distributed.replication.leaderless
 type: qa
 ---
 ## Q

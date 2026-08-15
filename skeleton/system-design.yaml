@@ -74,7 +74,14 @@ nodes:
     children:
       - id: storage.relational
         title: Relational Databases
-        summary: Indexing, connection pooling, read replicas, federation, and when a single Postgres is the right answer.
+        summary: The default system of record — used well before being scaled.
+        children:
+          - id: storage.relational.indexing
+            title: Indexing
+            summary: B-tree indexes, composite and covering indexes, leftmost-prefix rule, when indexes hurt.
+          - id: storage.relational.operations
+            title: Operating at Scale
+            summary: Connection pooling, read replicas, federation, MVCC maintenance, and when a single Postgres is the right answer.
       - id: storage.internals
         title: B-trees vs LSM-trees
         summary: The two storage engine families; read, write, and space amplification trade-offs.
@@ -103,15 +110,35 @@ nodes:
         summary: Linearizability, causal, read-your-writes, eventual — as contracts you promise the client.
       - id: distributed.replication
         title: Replication
-        summary: Leader-follower, multi-leader, leaderless quorums; replication lag and what it breaks.
+        summary: Keeping copies of the same data on multiple nodes — and what each topology costs.
         requires: [distributed.consistency]
+        children:
+          - id: distributed.replication.leader
+            title: Leader-Based
+            summary: Single-leader replication, log shipping formats, sync vs async, lag and its anomalies, failover mechanics.
+          - id: distributed.replication.multi-leader
+            title: Multi-Leader
+            summary: Multi-datacenter writes, conflict detection and resolution, why LWW loses data.
+          - id: distributed.replication.leaderless
+            title: Leaderless & Quorums
+            summary: Dynamo-style quorums, sloppy quorums and hinted handoff, read repair and anti-entropy.
       - id: distributed.partitioning
         title: Partitioning
         summary: Hash vs range sharding, consistent hashing, hot keys, and rebalancing without downtime.
       - id: distributed.transactions
-        title: Transactions & Isolation
-        summary: ACID isolation levels, snapshot isolation, and why 2PC is avoided at scale.
+        title: Transactions
+        summary: What the database promises around concurrent access — and what it charges for the promise.
         requires: [storage.relational]
+        children:
+          - id: distributed.transactions.isolation
+            title: Isolation Levels & Anomalies
+            summary: Read committed to serializable through the anomalies each level permits — dirty/non-repeatable reads, write skew, phantoms.
+          - id: distributed.transactions.concurrency-control
+            title: Concurrency Control
+            summary: 2PL vs MVCC vs SSI — how databases actually enforce isolation, and their contention behavior.
+          - id: distributed.transactions.distributed
+            title: Distributed Transactions
+            summary: 2PC mechanics and blocking, why it's avoided at scale, and what replaces it.
       - id: distributed.consensus
         title: Consensus
         summary: Why single-leader systems need election, what Raft guarantees, fencing tokens, and the cost of quorum writes.
@@ -207,7 +234,14 @@ nodes:
         summary: Nines, serial vs parallel composition, redundancy patterns, failover modes and their data-loss windows.
       - id: reliability.resilience
         title: Resilience Patterns
-        summary: Timeouts, retries with jitter, circuit breakers, bulkheads, load shedding — and how retries cause outages.
+        summary: Degrading gracefully instead of collapsing — client discipline and failure containment.
+        children:
+          - id: reliability.resilience.retries
+            title: Timeouts & Retries
+            summary: Timeout budgets, deadline propagation, exponential backoff with jitter, retry storms and retry budgets.
+          - id: reliability.resilience.containment
+            title: Failure Containment
+            summary: Circuit breakers, bulkheads, load shedding, chaos engineering, and safe deployment strategies.
       - id: reliability.slo
         title: SLOs & Error Budgets
         summary: SLIs worth measuring, percentiles over averages, and error budgets as a release throttle.
@@ -218,6 +252,22 @@ nodes:
         title: Multi-Region
         summary: Active-passive vs active-active, data residency, RPO/RTO, and why failover you never test doesn't exist.
         requires: [distributed.replication, distributed.consensus]
+
+  - id: infra
+    title: Platform & Infrastructure
+    summary: The layer designs run on — containers, meshes, and the road to production.
+    children:
+      - id: infra.containers
+        title: Containers & Orchestration
+        summary: Containers vs VMs, Kubernetes primitives (pods, services, autoscaling) at design-conversation depth.
+      - id: infra.mesh
+        title: Service Mesh
+        summary: Sidecars and ambient meshes — mTLS, retries, and traffic policy moved out of application code, at a latency cost.
+        requires: [reliability.resilience.retries]
+      - id: infra.delivery
+        title: CI/CD & Progressive Delivery
+        summary: Pipelines, canary and blue-green automation, feature flags, and config/schema changes as deploys.
+        requires: [reliability.resilience.containment]
 
   - id: security
     title: Security
@@ -232,12 +282,23 @@ nodes:
 
   - id: ai
     title: AI Systems
-    summary: The data-infrastructure side of serving models — the newest standard interview add-on.
+    summary: The data-infrastructure side of AI — from zero, in system-design terms, to serving and evaluating LLM backends.
     children:
+      - id: ai.foundations
+        title: LLM Foundations for Engineers
+        summary: What an LLM actually does at serving time — tokens, context windows, embeddings, prefill/decode — no ML math required.
       - id: ai.vector-search
-        title: Vector Search & RAG
-        summary: Embeddings, ANN indexes (HNSW), hybrid retrieval, and freshness of the underlying corpus.
-        requires: [storage.search]
+        title: Vector Search
+        summary: Embeddings as vectors, ANN indexes (HNSW/IVF), hybrid retrieval, and freshness of the indexed corpus.
+        requires: [storage.search, ai.foundations]
+      - id: ai.rag
+        title: RAG Pipelines
+        summary: Chunking, retrieval, reranking, and grounding as a data pipeline — where quality is won and lost.
+        requires: [ai.vector-search]
       - id: ai.inference
         title: Inference Serving
         summary: GPU batching, KV-cache reuse, streaming responses, and cost/latency levers unique to LLM backends.
+        requires: [ai.foundations]
+      - id: ai.evals
+        title: Evals & AI Observability
+        summary: Offline vs online evaluation, LLM-as-judge, regression suites for prompts, and tracing AI pipelines.

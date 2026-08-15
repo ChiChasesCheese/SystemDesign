@@ -4,6 +4,9 @@
 
 Exceptions vs result types, validation at boundaries, designing failure paths as first-class flows.
 
+## Readings
+- [[duffy-error-model|The Error Model (Joe Duffy)]]
+
 ## Drills
 - [[splitwise|Drill: Splitwise (Expense Sharing)]]
 

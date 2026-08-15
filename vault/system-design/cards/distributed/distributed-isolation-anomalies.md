@@ -1,6 +1,6 @@
 ---
 id: distributed-isolation-anomalies
-node: distributed.transactions
+node: distributed.transactions.isolation
 type: qa
 ---
 ## Q

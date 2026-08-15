@@ -4,7 +4,10 @@
 
 Why writing DB-then-publish loses events, and how the transactional outbox closes the gap.
 
-**Requires:** [[distributed.transactions|Transactions & Isolation]], [[async.queues|Message Queues]]
+**Requires:** [[distributed.transactions|Transactions]], [[async.queues|Message Queues]]
+
+## Readings
+- [[microservices-io-outbox|Transactional Outbox (microservices.io, Chris Richardson)]]
 
 ## Cards (6)
 - [[correctness-dual-write-problem]]

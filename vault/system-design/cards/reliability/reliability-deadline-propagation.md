@@ -1,6 +1,6 @@
 ---
 id: reliability-deadline-propagation
-node: reliability.resilience
+node: reliability.resilience.retries
 type: qa
 ---
 ## Q

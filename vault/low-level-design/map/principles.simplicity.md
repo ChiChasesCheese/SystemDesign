@@ -6,6 +6,9 @@ The simplicity principles and their failure mode — premature abstraction and s
 
 **Unlocks:** [[patterns.selection|Choosing (and Refusing) Patterns]]
 
+## Readings
+- [[fowler-yagni|Yagni (Martin Fowler, bliki)]]
+
 ## Cards (3)
 - [[principles-dry-limit]]
 - [[principles-speculative-generality]]

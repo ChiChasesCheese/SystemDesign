@@ -1,6 +1,6 @@
 ---
 id: storage-normalization-tradeoff
-node: storage.relational
+node: storage.relational.operations
 type: qa
 ---
 ## Q

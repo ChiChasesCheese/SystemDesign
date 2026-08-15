@@ -1,6 +1,6 @@
 ---
 id: distributed-multi-leader-fit
-node: distributed.replication
+node: distributed.replication.multi-leader
 type: qa
 ---
 ## Q

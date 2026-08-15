@@ -8,7 +8,7 @@ What happens to data when one machine is no longer enough — the deep end of th
 - [[distributed.consistency|Consistency Models]]
 - [[distributed.replication|Replication]]
 - [[distributed.partitioning|Partitioning]]
-- [[distributed.transactions|Transactions & Isolation]]
+- [[distributed.transactions|Transactions]]
 - [[distributed.consensus|Consensus]]
 - [[distributed.time|Clocks & Ordering]]
 - [[distributed.crdt|CRDTs & Local-First]]

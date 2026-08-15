@@ -6,6 +6,9 @@ Why deep hierarchies rot, delegation as the default reuse tool, when inheritance
 
 **Requires:** [[oop.relationships|Class Relationships]]
 
+## Readings
+- [[python-patterns-composition|The Composition Over Inheritance Principle (Brandon Rhodes)]]
+
 ## Cards (3)
 - [[principles-hierarchy-explosion]]
 - [[principles-stack-extends-arraylist]]

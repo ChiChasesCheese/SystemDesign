@@ -1,6 +1,6 @@
 ---
 id: distributed-2pc-avoidance
-node: distributed.transactions
+node: distributed.transactions.distributed
 type: qa
 ---
 ## Q

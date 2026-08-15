@@ -1,6 +1,6 @@
 ---
 id: distributed-write-skew
-node: distributed.transactions
+node: distributed.transactions.isolation
 type: qa
 ---
 ## Q

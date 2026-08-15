@@ -4,7 +4,10 @@
 
 Long-running workflows via compensating actions when a distributed transaction is off the table.
 
-**Requires:** [[distributed.transactions|Transactions & Isolation]]
+**Requires:** [[distributed.transactions|Transactions]]
+
+## Readings
+- [[microservices-io-saga|Saga (microservices.io, Chris Richardson)]]
 
 ## Cards (6)
 - [[correctness-saga-compensation-limits]]

@@ -1,6 +1,6 @@
 ---
 id: reliability-chaos-hypothesis
-node: reliability.resilience
+node: reliability.resilience.containment
 type: qa
 ---
 ## Q

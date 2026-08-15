@@ -1,6 +1,6 @@
 ---
 id: distributed-phantoms-predicate-locks
-node: distributed.transactions
+node: distributed.transactions.isolation
 type: qa
 ---
 ## Q

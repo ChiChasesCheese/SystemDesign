@@ -69,4 +69,14 @@ def validate(
         report.warnings.append(
             f"{len(bare)} leaf node(s) have no cards yet: " + ", ".join(bare)
         )
+
+    if cards:
+        from .links import LINK_COVERAGE_TARGET, coverage
+        linked, total = coverage(skeleton, cards, readings or [])
+        if linked / total < LINK_COVERAGE_TARGET:
+            report.warnings.append(
+                f"link coverage {linked}/{total} ({linked / total:.0%}) is below the "
+                f"{LINK_COVERAGE_TARGET:.0%} target — attach readings with URLs to "
+                "the uncovered nodes"
+            )
     return report

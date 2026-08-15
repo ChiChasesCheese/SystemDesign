@@ -4,6 +4,9 @@
 
 Small stable interfaces, fluent builders, method contracts, and evolving an API without breaking callers.
 
+## Readings
+- [[philosophy-of-software-design|A Philosophy of Software Design (John Ousterhout)]]
+
 ## Drills
 - [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]
 - [[splitwise|Drill: Splitwise (Expense Sharing)]]

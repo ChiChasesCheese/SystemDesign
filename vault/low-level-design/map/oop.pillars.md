@@ -4,6 +4,9 @@
 
 Encapsulation, abstraction, inheritance, polymorphism — each as a lever with a cost, not a virtue.
 
+## Readings
+- [[poodr|Practical Object-Oriented Design (Sandi Metz)]]
+
 ## Cards (3)
 - [[oop-encapsulation-anemic-model]]
 - [[oop-inheritance-price]]

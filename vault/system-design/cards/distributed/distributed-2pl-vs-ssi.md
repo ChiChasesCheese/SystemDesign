@@ -1,6 +1,6 @@
 ---
 id: distributed-2pl-vs-ssi
-node: distributed.transactions
+node: distributed.transactions.concurrency-control
 type: qa
 ---
 ## Q

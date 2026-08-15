@@ -4,6 +4,9 @@
 
 Entities vs value objects, equality semantics, enums with behavior, why immutability simplifies reasoning.
 
+## Readings
+- [[fowler-value-object|ValueObject (Martin Fowler, bliki)]]
+
 ## Drills
 - [[splitwise|Drill: Splitwise (Expense Sharing)]]
 

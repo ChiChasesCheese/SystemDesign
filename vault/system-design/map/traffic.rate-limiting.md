@@ -4,6 +4,9 @@
 
 Token bucket vs sliding window, local vs distributed enforcement, and what to return when you shed.
 
+## Readings
+- [[stripe-rate-limiters|Scaling your API with Rate Limiters (Stripe)]]
+
 ## Drills
 - [[design-rate-limiter|Drill: Design a distributed rate limiter]]
 

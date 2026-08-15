@@ -4,6 +4,9 @@
 
 Nines, serial vs parallel composition, redundancy patterns, failover modes and their data-loss windows.
 
+## Readings
+- [[google-sre-embracing-risk|Embracing Risk (Google SRE Book, ch. 3)]]
+
 ## Cards (6)
 - [[reliability-correlated-failures]]
 - [[reliability-failover-modes-tradeoff]]

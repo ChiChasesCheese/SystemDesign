@@ -1,6 +1,6 @@
 ---
 id: distributed-replication-log-formats
-node: distributed.replication
+node: distributed.replication.leader
 type: qa
 ---
 ## Q

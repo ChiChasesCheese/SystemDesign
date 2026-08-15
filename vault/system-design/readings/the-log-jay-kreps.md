@@ -1,11 +1,12 @@
 ---
 nodes: [async.log, async.streaming]
-url: https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying
+url: https://web.archive.org/web/2024/https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying
 tags: [canonical]
 ---
 # The Log: What every software engineer should know (Jay Kreps)
 
 The single most influential essay behind Kafka, CDC, and stream processing.
+(LinkedIn deleted the original URL; this is the Internet Archive copy.)
 Kreps (Kafka's creator) argues the append-only log is the unifying abstraction
 for replication, messaging, and derived data.
 

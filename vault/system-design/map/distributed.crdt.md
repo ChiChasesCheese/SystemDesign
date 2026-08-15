@@ -6,6 +6,9 @@ Conflict-free replicated data types, merge semantics, and offline-capable multi-
 
 **Requires:** [[distributed.replication|Replication]]
 
+## Readings
+- [[crdt-tech|CRDT.tech — Conflict-free Replicated Data Types]]
+
 ## Cards (5)
 - [[distributed-crdt-convergence]]
 - [[distributed-crdt-counters]]

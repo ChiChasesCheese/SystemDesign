@@ -4,6 +4,9 @@
 
 Repository pattern, id generation, secondary indexes, and thread-safe in-memory stores for machine coding.
 
+## Readings
+- [[fowler-repository|Repository (Fowler, P of EAA catalog)]]
+
 ## Drills
 - [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]
 - [[parking-lot|Drill: Parking Lot]]

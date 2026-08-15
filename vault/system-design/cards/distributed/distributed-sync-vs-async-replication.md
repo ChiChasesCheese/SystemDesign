@@ -1,6 +1,6 @@
 ---
 id: distributed-sync-vs-async-replication
-node: distributed.replication
+node: distributed.replication.leader
 type: qa
 ---
 ## Q

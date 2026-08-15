@@ -4,6 +4,9 @@
 
 Key-value, document, wide-column, graph — the access patterns each one exists to serve.
 
+## Readings
+- [[fowler-nosql|NoSQL Guide (Martin Fowler)]]
+
 ## Cards (6)
 - [[storage-document-vs-relational]]
 - [[storage-graph-db-fit]]

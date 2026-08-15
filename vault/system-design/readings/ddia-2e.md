@@ -1,5 +1,5 @@
 ---
-nodes: [storage.internals, storage.encoding, distributed.replication, distributed.transactions, analytics.batch, async.streaming]
+nodes: [storage.internals, storage.encoding, distributed.replication, distributed.transactions, analytics.olap, analytics.batch, async.streaming]
 url: https://dataintensive.net/
 tags: [book, canonical]
 ---

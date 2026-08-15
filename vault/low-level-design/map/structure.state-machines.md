@@ -6,6 +6,9 @@ Modeling lifecycles (order, elevator, game) as explicit states and transitions i
 
 **Requires:** [[patterns.behavioral|Behavioral Patterns]]
 
+## Readings
+- [[gpp-state|State (Game Programming Patterns, Bob Nystrom)]]
+
 ## Drills
 - [[elevator-system|Drill: Elevator System]]
 

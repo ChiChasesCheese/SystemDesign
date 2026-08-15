@@ -1,6 +1,6 @@
 ---
 id: distributed-lag-anomalies
-node: distributed.replication
+node: distributed.replication.leader
 type: qa
 ---
 ## Q
