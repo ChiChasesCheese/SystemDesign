@@ -1,0 +1,123 @@
+# Low-level design / machine coding: study order top-to-bottom, `requires`
+# marks real cross-topic prerequisites. Classic interview problems live as
+# drills, not nodes — they exercise many leaves at once.
+domain: low-level-design
+title: Low-Level Design
+nodes:
+  - id: method
+    title: Machine Coding Method
+    summary: How to run the 60–90 minute LLD round — what is graded and how to structure the hour.
+    children:
+      - id: method.delivery
+        title: Round Structure
+        summary: Requirement scoping, choosing core flows, time-boxing design vs code vs demo, driving the session.
+      - id: method.evaluation
+        title: Evaluation Rubric
+        summary: What interviewers grade — extensibility, readability, testability, and verifying your own code before they do.
+      - id: method.modeling
+        title: Requirements to Objects
+        summary: Noun–verb extraction, finding entities and invariants, sequence-of-interactions before class diagrams.
+
+  - id: oop
+    title: Object Modeling
+    summary: The vocabulary of object design — used as decision tools, not textbook definitions.
+    children:
+      - id: oop.pillars
+        title: OOP Pillars in Practice
+        summary: Encapsulation, abstraction, inheritance, polymorphism — each as a lever with a cost, not a virtue.
+      - id: oop.relationships
+        title: Class Relationships
+        summary: Association vs aggregation vs composition vs dependency; lifetime ownership and the UML arrows for each.
+      - id: oop.interfaces
+        title: Interfaces & Abstract Classes
+        summary: Program-to-interface, interface vs abstract class discrimination, default methods and their limits.
+      - id: oop.values
+        title: Value Objects & Immutability
+        summary: Entities vs value objects, equality semantics, enums with behavior, why immutability simplifies reasoning.
+
+  - id: principles
+    title: Design Principles
+    summary: The decision rules that make a design extensible — and the judgment of when to stop applying them.
+    children:
+      - id: principles.solid
+        title: SOLID
+        summary: The five principles as concrete refactoring triggers, with the violation each one detects.
+      - id: principles.composition
+        title: Composition over Inheritance
+        summary: Why deep hierarchies rot, delegation as the default reuse tool, when inheritance is still right.
+        requires: [oop.relationships]
+      - id: principles.coupling
+        title: Coupling, Cohesion & DI
+        summary: Afferent/efferent coupling, law of Demeter, dependency injection as the seam-maker.
+      - id: principles.simplicity
+        title: DRY, KISS, YAGNI
+        summary: The simplicity principles and their failure mode — premature abstraction and speculative generality.
+
+  - id: patterns
+    title: Design Patterns
+    summary: The GoF catalog as a shared vocabulary — intent and applicability over UML memorization.
+    children:
+      - id: patterns.creational
+        title: Creational Patterns
+        summary: Singleton, factory method, abstract factory, builder, prototype — who creates objects and how flexibly.
+      - id: patterns.structural
+        title: Structural Patterns
+        summary: Adapter, decorator, facade, composite, proxy, bridge, flyweight — composing objects into larger shapes.
+      - id: patterns.behavioral
+        title: Behavioral Patterns
+        summary: Strategy, observer, command, state, template method, iterator, chain of responsibility, mediator, memento, visitor.
+      - id: patterns.selection
+        title: Choosing (and Refusing) Patterns
+        summary: Mapping problem smells to patterns, pattern pairs that get confused, and over-engineering as the classic failure.
+        requires: [principles.simplicity]
+
+  - id: quality
+    title: Code Quality
+    summary: Recognizing rot and reversing it — the refactoring.guru layer.
+    children:
+      - id: quality.smells
+        title: Code Smells
+        summary: Bloaters, OO abusers, change preventers, dispensables, couplers — and the refactoring each family calls for.
+      - id: quality.refactoring
+        title: Core Refactorings
+        summary: Extract method/class, replace conditional with polymorphism, introduce parameter object, guard clauses.
+      - id: quality.testability
+        title: Designing for Tests
+        summary: Seams, constructor injection, test double taxonomy, and why static/global state kills testability.
+        requires: [principles.coupling]
+      - id: quality.errors
+        title: Error Handling Design
+        summary: Exceptions vs result types, validation at boundaries, designing failure paths as first-class flows.
+
+  - id: concurrency
+    title: Concurrency
+    summary: Writing correct multi-threaded code — the LLD round's hardest add-on requirement.
+    children:
+      - id: concurrency.model
+        title: Threads & Memory Model
+        summary: Concurrency vs parallelism, thread lifecycle, visibility and reordering, why data races are undefined behavior.
+      - id: concurrency.primitives
+        title: Synchronization Primitives
+        summary: Mutex, semaphore, condition variable, reentrant and read-write locks, CAS and lock-free basics.
+      - id: concurrency.hazards
+        title: Deadlock & Friends
+        summary: The four deadlock conditions and their breakers, livelock, starvation, lock ordering discipline.
+      - id: concurrency.patterns
+        title: Concurrency Patterns
+        summary: Producer-consumer, bounded blocking queue, thread pool, reader-writer, safe lazy initialization.
+        requires: [concurrency.primitives]
+
+  - id: structure
+    title: APIs & Program Structure
+    summary: The recurring skeleton of every machine-coding solution.
+    children:
+      - id: structure.api
+        title: In-Process API Design
+        summary: Small stable interfaces, fluent builders, method contracts, and evolving an API without breaking callers.
+      - id: structure.state-machines
+        title: State Machines
+        summary: Modeling lifecycles (order, elevator, game) as explicit states and transitions instead of boolean soup.
+        requires: [patterns.behavioral]
+      - id: structure.storage
+        title: In-Memory Persistence
+        summary: Repository pattern, id generation, secondary indexes, and thread-safe in-memory stores for machine coding.
