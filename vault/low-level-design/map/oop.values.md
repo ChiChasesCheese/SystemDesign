@@ -10,10 +10,12 @@ Entities vs value objects, equality semantics, enums with behavior, why immutabi
 ## Drills
 - [[splitwise|Drill: Splitwise (Expense Sharing)]]
 
-## Cards (3)
+## Cards (5)
 - [[oop-entity-vs-value-object]]
 - [[oop-enum-with-behavior]]
+- [[oop-equals-hashcode-contract]]
 - [[oop-immutability-payoff]]
+- [[oop-primitive-obsession-fix]]
 %% trellis:end %%
 
 ## Notes

@@ -4,10 +4,12 @@
 
 At-most-once vs at-least-once, ordering scope, dead-letter queues and poison pills.
 
-## Cards (3)
+## Cards (5)
 - [[async-delivery-semantics-cloze]]
 - [[async-dlq-poison-pill]]
 - [[async-exactly-once-myth]]
+- [[async-redelivery-causes]]
+- [[async-stale-event-ordering]]
 %% trellis:end %%
 
 ## Notes

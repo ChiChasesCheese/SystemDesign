@@ -7,9 +7,12 @@ B-tree indexes, composite and covering indexes, leftmost-prefix rule, when index
 ## Readings
 - [[use-the-index-luke|Use The Index, Luke! (Markus Winand)]]
 
-## Cards (2)
+## Cards (5)
 - [[storage-covering-index]]
 - [[storage-index-leftmost-prefix]]
+- [[storage-index-selectivity]]
+- [[storage-index-write-cost]]
+- [[storage-partial-expression-index]]
 %% trellis:end %%
 
 ## Notes

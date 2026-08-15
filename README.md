@@ -69,6 +69,31 @@ Mechanically:
 - `python3 scripts/check_links.py` verifies every archived URL still resolves
   (run manually; network-bound).
 
+### One app to read in
+
+A reading is a pointer; a **clipping** is the page itself, saved as markdown in
+the vault. When a reading has been clipped, its footer link becomes
+`obsidian://open?...` — tapping it in Anki opens the article *in Obsidian*, with
+your own typography, highlights and backlinks, online or not. The web original
+stays one ↗ away. See [ADR 0001](docs/adr/0001-obsidian-as-the-reader.md).
+
+```bash
+trellis --all clip          # fetch every unclipped reading into vault/<domain>/clippings/
+trellis --all build         # footers now point at the local copies
+```
+
+Clippings are matched to readings by URL — the same `source:` property
+[Obsidian Web Clipper](https://obsidian.md/clipper) writes — so anything you clip
+by hand with the extension (point it at `<domain>/clippings/`) is picked up
+identically. Pages that are the resource itself (videos) or that hide behind
+JavaScript are skipped with a reason and stay web links.
+
+Clippings are **gitignored on purpose**: they are verbatim copies of other
+people's writing and this repo is public. They are personal and reproducible —
+`trellis clip` rebuilds them anywhere. To read them on a phone, sync the vault
+with Obsidian Sync or iCloud (a git clone won't carry ignored files); to commit
+them instead, make the repo private first and drop the ignore rule.
+
 - **Anki**: import `dist/system-design.apkg`. After editing or adding cards,
   rebuild and re-import — note GUIDs are stable, so edits update in place and
   your review history survives.

@@ -4,9 +4,12 @@
 
 Dynamo-style quorums, sloppy quorums and hinted handoff, read repair and anti-entropy.
 
-## Cards (2)
+## Cards (5)
+- [[distributed-anti-entropy-cost]]
+- [[distributed-leaderless-monotonic-reads]]
 - [[distributed-quorum-math]]
 - [[distributed-read-repair-anti-entropy]]
+- [[distributed-sloppy-quorum-handoff]]
 %% trellis:end %%
 
 ## Notes

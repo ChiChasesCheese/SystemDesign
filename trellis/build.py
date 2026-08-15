@@ -18,7 +18,7 @@ import genanki
 import markdown
 
 from .cards import Card
-from .links import sources_for
+from .links import go_deeper
 from .readings import Reading
 from .skeleton import Skeleton
 
@@ -55,6 +55,7 @@ td, th { border: 1px solid #999; padding: 4px 10px; }
 .sources { margin-top: 18px; padding-top: 8px; border-top: 1px solid rgba(140,140,140,0.3);
            font-size: 14px; color: #888; }
 .sources a { color: #7aa2f7; text-decoration: none; }
+.sources a.web { color: #9aa; font-size: 12px; }
 """
 
 
@@ -102,16 +103,27 @@ def _cloze_model() -> genanki.Model:
     )
 
 
-def _sources_html(skeleton: Skeleton, readings: list[Reading], node_id: str) -> str:
+def _sources_html(
+    skeleton: Skeleton,
+    readings: list[Reading],
+    node_id: str,
+    clippings: dict | None = None,
+    vault: str | None = None,
+    vault_root: Path | None = None,
+) -> str:
     """Clickable further-reading footer from the node's (and ancestors')
-    readings — the card's road onward, tappable in Anki."""
-    sources = sources_for(skeleton, readings, node_id)
-    if not sources:
+    readings — the card's road onward, tappable in Anki. Clipped readings
+    open inside Obsidian; the web original stays available as ↗."""
+    links = go_deeper(skeleton, readings, node_id, clippings, vault, vault_root)
+    if not links:
         return ""
-    links = " · ".join(
-        f'<a href="{r.url}">{r.title}</a>' for r in sources
-    )
-    return f'<div class="sources">Go deeper: {links}</div>'
+    rendered = []
+    for link in links:
+        html = f'<a href="{link.href}">{link.title}</a>'
+        if link.web_href:
+            html += f' <a href="{link.web_href}" class="web" title="open the original online">↗</a>'
+        rendered.append(html)
+    return '<div class="sources">Go deeper: ' + " · ".join(rendered) + "</div>"
 
 
 def build_package(
@@ -119,6 +131,9 @@ def build_package(
     cards: list[Card],
     out_path: str | Path,
     readings: list[Reading] | None = None,
+    clippings: dict | None = None,
+    vault: str | None = None,
+    vault_root: Path | None = None,
 ) -> dict:
     """Write the .apkg. Returns {'notes': int, 'decks': int, 'path': str}."""
     readings = readings or []
@@ -139,7 +154,9 @@ def build_package(
         tags = [skeleton.domain + "::" + card.node.replace(".", "::")] + card.tags
         if card.source:
             tags.append(f"src::{card.source}")
-        footer = _sources_html(skeleton, readings, card.node)
+        footer = _sources_html(
+            skeleton, readings, card.node, clippings, vault, vault_root
+        )
         if card.type == "qa":
             note = genanki.Note(
                 model=qa_model,

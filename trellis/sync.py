@@ -81,7 +81,7 @@ def _node_body(
     return "\n".join(lines)
 
 
-def _write_managed(path: Path, body: str) -> bool:
+def write_managed(path: Path, body: str) -> bool:
     """Insert or replace the managed block in path. Returns True if the
     file changed."""
     block = f"{BEGIN}\n{body}\n{END}"
@@ -115,12 +115,12 @@ def sync(
     written: list[str] = []
 
     moc_path = vault / f"{skeleton.title} MOC.md"
-    if _write_managed(moc_path, _moc_body(skeleton)):
+    if write_managed(moc_path, _moc_body(skeleton)):
         written.append(str(moc_path))
 
     for node in skeleton.walk():
         path = map_dir / f"{node.id}.md"
-        if _write_managed(path, _node_body(skeleton, node, cards, readings, drills)):
+        if write_managed(path, _node_body(skeleton, node, cards, readings, drills)):
             written.append(str(path))
 
     known = {f"{n.id}.md" for n in skeleton.walk()}

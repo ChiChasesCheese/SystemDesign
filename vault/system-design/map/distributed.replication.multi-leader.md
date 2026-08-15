@@ -4,8 +4,12 @@
 
 Multi-datacenter writes, conflict detection and resolution, why LWW loses data.
 
-## Cards (1)
+## Cards (5)
+- [[distributed-conflict-detection-siblings]]
+- [[distributed-multi-leader-conflict-timing]]
 - [[distributed-multi-leader-fit]]
+- [[distributed-multi-leader-topologies]]
+- [[distributed-offline-client-writes]]
 %% trellis:end %%
 
 ## Notes
