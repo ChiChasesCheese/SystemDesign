@@ -16,3 +16,11 @@ violation each principle detects.
   high-level code newing up low-level classes.
 - The AreaCalculator running example — how one design accretes all five fixes.
 - Each fix is a refactoring trigger, not an up-front design mandate.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design)
+
+## Archived copy
+![[digitalocean-solid-clip]]
+%% trellis:end %%

@@ -16,3 +16,11 @@ skipping features and skipping design quality.
   "yagni is only viable with cheap-to-change code."
 - The interview framing: extensibility comes from seams and small interfaces,
   not from pre-built abstraction layers.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/bliki/Yagni.html)
+
+## Archived copy
+![[fowler-yagni-clip]]
+%% trellis:end %%

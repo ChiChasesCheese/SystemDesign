@@ -14,3 +14,11 @@ have to turn the whole service off to turn it back on.
 - The cascade mechanic: retries + failover concentrate load on whatever is still alive.
 - Shed load early (queue caps, per-client quotas) and degrade quality before availability.
 - Recovery from a death spiral: reduce load below capacity, restart cold — capacity planning must include restart cost.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://sre.google/sre-book/addressing-cascading-failures/)
+
+## Archived copy
+![[google-sre-cascading-failures-clip]]
+%% trellis:end %%

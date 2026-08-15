@@ -14,3 +14,8 @@ disciplined clients do instead. The whole Builders' Library is worth mining.
 - Why jitter (not just exponential backoff) breaks synchronized retry waves.
 
 Related cards: [[reliability-retry-storm]], [[reliability-deadline-propagation]]
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/)
+%% trellis:end %%

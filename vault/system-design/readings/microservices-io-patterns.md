@@ -13,3 +13,11 @@ registry, self-registration, and the communication-contract patterns around them
 - Client-side vs server-side discovery: who queries the registry, and what each couples.
 - Registries need health checking and TTLs — a registry full of dead instances is worse than DNS.
 - Contract evolution: consumer-driven contract tests and tolerant readers keep API versioning from breaking consumers.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://microservices.io/patterns/index.html)
+
+## Archived copy
+![[microservices-io-patterns-clip]]
+%% trellis:end %%

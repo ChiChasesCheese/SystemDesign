@@ -13,3 +13,11 @@ approach, and back-of-envelope tables, all in one repo with sources linked.
 - The step-by-step interview approach: use cases → constraints → high-level → core → scale.
 - The trade-off framings in "Performance vs scalability" and "Latency vs throughput".
 - The "Powers of two" and per-component tables for estimation drills.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://github.com/donnemartin/system-design-primer)
+
+## Archived copy
+![[system-design-primer-clip]]
+%% trellis:end %%

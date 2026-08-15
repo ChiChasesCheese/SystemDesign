@@ -16,3 +16,11 @@ example into a subclass explosion, then dissolves it four different ways
   mechanism for delegating responsibility" — delegation as the default.
 - When inheritance still wins: a genuine is-a with a stable base contract and
   one axis of variation.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://python-patterns.guide/gang-of-four/composition-over-inheritance/)
+
+## Archived copy
+![[python-patterns-composition-clip]]
+%% trellis:end %%

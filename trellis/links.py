@@ -63,20 +63,22 @@ def go_deeper(
     skeleton: Skeleton,
     readings: list[Reading],
     node_id: str,
-    clippings: dict[str, Clipping] | None = None,
     vault: str | None = None,
-    vault_root: Path | None = None,
 ) -> list[GoDeeper]:
-    """Footer links for a card on `node_id`. A reading whose page has been
-    clipped into the vault resolves to an obsidian:// link so it opens in
-    Obsidian; everything else stays a web link."""
-    clippings = clippings or {}
+    """Footer links for a card on `node_id`.
+
+    The obsidian:// target is always the *reading note* — addressed by name
+    alone, never by path. Two reasons: the note is committed, so it exists
+    on every device, and a bare name resolves wherever the vault root
+    happens to sit (the phone clones the whole repo; the desktop opens
+    `vault/`). The clipped article rides along embedded inside that note.
+    """
     out: list[GoDeeper] = []
     for reading in sources_for(skeleton, readings, node_id):
-        clip = clippings.get(canonical_url(reading.url)) if vault else None
-        if clip is not None and vault_root is not None:
-            note = clip.path.resolve().relative_to(Path(vault_root).resolve())
-            out.append(GoDeeper(reading.title, open_uri(vault, note), reading.url))
+        if vault:
+            out.append(
+                GoDeeper(reading.title, open_uri(vault, reading.path.stem), reading.url)
+            )
         else:
             out.append(GoDeeper(reading.title, reading.url, None))
     return out

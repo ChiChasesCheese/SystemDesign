@@ -13,3 +13,11 @@ load without hurting real users.
 - Token bucket as the workhorse; where sliding windows earn their extra cost.
 - Request-rate limiters vs concurrency limiters vs fleet-usage load shedders — different problems.
 - Return 429 with Retry-After, and dark-launch limiters in log-only mode first.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://stripe.com/blog/rate-limiters)
+
+## Archived copy
+![[stripe-rate-limiters-clip]]
+%% trellis:end %%

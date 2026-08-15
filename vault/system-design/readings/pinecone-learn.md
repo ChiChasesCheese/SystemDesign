@@ -14,3 +14,11 @@ the retrieval pipeline end to end. Start with the vector-indexes overview.
 - ANN index families — HNSW (graph), IVF (clustering), PQ (compression) — and their recall/latency/memory trade-offs.
 - Hybrid retrieval: dense vectors + keyword/sparse scores, fused rank.
 - Chunking and reranking as the levers where RAG quality is actually won.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.pinecone.io/learn/)
+
+## Archived copy
+![[pinecone-learn-clip]]
+%% trellis:end %%

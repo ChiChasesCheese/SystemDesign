@@ -13,3 +13,11 @@ interviewers test loosely and Jepsen defines exactly.
 **Extract on read:**
 - The two hierarchies (single-object vs transactional) and where they meet.
 - Which models survive a partition (sticky availability vs total).
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://jepsen.io/consistency)
+
+## Archived copy
+![[jepsen-consistency-map-clip]]
+%% trellis:end %%

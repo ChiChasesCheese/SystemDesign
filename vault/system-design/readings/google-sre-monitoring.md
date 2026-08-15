@@ -14,3 +14,11 @@ traces, metrics, and structured logs.
 - Four golden signals: latency, traffic, errors, saturation — and latency of *failures* measured separately.
 - Alert on symptoms users feel; use cause-based data (and traces) for debugging, not paging.
 - Keep it simple: high-cardinality labels and clever alerts are where monitoring systems go to die.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://sre.google/sre-book/monitoring-distributed-systems/)
+
+## Archived copy
+![[google-sre-monitoring-clip]]
+%% trellis:end %%

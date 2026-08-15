@@ -25,3 +25,11 @@ and AI-era data systems.
 | Ch 11 Batch Processing | `analytics.batch` |
 | Ch 12 Stream Processing | `async.streaming`, `async.log` |
 | Ch 13–14 Derived State | `analytics.derived`, `analytics.warehouse` |
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://dataintensive.net/)
+
+## Archived copy
+![[ddia-2e-clip]]
+%% trellis:end %%

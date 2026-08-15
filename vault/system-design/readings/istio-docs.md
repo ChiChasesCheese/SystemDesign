@@ -14,3 +14,11 @@ retries, timeouts, traffic splitting) and what the sidecar/ambient split costs.
 - The mesh value proposition: uniform retries/timeouts/mTLS/telemetry without touching app code.
 - Sidecar proxies vs ambient mode — per-pod proxy latency and resource tax vs shared node infrastructure.
 - Mesh retries stack on top of app and library retries: amplification unless budgets are aligned.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://istio.io/latest/docs/)
+
+## Archived copy
+![[istio-docs-clip]]
+%% trellis:end %%

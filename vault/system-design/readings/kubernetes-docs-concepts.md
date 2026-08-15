@@ -14,3 +14,11 @@ reconciliation model behind them all. Read "Overview", "Workloads", and
 - Declarative desired state + control loops — the idea underneath every primitive.
 - Pod (scheduling unit) vs Deployment (replicas + rollout) vs Service (stable virtual IP over ephemeral pods).
 - HPA scales pods on metrics; cluster autoscaler scales nodes — two loops, two failure modes.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://kubernetes.io/docs/concepts/)
+
+## Archived copy
+![[kubernetes-docs-concepts-clip]]
+%% trellis:end %%

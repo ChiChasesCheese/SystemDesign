@@ -13,3 +13,11 @@ machine-coding interviewer probes when they ask "what would you improve?"
 **Extract on read:**
 - One representative smell per family and its paired refactoring.
 - Replace Conditional with Polymorphism — the single most interview-relevant refactoring.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://refactoring.guru/refactoring/smells)
+
+## Archived copy
+![[refactoring-guru-smells-clip]]
+%% trellis:end %%

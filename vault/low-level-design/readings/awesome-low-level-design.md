@@ -10,3 +10,11 @@ all GoF patterns, concurrency topics, and 40+ classic problems with
 worked implementations in multiple languages, sorted easy/medium/hard.
 Use it as the source pool when adding drills — our drills name the same
 canonical problems (parking lot, LRU, elevator, Splitwise, ...).
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://github.com/ashishps1/awesome-low-level-design)
+
+## Archived copy
+![[awesome-low-level-design-clip]]
+%% trellis:end %%

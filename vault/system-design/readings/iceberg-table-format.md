@@ -14,3 +14,11 @@ works" pages; the details generalize to Delta Lake and Hudi.
 - Snapshot isolation via immutable manifest trees + one atomic pointer swap.
 - Why partition evolution is possible when partitioning is metadata, not paths.
 - Compaction and the small-files problem every log-structured system shares.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://iceberg.apache.org/spec/)
+
+## Archived copy
+![[iceberg-table-format-clip]]
+%% trellis:end %%

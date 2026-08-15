@@ -14,3 +14,11 @@ short, and every payments interviewer has read it.
 - How retries, timeouts, and idempotency compose into an end-to-end guarantee.
 
 Related cards: [[correctness-idempotency-key-design]], [[correctness-dedup-window]], [[correctness-idempotency-concurrent-retries]]
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://stripe.com/blog/idempotency)
+
+## Archived copy
+![[stripe-idempotency-clip]]
+%% trellis:end %%

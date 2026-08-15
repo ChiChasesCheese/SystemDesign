@@ -16,3 +16,11 @@ reciting definitions. Ruby examples, fully language-transferable.
   shallow hierarchy is still the right call.
 - Ch. 4–5: designing around messages, not classes — polymorphism as trusting
   the receiver.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.poodr.com/)
+
+## Archived copy
+![[poodr-clip]]
+%% trellis:end %%

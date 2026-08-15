@@ -18,6 +18,7 @@ import re
 from pathlib import Path
 
 from .cards import Card
+from .clippings import Clipping, canonical_url
 from .readings import Reading
 from .skeleton import Node, Skeleton
 
@@ -100,16 +101,28 @@ def write_managed(path: Path, body: str) -> bool:
     return True
 
 
+def _reading_body(reading: Reading, clip: "Clipping | None") -> str:
+    """The managed tail of a reading note: where the card lands, and where
+    the archived article is embedded so it reads inside Obsidian."""
+    lines = ["## Source", f"[Open the original ↗]({reading.url})"] if reading.url else []
+    if clip is not None:
+        lines += ["", "## Archived copy", f"![[{clip.path.stem}]]"]
+    return "\n".join(lines)
+
+
 def sync(
     skeleton: Skeleton,
     cards: list[Card],
     vault_dir: str | Path,
     readings: list[Reading] | None = None,
     drills: list[Reading] | None = None,
+    clippings: dict[str, "Clipping"] | None = None,
 ) -> dict:
-    """Regenerate map notes. Returns {'written': [...], 'orphans': [...]}."""
+    """Regenerate map notes and the managed tail of each reading note.
+    Returns {'written': [...], 'orphans': [...]}."""
     readings = readings or []
     drills = drills or []
+    clippings = clippings or {}
     vault = Path(vault_dir)
     map_dir = vault / "map"
     written: list[str] = []
@@ -122,6 +135,11 @@ def sync(
         path = map_dir / f"{node.id}.md"
         if write_managed(path, _node_body(skeleton, node, cards, readings, drills)):
             written.append(str(path))
+
+    for reading in readings:
+        body = _reading_body(reading, clippings.get(canonical_url(reading.url)))
+        if body and write_managed(reading.path, body):
+            written.append(str(reading.path))
 
     known = {f"{n.id}.md" for n in skeleton.walk()}
     orphans = sorted(

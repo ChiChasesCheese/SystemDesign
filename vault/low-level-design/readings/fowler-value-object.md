@@ -16,3 +16,11 @@ entries (AliasingBug, EvansClassification) for the full picture.
   failure mode.
 - Whole-value style: replace primitive pairs (amount + currency) with a small
   typed value that owns its own validation.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://martinfowler.com/bliki/ValueObject.html)
+
+## Archived copy
+![[fowler-value-object-clip]]
+%% trellis:end %%

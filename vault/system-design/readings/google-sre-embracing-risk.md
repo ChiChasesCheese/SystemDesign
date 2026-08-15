@@ -13,3 +13,11 @@ extra nine costs an order of magnitude more than the last.
 - The nines table: what 99.9% vs 99.99% actually permit per month.
 - Serial composition multiplies unavailability; redundancy in parallel buys it back.
 - Cost of the next nine vs what users can even perceive behind their ISP's reliability.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://sre.google/sre-book/embracing-risk/)
+
+## Archived copy
+![[google-sre-embracing-risk-clip]]
+%% trellis:end %%

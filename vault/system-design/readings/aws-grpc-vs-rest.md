@@ -13,3 +13,11 @@ sibling page (the-difference-between-graphql-and-rest) completing the trio.
 - gRPC: contract-first Protobuf + HTTP/2 streaming — best inside the datacenter, weak in browsers.
 - REST: loose coupling and cacheability — the default when you don't own every client.
 - GraphQL (sibling page): client-shaped queries traded against server complexity and cache misses.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/compare/the-difference-between-grpc-and-rest/)
+
+## Archived copy
+![[aws-grpc-vs-rest-clip]]
+%% trellis:end %%

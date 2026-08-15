@@ -14,3 +14,11 @@ for merge semantics and local-first architecture.
 - State-based vs operation-based CRDTs, and the commutative/associative/idempotent merge requirement.
 - Why counters, sets (OR-Set), and sequences each need their own construction.
 - What CRDTs give up: cross-object invariants still need consensus.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://crdt.tech/)
+
+## Archived copy
+![[crdt-tech-clip]]
+%% trellis:end %%

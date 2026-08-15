@@ -15,3 +15,11 @@ Pairs with Square's "Books" post on immutable accounting databases.
 - Balances: derived vs cached, and when each is right.
 
 Related cards: [[correctness-double-entry-invariant]], [[correctness-ledger-immutability]], [[correctness-balance-derivation]], [[correctness-reconciliation]]
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.moderntreasury.com/learn/what-is-a-ledger)
+
+## Archived copy
+![[modern-treasury-ledgers-clip]]
+%% trellis:end %%

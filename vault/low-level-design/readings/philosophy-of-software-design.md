@@ -16,3 +16,11 @@ for every class boundary you draw in a machine-coding round.
   errors (e.g. delete-nonexistent is a no-op).
 - Somewhat-general-purpose interfaces outlive their first caller; comments and
   names are part of the abstraction.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://web.stanford.edu/~ouster/cgi-bin/book.php)
+
+## Archived copy
+![[philosophy-of-software-design-clip]]
+%% trellis:end %%

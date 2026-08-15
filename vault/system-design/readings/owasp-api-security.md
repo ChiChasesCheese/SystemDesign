@@ -13,3 +13,11 @@ per-object, per-request work, not a gateway checkbox.
 - BOLA (broken object-level authorization) is #1: check ownership on every object access, every time.
 - Object-level vs function-level authz — RBAC/ABAC decisions must be enforced at both.
 - The supporting cast: unrestricted resource consumption (rate limits), broken authentication, and never trusting client-supplied ids.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://owasp.org/API-Security/)
+
+## Archived copy
+![[owasp-api-security-clip]]
+%% trellis:end %%

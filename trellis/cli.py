@@ -133,7 +133,7 @@ def cmd_validate(args, project: Project) -> int:
 def cmd_sync(args, project: Project) -> int:
     _checked(project, "syncing")
     result = sync(project.skeleton, project.cards, project.content_dir(args.root),
-                  project.readings, project.drills)
+                  project.readings, project.drills, project.clippings)
     print(f"{project.skeleton.domain}: updated {len(result['written'])} note(s)")
     for orphan in result["orphans"]:
         print(f"warning: orphan map note (node no longer in skeleton): {orphan}")
@@ -145,12 +145,9 @@ def cmd_build(args, project: Project) -> int:
     if not project.cards:
         _fail(f"{project.skeleton.domain}: no cards to build")
     out = args.output or args.root / "dist" / f"{project.skeleton.domain}.apkg"
-    vault_root = args.root / "vault"
     result = build_package(
         project.skeleton, project.cards, out, project.readings,
-        clippings=project.clippings,
-        vault=args.vault_name or vault_name(vault_root),
-        vault_root=vault_root,
+        vault=args.vault_name or vault_name(args.root / "vault"),
     )
     print(f"wrote {result['path']}: {result['notes']} notes in {result['decks']} decks")
     return 0

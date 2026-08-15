@@ -14,3 +14,11 @@ flags, and config changes — which the chapter insists are deploys too.
 - Sizing the canary population against the error rates you need to detect.
 - Choosing canary metrics: leading indicators tied to SLIs, evaluated automatically.
 - Roll-forward vs rollback mechanics, and why config/flag changes need the same pipeline.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://sre.google/workbook/canarying-releases/)
+
+## Archived copy
+![[google-sre-canarying-clip]]
+%% trellis:end %%

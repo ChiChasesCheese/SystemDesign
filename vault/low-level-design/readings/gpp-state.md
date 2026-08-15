@@ -17,3 +17,11 @@ or order-lifecycle problem climbs.
   scattered setup code, and illegal transitions become unrepresentable.
 - Static states vs instantiated states, and pushdown automata for
   "return to previous state" requirements.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://gameprogrammingpatterns.com/state.html)
+
+## Archived copy
+![[gpp-state-clip]]
+%% trellis:end %%

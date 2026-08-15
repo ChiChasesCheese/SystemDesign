@@ -13,3 +13,11 @@ of this work at Google. Read chapters 1–2 and the XHR/SSE/WebSocket part.
 - Latency is dominated by RTTs: handshakes, slow start, and why connection reuse matters.
 - TCP vs UDP as guarantee bundles you pay for, not just "reliable vs fast".
 - Long-polling vs SSE vs WebSocket: delivery model, proxy friendliness, and connection-state cost.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://hpbn.co/)
+
+## Archived copy
+![[high-performance-browser-networking-clip]]
+%% trellis:end %%
