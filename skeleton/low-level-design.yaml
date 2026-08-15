@@ -5,6 +5,7 @@ domain: low-level-design
 title: Low-Level Design
 nodes:
   - id: method
+    order: 1
     title: Machine Coding Method
     summary: How to run the 60–90 minute LLD round — what is graded and how to structure the hour.
     children:
@@ -19,6 +20,7 @@ nodes:
         summary: Noun–verb extraction, finding entities and invariants, sequence-of-interactions before class diagrams.
 
   - id: oop
+    order: 2
     title: Object Modeling
     summary: The vocabulary of object design — used as decision tools, not textbook definitions.
     children:
@@ -36,6 +38,7 @@ nodes:
         summary: Entities vs value objects, equality semantics, enums with behavior, why immutability simplifies reasoning.
 
   - id: principles
+    order: 3
     title: Design Principles
     summary: The decision rules that make a design extensible — and the judgment of when to stop applying them.
     children:
@@ -54,6 +57,7 @@ nodes:
         summary: The simplicity principles and their failure mode — premature abstraction and speculative generality.
 
   - id: patterns
+    order: 4
     title: Design Patterns
     summary: The GoF catalog as a shared vocabulary — intent and applicability over UML memorization.
     children:
@@ -72,6 +76,7 @@ nodes:
         requires: [principles.simplicity]
 
   - id: quality
+    order: 5
     title: Code Quality
     summary: Recognizing rot and reversing it — the refactoring.guru layer.
     children:
@@ -90,6 +95,7 @@ nodes:
         summary: Exceptions vs result types, validation at boundaries, designing failure paths as first-class flows.
 
   - id: concurrency
+    order: 6
     title: Concurrency
     summary: Writing correct multi-threaded code — the LLD round's hardest add-on requirement.
     children:
@@ -108,6 +114,7 @@ nodes:
         requires: [concurrency.primitives]
 
   - id: structure
+    order: 7
     title: APIs & Program Structure
     summary: The recurring skeleton of every machine-coding solution.
     children:

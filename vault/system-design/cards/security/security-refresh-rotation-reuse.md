@@ -1,6 +1,6 @@
 ---
 id: security-refresh-rotation-reuse
-node: security.authn
+node: security.authn.tokens
 type: qa
 ---
 ## Q

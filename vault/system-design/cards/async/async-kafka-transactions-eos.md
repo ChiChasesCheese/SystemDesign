@@ -1,6 +1,6 @@
 ---
 id: async-kafka-transactions-eos
-node: async.delivery
+node: async.delivery.exactly-once
 type: qa
 ---
 ## Q

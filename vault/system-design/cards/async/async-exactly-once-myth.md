@@ -1,6 +1,6 @@
 ---
 id: async-exactly-once-myth
-node: async.delivery
+node: async.delivery.guarantees
 type: qa
 ---
 ## Q

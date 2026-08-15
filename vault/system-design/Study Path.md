@@ -46,7 +46,10 @@
 - [ ] [[distributed.replication.leader|Leader-Based]] — 4 cards
 - [ ] [[distributed.replication.multi-leader|Multi-Leader]] — 1 cards
 - [ ] [[distributed.replication.leaderless|Leaderless & Quorums]] — 2 cards
-- [ ] [[distributed.partitioning|Partitioning]] — 6 cards
+- [ ] [[distributed.partitioning.schemes|Hash vs Range]] — 2 cards
+- [ ] [[distributed.partitioning.rebalancing|Rebalancing & Routing]] — 2 cards
+- [ ] [[distributed.partitioning.skew|Hot Keys & Skew]] — 1 cards
+- [ ] [[distributed.partitioning.indexes|Partitioned Secondary Indexes]] — 1 cards
 - [ ] [[distributed.transactions.isolation|Isolation Levels & Anomalies]] — 3 cards
 - [ ] [[distributed.transactions.concurrency-control|Concurrency Control]] — 3 cards
 - [ ] [[distributed.transactions.distributed|Distributed Transactions]] — 1 cards
@@ -58,7 +61,8 @@
 **Async & Streaming**
 - [ ] [[async.queues|Message Queues]] — 6 cards
 - [ ] [[async.log|The Log & Kafka]] — 6 cards; needs: B-trees vs LSM-trees
-- [ ] [[async.delivery|Delivery Semantics]] — 6 cards
+- [ ] [[async.delivery.guarantees|Delivery Guarantees]] — 3 cards
+- [ ] [[async.delivery.exactly-once|Effectively Exactly-Once]] — 3 cards
 - [ ] [[async.streaming|Stream Processing & CDC]] — 6 cards
 **Analytics & Derived Data**
 - [ ] [[analytics.olap|OLTP vs OLAP & Columnar]] — 5 cards; needs: B-trees vs LSM-trees
@@ -92,7 +96,9 @@
 ## Week 8
 
 **Security**
-- [ ] [[security.authn|Authentication]] — 7 cards
+- [ ] [[security.authn.tokens|Sessions & Tokens]] — 4 cards
+- [ ] [[security.authn.oauth|OAuth2 & OIDC]] — 2 cards
+- [ ] [[security.authn.credentials|Passwords & Passkeys]] — 1 cards
 - [ ] [[security.authz|Authorization & API Security]] — 6 cards
 **AI Systems**
 - [ ] [[ai.foundations|LLM Foundations for Engineers]] — 5 cards

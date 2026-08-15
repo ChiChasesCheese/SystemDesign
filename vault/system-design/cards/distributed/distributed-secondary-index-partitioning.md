@@ -1,6 +1,6 @@
 ---
 id: distributed-secondary-index-partitioning
-node: distributed.partitioning
+node: distributed.partitioning.indexes
 type: qa
 ---
 ## Q

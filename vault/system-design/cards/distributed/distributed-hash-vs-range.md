@@ -1,6 +1,6 @@
 ---
 id: distributed-hash-vs-range
-node: distributed.partitioning
+node: distributed.partitioning.schemes
 type: qa
 ---
 ## Q

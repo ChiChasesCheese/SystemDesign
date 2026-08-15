@@ -4,6 +4,7 @@ domain: system-design
 title: System Design
 nodes:
   - id: foundations
+    order: 1
     title: Foundations
     summary: How to run a design conversation and reason in numbers before touching any component.
     children:
@@ -21,6 +22,7 @@ nodes:
         summary: Performance vs scalability, latency vs throughput, availability vs consistency — the axes every later choice moves along.
 
   - id: networking
+    order: 2
     title: Networking & APIs
     summary: How clients reach services and how services talk to each other.
     children:
@@ -41,6 +43,7 @@ nodes:
         summary: Push vs pull CDNs, cache keys, and what belongs at the edge.
 
   - id: traffic
+    order: 3
     title: Load Balancing & Traffic
     summary: Spreading, shaping, and protecting request flow at the front door.
     children:
@@ -55,6 +58,7 @@ nodes:
         summary: Token bucket vs sliding window, local vs distributed enforcement, and what to return when you shed.
 
   - id: caching
+    order: 4
     title: Caching
     summary: The highest-leverage latency tool, and the consistency debt it creates.
     children:
@@ -69,6 +73,7 @@ nodes:
         summary: Client, CDN, gateway, application, and database layers — what each layer can and cannot absorb.
 
   - id: storage
+    order: 5
     title: Storage
     summary: Choosing and operating the systems of record.
     children:
@@ -99,6 +104,7 @@ nodes:
         summary: Data formats as contracts between code versions — JSON, Protobuf, Avro; forward and backward compatibility rules.
 
   - id: distributed
+    order: 6
     title: Distributed Data
     summary: What happens to data when one machine is no longer enough — the deep end of the interview.
     children:
@@ -124,7 +130,20 @@ nodes:
             summary: Dynamo-style quorums, sloppy quorums and hinted handoff, read repair and anti-entropy.
       - id: distributed.partitioning
         title: Partitioning
-        summary: Hash vs range sharding, consistent hashing, hot keys, and rebalancing without downtime.
+        summary: Splitting data across nodes — scheme choice, movement, and the skew that breaks both.
+        children:
+          - id: distributed.partitioning.schemes
+            title: Hash vs Range
+            summary: Hash and range partitioning trade-offs; consistent hashing and virtual nodes.
+          - id: distributed.partitioning.rebalancing
+            title: Rebalancing & Routing
+            summary: Moving partitions without downtime; who knows where a key lives — routing tiers and coordination services.
+          - id: distributed.partitioning.skew
+            title: Hot Keys & Skew
+            summary: Detecting and defusing hot partitions — key salting, splitting, and request-level caches.
+          - id: distributed.partitioning.indexes
+            title: Partitioned Secondary Indexes
+            summary: Local vs global secondary indexes — scatter-gather reads vs write amplification.
       - id: distributed.transactions
         title: Transactions
         summary: What the database promises around concurrent access — and what it charges for the promise.
@@ -152,6 +171,7 @@ nodes:
         requires: [distributed.replication]
 
   - id: async
+    order: 7
     title: Async & Streaming
     summary: Decoupling producers from consumers, and the delivery semantics that come with it.
     children:
@@ -164,12 +184,20 @@ nodes:
         requires: [storage.internals]
       - id: async.delivery
         title: Delivery Semantics
-        summary: At-most-once, at-least-once, effectively-exactly-once; ordering guarantees and dead-letter queues.
+        summary: What "delivered" actually promises — and how to engineer the strongest practical guarantee.
+        children:
+          - id: async.delivery.guarantees
+            title: Delivery Guarantees
+            summary: At-most-once vs at-least-once, ordering scope, dead-letter queues and poison pills.
+          - id: async.delivery.exactly-once
+            title: Effectively Exactly-Once
+            summary: Idempotent producers, transactional consume-process-produce, and why end-to-end exactly-once is a composition, not a feature.
       - id: async.streaming
         title: Stream Processing & CDC
         summary: Change data capture, materialized views, windows, and keeping derived data fresh.
 
   - id: analytics
+    order: 8
     title: Analytics & Derived Data
     summary: The OLAP side of the house — batch, warehouses, and every dataset derived from a system of record.
     children:
@@ -190,6 +218,7 @@ nodes:
         requires: [async.log]
 
   - id: correctness
+    order: 9
     title: Correctness Patterns
     summary: Patterns that keep money and state right when calls retry and services fail mid-flight.
     children:
@@ -211,6 +240,7 @@ nodes:
         requires: [correctness.idempotency]
 
   - id: architecture
+    order: 10
     title: Architecture
     summary: Slicing a system into deployable parts, and the coordination tax of each cut.
     children:
@@ -226,6 +256,7 @@ nodes:
         summary: FaaS execution model, cold starts, and where per-request pricing beats owning servers.
 
   - id: reliability
+    order: 11
     title: Reliability & Operations
     summary: Staying up, degrading gracefully, and proving it with numbers.
     children:
@@ -254,6 +285,7 @@ nodes:
         requires: [distributed.replication, distributed.consensus]
 
   - id: infra
+    order: 12
     title: Platform & Infrastructure
     summary: The layer designs run on — containers, meshes, and the road to production.
     children:
@@ -270,17 +302,29 @@ nodes:
         requires: [reliability.resilience.containment]
 
   - id: security
+    order: 13
     title: Security
     summary: The authn/authz layer every design gets asked about once.
     children:
       - id: security.authn
         title: Authentication
-        summary: Sessions vs JWTs, token lifetimes and revocation, OAuth2/OIDC flows in one diagram.
+        summary: Proving who's calling — session mechanics, delegation flows, and credentials themselves.
+        children:
+          - id: security.authn.tokens
+            title: Sessions & Tokens
+            summary: Server sessions vs JWTs, access/refresh pairs, rotation and reuse detection, sender-constrained tokens.
+          - id: security.authn.oauth
+            title: OAuth2 & OIDC
+            summary: Authorization-code + PKCE flow, what OIDC adds on top, which flow for which client.
+          - id: security.authn.credentials
+            title: Passwords & Passkeys
+            summary: Credential storage, phishing resistance, and the WebAuthn/passkey model.
       - id: security.authz
         title: Authorization & API Security
         summary: RBAC vs ABAC, API keys vs user tokens, TLS everywhere, secrets handling.
 
   - id: ai
+    order: 14
     title: AI Systems
     summary: The data-infrastructure side of AI — from zero, in system-design terms, to serving and evaluating LLM backends.
     children:

@@ -1,6 +1,6 @@
 ---
 id: security-passkeys-phishing
-node: security.authn
+node: security.authn.credentials
 type: qa
 ---
 ## Q

@@ -1,6 +1,6 @@
 ---
 id: async-idempotent-producer
-node: async.delivery
+node: async.delivery.exactly-once
 type: qa
 ---
 ## Q

@@ -242,7 +242,7 @@ def test_real_repo_wikilinks_resolve():
                 targets |= {getattr(i, "id", None) or i.link_target for i in items}
     link_re = re.compile(r"\[\[([^\]|#]+)")
     for path in (REPO / "vault").rglob("*.md"):
-        if "map" in path.parts or path.name in ("Study Path.md",):
+        if "map" in path.parts or path.name == "Study Path.md":
             continue
         for target in link_re.findall(path.read_text(encoding="utf-8")):
             assert target.strip() in targets, f"{path}: dangling link [[{target}]]"

@@ -1,6 +1,6 @@
 ---
 id: security-oauth-vs-oidc
-node: security.authn
+node: security.authn.oauth
 type: qa
 ---
 ## Q

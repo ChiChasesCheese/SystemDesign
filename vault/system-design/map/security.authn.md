@@ -2,19 +2,15 @@
 # Authentication
 *Security*
 
-Sessions vs JWTs, token lifetimes and revocation, OAuth2/OIDC flows in one diagram.
+Proving who's calling — session mechanics, delegation flows, and credentials themselves.
+
+## Topics
+- [[security.authn.tokens|Sessions & Tokens]]
+- [[security.authn.oauth|OAuth2 & OIDC]]
+- [[security.authn.credentials|Passwords & Passkeys]]
 
 ## Readings
 - [[okta-illustrated-oauth-oidc|An Illustrated Guide to OAuth and OpenID Connect (David Neal, Okta)]]
-
-## Cards (7)
-- [[security-access-refresh-tokens]]
-- [[security-oauth-code-pkce]]
-- [[security-oauth-vs-oidc]]
-- [[security-passkeys-phishing]]
-- [[security-refresh-rotation-reuse]]
-- [[security-sender-constrained-tokens]]
-- [[security-sessions-vs-jwt]]
 %% trellis:end %%
 
 ## Notes

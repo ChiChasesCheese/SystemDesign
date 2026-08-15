@@ -1,6 +1,6 @@
 ---
 id: async-dlq-poison-pill
-node: async.delivery
+node: async.delivery.guarantees
 type: qa
 ---
 ## Q

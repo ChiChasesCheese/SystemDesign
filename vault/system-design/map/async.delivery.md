@@ -2,20 +2,16 @@
 # Delivery Semantics
 *Async & Streaming*
 
-At-most-once, at-least-once, effectively-exactly-once; ordering guarantees and dead-letter queues.
+What "delivered" actually promises — and how to engineer the strongest practical guarantee.
+
+## Topics
+- [[async.delivery.guarantees|Delivery Guarantees]]
+- [[async.delivery.exactly-once|Effectively Exactly-Once]]
 
 **Unlocks:** [[correctness.idempotency|Idempotency]]
 
 ## Readings
 - [[kafka-docs|Apache Kafka Documentation (Design section)]]
-
-## Cards (6)
-- [[async-delivery-semantics-cloze]]
-- [[async-dlq-poison-pill]]
-- [[async-exactly-once-myth]]
-- [[async-idempotent-producer]]
-- [[async-kafka-transactions-eos]]
-- [[async-producer-retry-reordering]]
 %% trellis:end %%
 
 ## Notes

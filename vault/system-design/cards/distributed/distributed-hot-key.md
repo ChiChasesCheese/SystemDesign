@@ -1,6 +1,6 @@
 ---
 id: distributed-hot-key
-node: distributed.partitioning
+node: distributed.partitioning.skew
 type: qa
 ---
 ## Q
