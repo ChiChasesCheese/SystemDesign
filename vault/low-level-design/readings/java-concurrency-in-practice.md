@@ -18,7 +18,4 @@ everything an LLD round can throw at you.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://jcip.net/)
-
-## Archived copy
-![[java-concurrency-in-practice-clip]]
 %% trellis:end %%

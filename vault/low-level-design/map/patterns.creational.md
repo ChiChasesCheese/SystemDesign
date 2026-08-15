@@ -5,6 +5,7 @@
 Singleton, factory method, abstract factory, builder, prototype — who creates objects and how flexibly.
 
 ## Readings
+- [[refactoring-guru-builder|Builder (refactoring.guru)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
 ## Drills

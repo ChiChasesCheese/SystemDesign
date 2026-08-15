@@ -5,6 +5,7 @@
 Adapter, decorator, facade, composite, proxy, bridge, flyweight — composing objects into larger shapes.
 
 ## Readings
+- [[refactoring-guru-decorator|Decorator (refactoring.guru)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
 ## Cards (6)

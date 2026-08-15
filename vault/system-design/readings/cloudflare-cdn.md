@@ -1,7 +1,11 @@
 ---
-nodes: [networking.cdn, caching.placement]
+nodes:
+- networking.cdn
+- caching.placement
 url: https://developers.cloudflare.com/cache/
-tags: [reference]
+tags:
+- reference
+- index
 ---
 # How CDN caching actually works (Cloudflare docs)
 
@@ -18,7 +22,4 @@ Related cards: [[networking-cdn-cache-key]], [[networking-push-vs-pull-cdn]]
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://developers.cloudflare.com/cache/)
-
-## Archived copy
-![[cloudflare-cdn-clip]]
 %% trellis:end %%

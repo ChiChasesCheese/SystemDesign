@@ -17,7 +17,4 @@ scoring) for exactly the depth a design conversation needs.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://nlp.stanford.edu/IR-book/information-retrieval-book.html)
-
-## Archived copy
-![[stanford-ir-book-clip]]
 %% trellis:end %%

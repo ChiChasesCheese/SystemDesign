@@ -14,7 +14,4 @@ canonical problems (parking lot, LRU, elevator, Splitwise, ...).
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://github.com/ashishps1/awesome-low-level-design)
-
-## Archived copy
-![[awesome-low-level-design-clip]]
 %% trellis:end %%

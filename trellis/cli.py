@@ -60,7 +60,7 @@ class Project:
     def report(self):
         return validate(self.skeleton, self.cards, self.card_errors,
                         self.readings, self.reading_errors,
-                        self.drills, self.drill_errors)
+                        self.drills, self.drill_errors, self.clippings)
 
     def content_dir(self, root: Path) -> Path:
         """This domain's folder inside the Obsidian vault. Not the vault
@@ -148,19 +148,23 @@ def cmd_build(args, project: Project) -> int:
     result = build_package(
         project.skeleton, project.cards, out, project.readings,
         vault=args.vault_name or vault_name(args.root / "vault"),
+        clippings=project.clippings,
     )
     print(f"wrote {result['path']}: {result['notes']} notes in {result['decks']} decks")
     return 0
 
 
 def cmd_stats(args, project: Project) -> int:
-    from .links import coverage
+    from .links import coverage, leaves_without_readable_source
     s = project.skeleton
     per_node = Counter(c.node for c in project.cards)
     linked_all, total_all = coverage(s, project.cards, project.readings)
     pct = f"{linked_all / total_all:.0%}" if total_all else "n/a"
+    hunting = leaves_without_readable_source(s, project.readings, project.clippings)
+    readable = len(s.leaves()) - len(hunting)
     print(f"{s.title} — {len(project.cards)} cards, {len(project.readings)} readings, "
           f"{len(project.drills)} drills, link coverage {pct}, "
+          f"readable sources {readable}/{len(s.leaves())} leaves, "
           f"{len(project.card_errors)} unparseable")
     for root_node in s.roots:
         subtree = [root_node] + [n for n in s.walk()

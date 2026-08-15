@@ -6,6 +6,7 @@ Requirement scoping, choosing core flows, time-boxing design vs code vs demo, dr
 
 ## Readings
 - [[awesome-low-level-design|awesome-low-level-design (ashishps1)]]
+- [[hellointerview-delivery|The Low Level Design Delivery Framework (Hello Interview)]]
 
 ## Drills
 - [[elevator-system|Drill: Elevator System]]

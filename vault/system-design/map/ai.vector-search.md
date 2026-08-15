@@ -9,6 +9,7 @@ Embeddings as vectors, ANN indexes (HNSW/IVF), hybrid retrieval, and freshness o
 **Unlocks:** [[ai.rag|RAG Pipelines]]
 
 ## Readings
+- [[hnsw-paper|Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs]]
 - [[pinecone-learn|Pinecone Learning Center]]
 
 ## Cards (7)

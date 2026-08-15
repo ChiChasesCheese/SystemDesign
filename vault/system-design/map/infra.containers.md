@@ -5,6 +5,7 @@
 Containers vs VMs, Kubernetes primitives (pods, services, autoscaling) at design-conversation depth.
 
 ## Readings
+- [[borg-omega-kubernetes|Borg, Omega, and Kubernetes: Lessons Learned from Three Container-Management Systems over a Decade]]
 - [[kubernetes-docs-concepts|Kubernetes Concepts (official docs)]]
 
 ## Cards (4)

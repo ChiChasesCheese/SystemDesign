@@ -17,7 +17,4 @@ of this work at Google. Read chapters 1–2 and the XHR/SSE/WebSocket part.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://hpbn.co/)
-
-## Archived copy
-![[high-performance-browser-networking-clip]]
 %% trellis:end %%

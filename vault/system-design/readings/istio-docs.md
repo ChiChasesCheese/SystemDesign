@@ -1,7 +1,10 @@
 ---
-nodes: [infra.mesh]
+nodes:
+- infra.mesh
 url: https://istio.io/latest/docs/
-tags: [reference]
+tags:
+- reference
+- index
 ---
 # Istio Documentation (concepts pages)
 
@@ -18,7 +21,4 @@ retries, timeouts, traffic splitting) and what the sidecar/ambient split costs.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://istio.io/latest/docs/)
-
-## Archived copy
-![[istio-docs-clip]]
 %% trellis:end %%

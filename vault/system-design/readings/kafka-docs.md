@@ -1,7 +1,12 @@
 ---
-nodes: [async.delivery, async.log]
+nodes:
+- async.delivery
+- async.log
 url: https://kafka.apache.org/documentation/
-tags: [reference, canonical]
+tags:
+- reference
+- canonical
+- index
 ---
 # Apache Kafka Documentation (Design section)
 
@@ -18,7 +23,4 @@ Also the authority on partitions, consumer groups, offsets, and retention.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://kafka.apache.org/documentation/)
-
-## Archived copy
-![[kafka-docs-clip]]
 %% trellis:end %%

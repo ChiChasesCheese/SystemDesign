@@ -1,7 +1,12 @@
 ---
-nodes: [ai.vector-search, ai.rag]
+nodes:
+- ai.vector-search
+- ai.rag
 url: https://www.pinecone.io/learn/
-tags: [intro, reference]
+tags:
+- intro
+- reference
+- index
 ---
 # Pinecone Learning Center
 
@@ -18,7 +23,4 @@ the retrieval pipeline end to end. Start with the vector-indexes overview.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://www.pinecone.io/learn/)
-
-## Archived copy
-![[pinecone-learn-clip]]
 %% trellis:end %%

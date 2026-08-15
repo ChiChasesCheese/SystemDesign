@@ -6,6 +6,7 @@ Long polling vs SSE vs WebSockets; connection state as the scaling cost.
 
 ## Readings
 - [[high-performance-browser-networking|High Performance Browser Networking (Ilya Grigorik)]]
+- [[hpbn-websocket-chapter|WebSocket — High Performance Browser Networking, Ch. 17]]
 
 ## Cards (6)
 - [[networking-heartbeats-idle-timeouts]]

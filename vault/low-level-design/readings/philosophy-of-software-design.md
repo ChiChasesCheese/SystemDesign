@@ -20,7 +20,4 @@ for every class boundary you draw in a machine-coding round.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://web.stanford.edu/~ouster/cgi-bin/book.php)
-
-## Archived copy
-![[philosophy-of-software-design-clip]]
 %% trellis:end %%

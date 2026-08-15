@@ -4,6 +4,9 @@
 
 2PC mechanics and blocking, why it's avoided at scale, and what replaces it.
 
+## Readings
+- [[helland-life-beyond-distributed-transactions|Life beyond Distributed Transactions: An Apostate's Opinion (Pat Helland, CIDR 2007)]]
+
 ## Cards (5)
 - [[distributed-2pc-avoidance]]
 - [[distributed-2pc-blocking-window]]

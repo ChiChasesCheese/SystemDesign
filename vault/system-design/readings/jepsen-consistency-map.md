@@ -1,7 +1,12 @@
 ---
-nodes: [distributed.consistency, distributed.cap]
+nodes:
+- distributed.consistency
+- distributed.cap
 url: https://jepsen.io/consistency
-tags: [canonical, reference]
+tags:
+- canonical
+- reference
+- index
 ---
 # Jepsen: Consistency Models
 
@@ -17,7 +22,4 @@ interviewers test loosely and Jepsen defines exactly.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://jepsen.io/consistency)
-
-## Archived copy
-![[jepsen-consistency-map-clip]]
 %% trellis:end %%

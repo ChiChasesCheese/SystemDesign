@@ -20,7 +20,4 @@ reciting definitions. Ruby examples, fully language-transferable.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://www.poodr.com/)
-
-## Archived copy
-![[poodr-clip]]
 %% trellis:end %%

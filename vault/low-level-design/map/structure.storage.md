@@ -6,6 +6,7 @@ Repository pattern, id generation, secondary indexes, and thread-safe in-memory 
 
 ## Readings
 - [[fowler-repository|Repository (Fowler, P of EAA catalog)]]
+- [[msdocs-persistence-layer|Designing the Infrastructure Persistence Layer (Microsoft .NET Architecture)]]
 
 ## Drills
 - [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]

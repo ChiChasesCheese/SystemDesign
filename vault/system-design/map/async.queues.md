@@ -8,6 +8,7 @@ Queues vs pub-sub, backpressure, consumer scaling, and when async is the wrong c
 
 ## Readings
 - [[aws-queue-backlogs|Avoiding insurmountable queue backlogs (AWS Builders' Library)]]
+- [[queues-dont-fix-overload|Queues Don't Fix Overload (Fred Hébert)]]
 
 ## Cards (6)
 - [[async-broker-selection]]

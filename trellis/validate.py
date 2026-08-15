@@ -28,6 +28,7 @@ def validate(
     reading_errors: list[str] | None = None,
     drills: list[Reading] | None = None,
     drill_errors: list[str] | None = None,
+    clippings: dict | None = None,
 ) -> Report:
     report = Report(
         errors=list(card_errors) + list(reading_errors or []) + list(drill_errors or [])
@@ -69,6 +70,16 @@ def validate(
         report.warnings.append(
             f"{len(bare)} leaf node(s) have no cards yet: " + ", ".join(bare)
         )
+
+    if cards and clippings is not None:
+        from .links import leaves_without_readable_source
+        hunting = leaves_without_readable_source(skeleton, readings or [], clippings)
+        if hunting:
+            report.warnings.append(
+                f"{len(hunting)} leaf/leaves have no archived, readable source — "
+                "their cards point at a book or an index: " + ", ".join(hunting[:8])
+                + (" …" if len(hunting) > 8 else "")
+            )
 
     if cards:
         from .links import LINK_COVERAGE_TARGET, coverage

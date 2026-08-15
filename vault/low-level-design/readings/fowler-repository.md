@@ -1,7 +1,11 @@
 ---
-nodes: [structure.storage]
+nodes:
+- structure.storage
 url: https://martinfowler.com/eaaCatalog/repository.html
-tags: [canonical, reference]
+tags:
+- canonical
+- reference
+- index
 ---
 # Repository (Fowler, P of EAA catalog)
 
@@ -21,7 +25,4 @@ swappable and thread-safe.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://martinfowler.com/eaaCatalog/repository.html)
-
-## Archived copy
-![[fowler-repository-clip]]
 %% trellis:end %%

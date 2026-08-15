@@ -28,22 +28,51 @@ def has_inline_link(card: Card) -> bool:
     return bool(_INLINE_LINK_RE.search(card.question + card.answer + card.text))
 
 
-def sources_for(skeleton: Skeleton, readings: list[Reading], node_id: str,
-                limit: int = 3) -> list[Reading]:
-    """Readings with URLs attached to the node or any ancestor, nearest
-    first, deduped by URL."""
+# Tags that mark a reading as a pointer rather than something you can sit
+# down and read: a book you must own, an index you must navigate.
+_POINTER_TAGS = {"book", "index"}
+
+
+def sources_for(
+    skeleton: Skeleton,
+    readings: list[Reading],
+    node_id: str,
+    limit: int = 3,
+    clippings: dict[str, Clipping] | None = None,
+) -> list[Reading]:
+    """Readings attached to the node or an ancestor, best first.
+
+    "Best" is by what it costs the reader to get the information: an
+    archived article you can read on the spot beats a web page, which beats
+    a book's homepage or a docs index. Proximity to the node breaks ties,
+    so a leaf's own source still wins among equals.
+    """
     node = skeleton.by_id.get(node_id)
     if node is None:
         return []
-    lineage = [n.id for n in reversed(node.path())]
-    out: list[Reading] = []
-    seen: set[str] = set()
-    for ancestor_id in lineage:
-        for reading in readings:
-            if ancestor_id in reading.nodes and reading.url and reading.url not in seen:
-                seen.add(reading.url)
-                out.append(reading)
-    return out[:limit]
+    clippings = clippings or {}
+    distance = {n.id: d for d, n in enumerate(reversed(node.path()))}
+
+    candidates: dict[str, tuple[tuple, Reading]] = {}
+    for reading in readings:
+        if not reading.url:
+            continue
+        near = min((distance[n] for n in reading.nodes if n in distance), default=None)
+        if near is None:
+            continue
+        clip = clippings.get(canonical_url(reading.url))
+        rank = (
+            # A book or an index is last whatever else is true of it: its
+            # homepage archiving cleanly does not put the chapter in your
+            # hands. Tag a genuine full chapter `canonical`, not `book`.
+            1 if _POINTER_TAGS & set(reading.tags) else 0,
+            0 if (clip is not None and clip.is_substantive) else 1,
+            near,
+        )
+        key = canonical_url(reading.url)
+        if key not in candidates or rank < candidates[key][0]:
+            candidates[key] = (rank, reading)
+    return [r for _, r in sorted(candidates.values(), key=lambda x: x[0])][:limit]
 
 
 @dataclass
@@ -64,6 +93,7 @@ def go_deeper(
     readings: list[Reading],
     node_id: str,
     vault: str | None = None,
+    clippings: dict[str, Clipping] | None = None,
 ) -> list[GoDeeper]:
     """Footer links for a card on `node_id`.
 
@@ -74,7 +104,7 @@ def go_deeper(
     `vault/`). The clipped article rides along embedded inside that note.
     """
     out: list[GoDeeper] = []
-    for reading in sources_for(skeleton, readings, node_id):
+    for reading in sources_for(skeleton, readings, node_id, clippings=clippings):
         if vault:
             out.append(
                 GoDeeper(reading.title, open_uri(vault, reading.path.stem), reading.url)
@@ -82,6 +112,32 @@ def go_deeper(
         else:
             out.append(GoDeeper(reading.title, reading.url, None))
     return out
+
+
+def is_readable_source(reading: Reading, clippings: dict[str, Clipping]) -> bool:
+    """True when this reading is something you can actually sit down and
+    read: archived in the vault, with real prose, and not a pointer at a
+    book you must own or an index you must navigate."""
+    if _POINTER_TAGS & set(reading.tags):
+        return False
+    clip = clippings.get(canonical_url(reading.url))
+    return clip is not None and clip.is_substantive
+
+
+def leaves_without_readable_source(
+    skeleton: Skeleton, readings: list[Reading], clippings: dict[str, Clipping]
+) -> list[str]:
+    """Leaves whose best source is still a book, an index, or a page that
+    would not archive — the cards there send you hunting instead of
+    reading."""
+    return [
+        leaf.id
+        for leaf in skeleton.leaves()
+        if not any(
+            is_readable_source(r, clippings)
+            for r in sources_for(skeleton, readings, leaf.id, clippings=clippings)
+        )
+    ]
 
 
 def coverage(skeleton: Skeleton, cards: list[Card],
