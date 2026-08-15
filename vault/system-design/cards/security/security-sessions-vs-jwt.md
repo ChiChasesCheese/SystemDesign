@@ -1,6 +1,6 @@
 ---
 id: security-sessions-vs-jwt
-node: security.authn
+node: security.authn.tokens
 type: qa
 ---
 ## Q

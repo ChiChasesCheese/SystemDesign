@@ -72,6 +72,24 @@ Mechanically:
 - **Anki**: import `dist/system-design.apkg`. After editing or adding cards,
   rebuild and re-import — note GUIDs are stable, so edits update in place and
   your review history survives.
+- **After a skeleton restructure** (renamed/split/reordered nodes): Anki never
+  moves existing cards between decks on import, so stale deck names linger with
+  the old cards inside. Fix in one step on desktop Anki (with the
+  [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on installed):
+  import the new `.apkg` first, then `trellis anki-align`, then sync to
+  AnkiWeb. Cards are matched by their stable node tags, moved to the decks the
+  current skeleton defines, and emptied stale decks are deleted. Top-level
+  branches carry an explicit `order:` in the skeleton, so their deck numbers
+  never shift when new branches are inserted.
+
+### Granularity policy
+
+A leaf is **one interview probe** — a topic narrow enough that "I'm weak here"
+points at something specific to drill or generate more cards for. Split a leaf
+when it accumulates more than ~6 cards or you can't name the single skill it
+trains. Splits are cheap: edit the skeleton, re-point the affected cards'
+`node:` lines, `trellis sync && trellis build`, and `trellis anki-align` makes
+the live collection follow.
 - **Obsidian**: open `vault/` as the vault (not a single domain folder), so
   wikilinks work across domains. Each domain's `map/` holds the generated topic
   notes (your own text outside the `%% trellis %%` markers is preserved). The

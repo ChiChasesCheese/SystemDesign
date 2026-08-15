@@ -1,6 +1,6 @@
 ---
 id: distributed-request-routing
-node: distributed.partitioning
+node: distributed.partitioning.rebalancing
 type: qa
 ---
 ## Q

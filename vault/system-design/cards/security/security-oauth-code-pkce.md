@@ -1,6 +1,6 @@
 ---
 id: security-oauth-code-pkce
-node: security.authn
+node: security.authn.oauth
 type: qa
 ---
 ## Q

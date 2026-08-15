@@ -42,6 +42,7 @@ class Node:
     requires: list[str] = field(default_factory=list)
     children: list["Node"] = field(default_factory=list)
     parent: "Node | None" = None
+    order: int | None = None  # stable deck ordinal, top-level only
 
     @property
     def is_leaf(self) -> bool:
@@ -89,7 +90,9 @@ class Skeleton:
         parts = [self.title]
         for n in node.path():
             if n.parent is None:
-                ordinal = self.roots.index(n) + 1
+                # explicit order pins the deck name across future branch
+                # insertions — deck names are identities in Anki
+                ordinal = n.order if n.order is not None else self.roots.index(n) + 1
                 parts.append(f"{ordinal:02d} {n.title}")
             else:
                 parts.append(n.title)
@@ -110,9 +113,13 @@ def _parse_node(raw: object, parent: Node | None, errors: list[str]) -> Node | N
     if not isinstance(title, str) or not title.strip():
         errors.append(f"node {node_id!r}: missing title")
         title = node_id
-    unknown = set(raw) - {"id", "title", "summary", "requires", "children"}
+    unknown = set(raw) - {"id", "title", "summary", "requires", "children", "order"}
     if unknown:
         errors.append(f"node {node_id!r}: unknown keys {sorted(unknown)}")
+    order = raw.get("order")
+    if order is not None and (parent is not None or not isinstance(order, int)):
+        errors.append(f"node {node_id!r}: order must be an integer on top-level nodes only")
+        order = None
     requires = raw.get("requires", [])
     if not (isinstance(requires, list) and all(isinstance(r, str) for r in requires)):
         errors.append(f"node {node_id!r}: requires must be a list of node ids")
@@ -123,6 +130,7 @@ def _parse_node(raw: object, parent: Node | None, errors: list[str]) -> Node | N
         summary=str(raw.get("summary", "") or "").strip(),
         requires=list(requires),
         parent=parent,
+        order=order,
     )
     for raw_child in raw.get("children", []) or []:
         child = _parse_node(raw_child, node, errors)
@@ -156,6 +164,12 @@ def load_skeleton(path: str | Path) -> Skeleton:
             roots.append(node)
     if not roots:
         errors.append("skeleton has no nodes")
+
+    orders = [n.order for n in roots if n.order is not None]
+    if orders and len(orders) != len(roots):
+        errors.append("either every top-level node has an order or none do")
+    if len(set(orders)) != len(orders):
+        errors.append("duplicate top-level order values")
 
     skeleton = Skeleton(domain=domain, title=title.strip(), roots=roots, by_id={})
     for node in skeleton.walk():

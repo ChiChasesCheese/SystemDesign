@@ -1,6 +1,6 @@
 ---
 id: distributed-consistent-hashing
-node: distributed.partitioning
+node: distributed.partitioning.schemes
 type: qa
 ---
 ## Q

@@ -199,7 +199,21 @@ def cmd_import(args, project: Project) -> int:
     return 0
 
 
+def cmd_anki_align(args, project: Project) -> int:
+    from .anki import AnkiConnectError, align
+    try:
+        result = align(project.skeleton, url=args.anki_url)
+    except AnkiConnectError as exc:
+        _fail(str(exc))
+    print(f"{project.skeleton.domain}: moved {result['moved']} card(s), "
+          f"deleted {len(result['deleted'])} stale deck(s)")
+    for name in result["deleted"]:
+        print(f"  deleted: {name}")
+    return 0
+
+
 HANDLERS = {
+    "anki-align": cmd_anki_align,
     "validate": cmd_validate,
     "sync": cmd_sync,
     "build": cmd_build,
@@ -236,6 +250,13 @@ def main(argv: list[str] | None = None) -> int:
     p_scaffold.add_argument("-o", "--output", type=Path)
     p_import = sub.add_parser("import", help="import LLM-generated JSON as cards")
     p_import.add_argument("file", type=Path)
+    p_align = sub.add_parser(
+        "anki-align",
+        help="move cards in a live Anki collection to the decks the current "
+             "skeleton defines, and delete stale empty decks (run after "
+             "importing the new .apkg; needs desktop Anki + AnkiConnect)",
+    )
+    p_align.add_argument("--anki-url", default="http://127.0.0.1:8765")
 
     args = parser.parse_args(argv)
     if args.all and args.command in SINGLE_DOMAIN_ONLY:

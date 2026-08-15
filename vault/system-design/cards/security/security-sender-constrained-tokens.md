@@ -1,6 +1,6 @@
 ---
 id: security-sender-constrained-tokens
-node: security.authn
+node: security.authn.tokens
 type: qa
 ---
 ## Q
