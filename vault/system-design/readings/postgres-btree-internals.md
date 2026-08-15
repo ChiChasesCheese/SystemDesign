@@ -1,6 +1,6 @@
 ---
 nodes: [storage.relational.indexing]
-url: https://postgrespro.com/blog/pgsql/4161264
+url: https://postgrespro.com/blog/pgsql/4161516
 tags: [canonical]
 ---
 # Indexes in PostgreSQL — 4 (Btree) (Egor Rogov)
@@ -17,7 +17,7 @@ the leftmost-prefix rule stops being a rule you memorize.
 
 %% trellis:begin %%
 ## Source
-[Open the original ↗](https://postgrespro.com/blog/pgsql/4161264)
+[Open the original ↗](https://postgrespro.com/blog/pgsql/4161516)
 
 ## Archived copy
 ![[postgres-btree-internals-clip]]

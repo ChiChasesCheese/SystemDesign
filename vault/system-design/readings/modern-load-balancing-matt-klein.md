@@ -17,5 +17,8 @@ sidecar topologies — with production judgment behind every claim.
 
 %% trellis:begin %%
 ## Source
-[Open the original ↗](https://blog.envoyproxy.io/introduction-to-modern-network-load-balancing-and-proxying-91ef79a71c8a)
+[Open the original ↗](https://web.archive.org/web/20180115194524/https://blog.envoyproxy.io/introduction-to-modern-network-load-balancing-and-proxying-a57f6ff80236)
+
+## Archived copy
+![[modern-load-balancing-matt-klein-clip]]
 %% trellis:end %%

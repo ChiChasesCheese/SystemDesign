@@ -77,8 +77,13 @@ _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 def _download(url: str, timeout: int = 30) -> tuple[bytes, str, str]:
     """Returns (body, content-type, charset). Raises ClipError on failure."""
     import gzip
+    import socket
     import urllib.request
     import zlib
+
+    # urlopen's timeout does not always cover a connect that never answers,
+    # and one dead host must not stall a whole clip run.
+    socket.setdefaulttimeout(timeout)
 
     req = urllib.request.Request(
         url, headers={"User-Agent": _UA, "Accept-Encoding": "gzip, deflate"}
