@@ -2,18 +2,16 @@
 # Partitioning
 *Distributed Data*
 
-Hash vs range sharding, consistent hashing, hot keys, and rebalancing without downtime.
+Splitting data across nodes — scheme choice, movement, and the skew that breaks both.
+
+## Topics
+- [[distributed.partitioning.schemes|Hash vs Range]]
+- [[distributed.partitioning.rebalancing|Rebalancing & Routing]]
+- [[distributed.partitioning.skew|Hot Keys & Skew]]
+- [[distributed.partitioning.indexes|Partitioned Secondary Indexes]]
 
 ## Readings
 - [[dynamo-paper|Dynamo: Amazon's Highly Available Key-value Store (2007)]]
-
-## Cards (6)
-- [[distributed-consistent-hashing]]
-- [[distributed-hash-vs-range]]
-- [[distributed-hot-key]]
-- [[distributed-rebalancing]]
-- [[distributed-request-routing]]
-- [[distributed-secondary-index-partitioning]]
 %% trellis:end %%
 
 ## Notes
