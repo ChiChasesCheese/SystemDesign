@@ -4,6 +4,9 @@
 
 Dynamo-style quorums, sloppy quorums and hinted handoff, read repair and anti-entropy.
 
+## Drills
+- [[design-object-store|Design a replicated key-value store]]
+
 ## Cards (5)
 - [[distributed-anti-entropy-cost]]
 - [[distributed-leaderless-monotonic-reads]]

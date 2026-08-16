@@ -8,6 +8,9 @@ Encapsulation, abstraction, inheritance, polymorphism — each as a lever with a
 - [[holub-extends-is-evil|Why extends Is Evil (Allen Holub)]]
 - [[poodr|Practical Object-Oriented Design (Sandi Metz)]]
 
+## Drills
+- [[chess-game|Chess]]
+
 ## Cards (5)
 - [[oop-encapsulation-anemic-model]]
 - [[oop-getter-collection-leak]]

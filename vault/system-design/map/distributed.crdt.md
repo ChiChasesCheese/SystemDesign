@@ -9,6 +9,9 @@ Conflict-free replicated data types, merge semantics, and offline-capable multi-
 ## Readings
 - [[crdt-tech|CRDT.tech — Conflict-free Replicated Data Types]]
 
+## Drills
+- [[design-collaborative-editor|Design a collaborative document editor]]
+
 ## Cards (5)
 - [[distributed-crdt-convergence]]
 - [[distributed-crdt-counters]]

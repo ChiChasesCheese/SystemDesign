@@ -9,6 +9,10 @@ Registries, health checking, API versioning, and evolving schemas without breaki
 ## Readings
 - [[microservices-io-patterns|Microservice Architecture Pattern Index (microservices.io)]]
 
+## Drills
+- [[design-control-plane|Design the control plane for an internal platform]]
+- [[design-zero-downtime-migration|Split a table and a service without downtime]]
+
 ## Cards (5)
 - [[architecture-api-versioning-strategies]]
 - [[architecture-discovery-mechanisms]]

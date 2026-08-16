@@ -8,6 +8,9 @@ TCP vs UDP guarantees and costs; HTTP semantics, keep-alive, HTTP/2 and 3 in one
 - [[cloudflare-road-to-quic|The Road to QUIC (Cloudflare)]]
 - [[high-performance-browser-networking|High Performance Browser Networking (Ilya Grigorik)]]
 
+## Drills
+- [[design-chat-system|Design a chat system]]
+
 ## Cards (6)
 - [[networking-connection-pooling]]
 - [[networking-connection-setup-cost]]

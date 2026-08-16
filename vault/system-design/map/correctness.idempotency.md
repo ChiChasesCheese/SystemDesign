@@ -12,7 +12,8 @@ Idempotency keys, dedup windows, and designing every mutation to survive a retry
 - [[stripe-idempotency|Designing robust and predictable APIs with idempotency (Stripe)]]
 
 ## Drills
-- [[design-payment-ledger|Drill: Design a payment ledger service]]
+- [[design-notification-fanout|Design a notification service]]
+- [[design-payment-ledger|Design a payment ledger service]]
 
 ## Cards (7)
 - [[correctness-dedup-window]]

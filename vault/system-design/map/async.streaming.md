@@ -9,6 +9,10 @@ Change data capture, materialized views, windows, and keeping derived data fresh
 - [[the-log-jay-kreps|The Log: What every software engineer should know (Jay Kreps)]]
 - [[turning-the-database-inside-out|Turning the Database Inside-Out (Kleppmann)]]
 
+## Drills
+- [[design-ad-click-aggregation|Design ad click aggregation]]
+- [[design-metrics-platform|Design a metrics and alerting platform]]
+
 ## Cards (6)
 - [[async-cdc-initial-snapshot]]
 - [[async-cdc-mechanism]]

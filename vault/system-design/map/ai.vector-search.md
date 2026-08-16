@@ -12,6 +12,9 @@ Embeddings as vectors, ANN indexes (HNSW/IVF), hybrid retrieval, and freshness o
 - [[hnsw-paper|Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs]]
 - [[pinecone-learn|Pinecone Learning Center]]
 
+## Drills
+- [[design-rag-assistant|Design a retrieval-augmented assistant]]
+
 ## Cards (7)
 - [[ai-ann-tradeoff]]
 - [[ai-corpus-freshness]]

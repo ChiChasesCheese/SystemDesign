@@ -9,6 +9,9 @@ Why deep hierarchies rot, delegation as the default reuse tool, when inheritance
 ## Readings
 - [[python-patterns-composition|The Composition Over Inheritance Principle (Brandon Rhodes)]]
 
+## Drills
+- [[notification-dispatcher|Notification dispatcher library]]
+
 ## Cards (5)
 - [[principles-delegation-boilerplate]]
 - [[principles-hierarchy-explosion]]

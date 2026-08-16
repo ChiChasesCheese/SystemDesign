@@ -9,6 +9,9 @@ GPU batching, KV-cache reuse, streaming responses, and cost/latency levers uniqu
 ## Readings
 - [[vllm-docs|vLLM Documentation]]
 
+## Drills
+- [[design-inference-service|Design an LLM inference service]]
+
 ## Cards (7)
 - [[ai-continuous-batching]]
 - [[ai-gpu-utilization-economics]]

@@ -7,6 +7,9 @@ Offline vs online evaluation, LLM-as-judge, regression suites for prompts, and t
 ## Readings
 - [[hamel-evals|Your AI Product Needs Evals (Hamel Husain)]]
 
+## Drills
+- [[design-rag-assistant|Design a retrieval-augmented assistant]]
+
 ## Cards (5)
 - [[ai-eval-set-vs-ab]]
 - [[ai-guardrails-validation]]

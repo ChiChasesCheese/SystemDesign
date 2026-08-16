@@ -11,6 +11,9 @@ Why single-leader systems need election, what Raft guarantees, fencing tokens, a
 ## Readings
 - [[raft-paper|In Search of an Understandable Consensus Algorithm (Raft)]]
 
+## Drills
+- [[design-control-plane|Design the control plane for an internal platform]]
+
 ## Cards (7)
 - [[distributed-consensus-in-practice]]
 - [[distributed-epoch-numbers]]

@@ -8,6 +8,9 @@ Bloaters, OO abusers, change preventers, dispensables, couplers — and the refa
 - [[codinghorror-code-smells|Code Smells (Jeff Atwood, Coding Horror)]]
 - [[refactoring-guru-smells|Code Smells & Refactoring Catalog (refactoring.guru)]]
 
+## Drills
+- [[refactor-order-pricing|Refactor a legacy pricing method]]
+
 ## Cards (4)
 - [[quality-bloaters-refactorings]]
 - [[quality-couplers-refactorings]]

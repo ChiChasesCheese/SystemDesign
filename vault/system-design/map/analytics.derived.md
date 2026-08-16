@@ -9,6 +9,9 @@ Treating caches, indexes, and views as recomputable projections of a log — and
 ## Readings
 - [[turning-the-database-inside-out|Turning the Database Inside-Out (Kleppmann)]]
 
+## Drills
+- [[design-ad-click-aggregation|Design ad click aggregation]]
+
 ## Cards (5)
 - [[analytics-backfill-cdc]]
 - [[analytics-cache-as-derived]]

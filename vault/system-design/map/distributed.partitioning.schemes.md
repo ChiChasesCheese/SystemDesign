@@ -4,6 +4,9 @@
 
 Hash and range partitioning trade-offs; consistent hashing and virtual nodes.
 
+## Drills
+- [[design-url-shortener|Design a URL shortener]]
+
 ## Cards (5)
 - [[distributed-consistent-hashing]]
 - [[distributed-hash-vs-range]]

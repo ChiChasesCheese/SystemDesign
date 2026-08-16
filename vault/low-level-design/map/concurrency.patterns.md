@@ -11,7 +11,8 @@ Producer-consumer, bounded blocking queue, thread pool, reader-writer, safe lazy
 - [[ostep-semaphores|Semaphores (OSTEP, Arpaci-Dusseau — free chapter)]]
 
 ## Drills
-- [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]
+- [[job-scheduler|In-process job scheduler]]
+- [[lru-cache|LRU Cache (then make it thread-safe)]]
 
 ## Cards (4)
 - [[concurrency-bounded-queue-invariants]]

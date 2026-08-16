@@ -10,6 +10,10 @@ What an LLM actually does at serving time — tokens, context windows, embedding
 - [[illustrated-transformer|The Illustrated Transformer (Jay Alammar)]]
 - [[karpathy-intro-llms|Intro to Large Language Models (Andrej Karpathy, 1hr talk)]]
 
+## Drills
+- [[design-inference-service|Design an LLM inference service]]
+- [[design-rag-assistant|Design a retrieval-augmented assistant]]
+
 ## Cards (5)
 - [[ai-context-window-budget]]
 - [[ai-embeddings-as-coordinates]]

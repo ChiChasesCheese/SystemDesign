@@ -8,6 +8,10 @@ RBAC vs ABAC, API keys vs user tokens, TLS everywhere, secrets handling.
 - [[oso-why-authorization-is-hard|Why Authorization is Hard]]
 - [[owasp-api-security|OWASP API Security Top 10]]
 
+## Drills
+- [[design-account-security|Design account sign-in and recovery]]
+- [[design-api-platform|Design a public API platform]]
+
 ## Cards (6)
 - [[security-api-keys-vs-user-tokens]]
 - [[security-confused-deputy]]

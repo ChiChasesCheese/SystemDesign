@@ -8,6 +8,10 @@ Program-to-interface, interface vs abstract class discrimination, default method
 - [[gamma-program-to-interface|Design Principles from Design Patterns — A Conversation with Erich Gamma]]
 - [[java-tutorial-interfaces|Oracle Java Tutorial: Interfaces and Inheritance]]
 
+## Drills
+- [[chess-game|Chess]]
+- [[notification-dispatcher|Notification dispatcher library]]
+
 ## Cards (5)
 - [[oop-abstract-partial-implementation-cost]]
 - [[oop-default-methods]]

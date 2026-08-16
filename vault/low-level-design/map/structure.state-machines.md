@@ -10,7 +10,8 @@ Modeling lifecycles (order, elevator, game) as explicit states and transitions i
 - [[gpp-state|State (Game Programming Patterns, Bob Nystrom)]]
 
 ## Drills
-- [[elevator-system|Drill: Elevator System]]
+- [[elevator-system|Elevator System]]
+- [[job-scheduler|In-process job scheduler]]
 
 ## Cards (5)
 - [[structure-state-entry-exit-actions]]

@@ -8,7 +8,10 @@ Token bucket vs sliding window, local vs distributed enforcement, and what to re
 - [[stripe-rate-limiters|Scaling your API with Rate Limiters (Stripe)]]
 
 ## Drills
-- [[design-rate-limiter|Drill: Design a distributed rate limiter]]
+- [[design-account-security|Design account sign-in and recovery]]
+- [[design-rate-limiter|Design a distributed rate limiter]]
+- [[design-ticket-booking|Design seat booking]]
+- [[design-web-crawler|Design a web crawler]]
 
 ## Cards (6)
 - [[traffic-distributed-rate-limiting]]

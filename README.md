@@ -16,8 +16,9 @@ Cards and readings reference each other with ordinary wikilinks, and every node'
 generated map note lists both — so the Obsidian graph connects topic ↔ reading ↔
 card.
 
-Ships with a **System Design** domain: a 66-node map (318 cards, 13 readings,
-every leaf covered), structured against DDIA 2nd edition's chapter framework
+Ships with a **System Design** domain: a 92-node map (391 cards, 72 readings,
+22 drills; every leaf covered by all three), structured against DDIA 2nd
+edition's chapter framework
 and spanning the classic interview canon plus what the 2017-era resources
 miss — consensus, CRDTs, encoding & schema evolution, delivery semantics,
 idempotency/outbox/saga/ledger patterns, OLAP/lakehouse/batch/derived data,
@@ -75,6 +76,30 @@ Mechanically:
   names every leaf still stuck with a pointer, so this cannot regress quietly.
 - `python3 scripts/check_links.py` verifies every archived URL still resolves
   (run manually; network-bound).
+- Every `[[wikilink]]` in a card, reading, or drill is resolved at validation
+  time against the whole vault — a renamed card breaks the build, not the
+  graph. Cross-domain links are fine (one vault, one namespace); a name two
+  notes answer to is an error, because Obsidian would pick for you.
+
+## Drills: the half that is not recall
+
+Cards prove you know something; drills prove you can produce it in forty
+minutes. So drill coverage is tracked exactly like link coverage, and for the
+same reason — an area you have only ever read about is a gap you cannot see:
+
+- A drill lists the nodes it spans, and naming an inner node claims its
+  subtree: a question about "distributed transactions" is a question about
+  each probe under it.
+- `trellis stats` reports **drill coverage** — the share of leaves some drill
+  exercises — per branch; `trellis validate` warns below the 60% target and
+  names any branch with no drill at all.
+- `trellis path` schedules each drill under the last leaf it spans, the first
+  point in the walk where you know enough to attempt it.
+- A drill's grading points are wikilinks into the cards that answer them, so
+  a weak attempt names its own remediation — and the links are validated.
+
+Both domains currently cover every leaf: 22 drills across System Design's 14
+branches, 8 across Low-Level Design's 7.
 
 ### One app to read in
 
@@ -101,11 +126,12 @@ by hand with the extension (point it at `<domain>/clippings/`) is picked up
 identically. Pages that are the resource itself (videos) or that hide behind
 JavaScript are skipped with a reason and stay web links.
 
-Clippings are **gitignored on purpose**: they are verbatim copies of other
-people's writing and this repo is public. They are personal and reproducible —
-`trellis clip` rebuilds them anywhere. To read them on a phone, sync the vault
-with Obsidian Sync or iCloud (a git clone won't carry ignored files); to commit
-them instead, make the repo private first and drop the ignore rule.
+Clippings are **committed**, which is what lets a git clone carry the archive
+to a phone with no second sync mechanism. They are verbatim copies of other
+people's writing, so this repository is private and must stay that way: before
+making it public, `git rm -r --cached vault/*/clippings` and restore the ignore
+rule in `.gitignore`. They are reproducible either way — `trellis clip`
+rebuilds them anywhere.
 
 - **Anki**: import `dist/system-design.apkg`. After editing or adding cards,
   rebuild and re-import — note GUIDs are stable, so edits update in place and
@@ -182,8 +208,31 @@ trellis sync && trellis build
 ## Drill format
 
 One file per drill under `vault/<domain>/drills/`; same frontmatter as
-readings (`nodes` lists every topic the exercise exercises). Body: prompt,
-constraints, grading points, attempt log. Node map notes list their drills.
+readings (`nodes` lists every topic the exercise exercises). Node map notes
+list their drills, and the study path schedules them.
+
+```markdown
+---
+nodes: [correctness.saga, distributed.transactions.isolation]
+tags: [classic]
+---
+# Drill: Design seat booking
+
+One paragraph of prompt — the scenario and what is being sold.
+
+**Constraints to state and honor**
+- The numbers and the rules that make the easy answer wrong.
+
+**Grading points**
+- What a strong answer hits, each pointing at the card that
+  answers it ([[distributed-write-skew]]).
+
+**Attempt log**
+- [ ] Attempt 1 (date, 40 min, self-graded notes):
+```
+
+The grading points are the reason drills are worth writing down: after a bad
+attempt you follow the links, not your memory of what felt shaky.
 
 ## Adding a domain
 

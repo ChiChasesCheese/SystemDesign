@@ -9,6 +9,9 @@ Why writing DB-then-publish loses events, and how the transactional outbox close
 ## Readings
 - [[microservices-io-outbox|Transactional Outbox (microservices.io, Chris Richardson)]]
 
+## Drills
+- [[design-notification-fanout|Design a notification service]]
+
 ## Cards (6)
 - [[correctness-dual-write-problem]]
 - [[correctness-outbox-cleanup]]

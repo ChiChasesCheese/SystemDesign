@@ -60,6 +60,12 @@ question or coding problem with constraints, grading points, and an attempt log.
 Spans several nodes.
 _Avoid_: exercise, problem, practice question
 
+**Grading point**:
+One line of a drill naming what a strong answer hits, wikilinked to the cards
+that answer it. It is what makes a failed attempt actionable, so it is written
+as a claim about the answer, never as a hint.
+_Avoid_: rubric item, checklist, solution
+
 ### The surfaces
 
 **Vault**:
@@ -89,3 +95,9 @@ The share of cards that have a road onward — an inline link, or a reading
 inherited from their node or its ancestors. Tracked because a card with no way
 deeper is a gap in the index.
 _Avoid_: link rate, source coverage
+
+**Drill coverage**:
+The share of leaves some drill exercises, counting a drill against every leaf
+under the nodes it names. Tracked because a branch you have only read about
+looks identical to a mastered one until the interview.
+_Avoid_: practice coverage, drill rate

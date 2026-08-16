@@ -3,9 +3,11 @@ correctly."""
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass, field
 
 from .cards import Card
+from .obsidian import wikilink_targets
 from .readings import Reading
 from .skeleton import Skeleton
 
@@ -29,6 +31,7 @@ def validate(
     drills: list[Reading] | None = None,
     drill_errors: list[str] | None = None,
     clippings: dict | None = None,
+    notes: Counter | None = None,
 ) -> Report:
     report = Report(
         errors=list(card_errors) + list(reading_errors or []) + list(drill_errors or [])
@@ -90,4 +93,54 @@ def validate(
                 f"{LINK_COVERAGE_TARGET:.0%} target — attach readings with URLs to "
                 "the uncovered nodes"
             )
+
+    if drills is not None:
+        from .drills import (
+            DRILL_COVERAGE_TARGET, branches_without_drill, drill_coverage,
+        )
+        undrilled = branches_without_drill(skeleton, drills)
+        if undrilled:
+            report.warnings.append(
+                f"{len(undrilled)} branch(es) have no drill — nothing there trains "
+                "producing an answer, only recalling one: " + ", ".join(undrilled)
+            )
+        done, total = drill_coverage(skeleton, drills)
+        if total and done / total < DRILL_COVERAGE_TARGET:
+            report.warnings.append(
+                f"drill coverage {done}/{total} ({done / total:.0%}) is below the "
+                f"{DRILL_COVERAGE_TARGET:.0%} target — write drills spanning the "
+                "leaves you have only read about"
+            )
+
+    if notes:
+        report.errors += _dead_wikilinks(cards, list(readings or []),
+                                         list(drills or []), notes)
     return report
+
+
+def _dead_wikilinks(
+    cards: list[Card], readings: list[Reading], drills: list[Reading],
+    notes: Counter,
+) -> list[str]:
+    """Wikilinks that Obsidian would leave unresolved.
+
+    A drill's grading points are wikilinks into the cards that answer them,
+    and a reading points at the cards it feeds; when a card is renamed, the
+    reference has to break loudly here rather than quietly in the vault.
+    Names are resolved across the whole vault, so cross-domain links are
+    fine — an ambiguous name is not, since Obsidian then picks for you.
+    """
+    errors: list[str] = []
+    bodies = [(c.path, c.question + "\n" + c.answer + "\n" + c.text) for c in cards]
+    bodies += [(n.path, n.body) for n in readings + drills]
+    for path, text in bodies:
+        for target in dict.fromkeys(wikilink_targets(text)):
+            found = notes.get(target, 0)
+            if not found:
+                errors.append(f"{path}: wikilink [[{target}]] resolves to no note")
+            elif found > 1:
+                errors.append(
+                    f"{path}: wikilink [[{target}]] is ambiguous — {found} notes "
+                    "share that name"
+                )
+    return errors

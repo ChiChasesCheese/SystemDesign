@@ -4,6 +4,9 @@
 
 Local vs global secondary indexes — scatter-gather reads vs write amplification.
 
+## Drills
+- [[design-typeahead|Design search typeahead]]
+
 ## Cards (5)
 - [[distributed-avoiding-scatter-gather]]
 - [[distributed-global-index-staleness]]

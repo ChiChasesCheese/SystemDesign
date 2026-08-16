@@ -7,6 +7,9 @@ Requirements clarification, scoping functional vs non-functional needs, driving 
 ## Readings
 - [[hello-interview-in-a-hurry|System Design in a Hurry (Hello Interview)]]
 
+## Drills
+- [[design-url-shortener|Design a URL shortener]]
+
 ## Cards (6)
 - [[foundations-clarifying-questions-worth-asking]]
 - [[foundations-driving-the-40-minutes]]

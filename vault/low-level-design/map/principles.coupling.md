@@ -9,6 +9,9 @@ Afferent/efferent coupling, law of Demeter, dependency injection as the seam-mak
 ## Readings
 - [[fowler-injection|Inversion of Control Containers and the Dependency Injection Pattern (Fowler)]]
 
+## Drills
+- [[refactor-order-pricing|Refactor a legacy pricing method]]
+
 ## Cards (5)
 - [[principles-cohesion-signal]]
 - [[principles-demeter-train-wreck]]

@@ -7,6 +7,10 @@ Structured logs, metrics, distributed traces; correlation ids and cardinality co
 ## Readings
 - [[google-sre-monitoring|Monitoring Distributed Systems (Google SRE Book, ch. 6)]]
 
+## Drills
+- [[design-account-security|Design account sign-in and recovery]]
+- [[design-metrics-platform|Design a metrics and alerting platform]]
+
 ## Cards (6)
 - [[reliability-exemplars]]
 - [[reliability-logs-metrics-traces]]

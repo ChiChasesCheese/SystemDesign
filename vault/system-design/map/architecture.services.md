@@ -7,6 +7,9 @@ When to split, service boundaries by data ownership, and the operational bill mi
 ## Readings
 - [[fowler-microservices|Microservices (Lewis & Fowler)]]
 
+## Drills
+- [[design-ride-matching|Design ride matching]]
+
 ## Cards (6)
 - [[architecture-boundaries-data-ownership]]
 - [[architecture-conways-law]]

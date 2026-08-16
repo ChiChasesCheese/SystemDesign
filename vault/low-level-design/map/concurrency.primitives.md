@@ -12,7 +12,8 @@ Mutex, semaphore, condition variable, reentrant and read-write locks, CAS and lo
 - [[preshing-lock-free|An Introduction to Lock-Free Programming (Jeff Preshing)]]
 
 ## Drills
-- [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]
+- [[job-scheduler|In-process job scheduler]]
+- [[lru-cache|LRU Cache (then make it thread-safe)]]
 
 ## Cards (4)
 - [[concurrency-cas-aba]]

@@ -10,7 +10,7 @@ Double-entry design, immutability, balance derivation, and reconciliation as the
 - [[modern-treasury-ledgers|Ledgers (Modern Treasury Learn series)]]
 
 ## Drills
-- [[design-payment-ledger|Drill: Design a payment ledger service]]
+- [[design-payment-ledger|Design a payment ledger service]]
 
 ## Cards (8)
 - [[correctness-balance-derivation]]

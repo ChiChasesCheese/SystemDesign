@@ -10,7 +10,6 @@ import pytest
 
 from trellis.build import build_package
 from trellis.cards import load_cards
-from trellis.clippings import CLIP_SUFFIX, CLIPPINGS_DIRNAME
 from trellis.readings import load_readings
 from trellis.scaffold import import_cards, scaffold_prompt
 from trellis.skeleton import load_skeleton
@@ -189,12 +188,18 @@ def test_drills_and_path(project):
     assert main(root + ["validate"]) == 0
     assert main(root + ["sync"]) == 0
     node_note = (project / "vault" / "demo" / "map" / "alpha.one.md").read_text(encoding="utf-8")
-    assert "## Drills" in node_note and "[[build-the-thing|Drill: build the thing]]" in node_note
+    # the "Drill:" the note's H1 carries is dropped where we already say so
+    assert "## Drills" in node_note and "[[build-the-thing|build the thing]]" in node_note
 
     assert main(root + ["path", "--weeks", "2"]) == 0
     path_note = (project / "vault" / "demo" / "Study Path.md").read_text(encoding="utf-8")
     assert "Week 1" in path_note and "[[alpha.one|One]]" in path_note
     assert "needs: Beta" in path_note
+    # a drill lands under the last leaf it spans: beta is studied first
+    # (alpha.one requires it), so the drill spanning both waits for alpha.one
+    one, beta = path_note.index("[[alpha.one|One]]"), path_note.index("[[beta|Beta]]")
+    drill = path_note.index("**Drill:** [[build-the-thing|build the thing]]")
+    assert beta < one < drill
 
     # bad drill node -> validate fails
     (drills_dir / "bad.md").write_text(DRILL.replace("beta]", "ghost]"), encoding="utf-8")
@@ -226,35 +231,38 @@ def test_real_repo_content_validates_and_builds(tmp_path):
 
 
 def test_real_repo_wikilinks_resolve():
-    """Every [[wikilink]] in any domain's cards, readings, and drills must
-    point at an existing card, reading, drill, or map note. Targets are
-    pooled across domains because vault/ is one Obsidian vault."""
-    import re
+    """Every [[wikilink]] a card, reading, or drill carries must name
+    exactly one note in the vault. Names are pooled across domains,
+    because vault/ is one Obsidian vault — that is what lets a
+    low-level-design drill link a system-design topic."""
     from trellis.drills import load_drills
-    targets: set[str] = set()
+    from trellis.obsidian import note_names
+    notes = note_names(REPO / "vault")
     for skel_file in (REPO / "skeleton").glob("*.yaml"):
         skeleton = load_skeleton(skel_file)
-        targets |= {n.id for n in skeleton.walk()}
         vault = REPO / "vault" / skeleton.domain
-        for loader, sub in ((load_cards, "cards"), (load_readings, "readings"),
-                            (load_drills, "drills")):
-            if (vault / sub).exists():
-                items, _ = loader(vault / sub)
-                targets |= {getattr(i, "id", None) or i.link_target for i in items}
-    link_re = re.compile(r"\[\[([^\]|#]+)")
-    for path in (REPO / "vault").rglob("*.md"):
-        # map notes and the study path are generated; clippings are other
-        # people's pages, whose links are theirs and not ours to resolve
-        if ({"map", CLIPPINGS_DIRNAME} & set(path.parts)
-                or path.name == "Study Path.md"):
-            continue
-        for target in link_re.findall(path.read_text(encoding="utf-8")):
-            target = target.strip()
-            # embeds of clipped articles are expected to be missing here:
-            # clippings are gitignored, so a clean checkout has none
-            if target.endswith(CLIP_SUFFIX) or target.endswith(CLIP_SUFFIX + ".pdf"):
-                continue
-            assert target in targets, f"{path}: dangling link [[{target}]]"
+        cards, _ = load_cards(vault / "cards")
+        readings, _ = load_readings(vault / "readings")
+        drills, _ = load_drills(vault / "drills")
+        report = validate(skeleton, cards, [], readings, [], drills, [],
+                          notes=notes)
+        assert [e for e in report.errors if "wikilink" in e] == []
+
+
+def test_real_repo_drills_cover_every_branch():
+    """Cards prove recall; drills are the only thing here that trains
+    producing an answer. A branch with none is a hole in the product."""
+    from trellis.drills import (
+        DRILL_COVERAGE_TARGET, branches_without_drill, drill_coverage,
+        load_drills,
+    )
+    for skel_file in (REPO / "skeleton").glob("*.yaml"):
+        skeleton = load_skeleton(skel_file)
+        drills, errors = load_drills(REPO / "vault" / skeleton.domain / "drills")
+        assert errors == []
+        assert branches_without_drill(skeleton, drills) == []
+        done, total = drill_coverage(skeleton, drills)
+        assert done / total >= DRILL_COVERAGE_TARGET
 
 
 def test_every_deck_link_resolves_to_exactly_one_note(tmp_path):

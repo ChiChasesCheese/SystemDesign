@@ -4,6 +4,9 @@
 
 Authorization-code + PKCE flow, what OIDC adds on top, which flow for which client.
 
+## Drills
+- [[design-api-platform|Design a public API platform]]
+
 ## Cards (5)
 - [[security-oauth-browser-token-storage]]
 - [[security-oauth-code-pkce]]

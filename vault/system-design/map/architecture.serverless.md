@@ -7,6 +7,9 @@ FaaS execution model, cold starts, and where per-request pricing beats owning se
 ## Readings
 - [[fowler-serverless|Serverless Architectures (Mike Roberts, on martinfowler.com)]]
 
+## Drills
+- [[design-video-platform|Design a video platform]]
+
 ## Cards (5)
 - [[architecture-cold-starts]]
 - [[architecture-serverless-backpressure]]

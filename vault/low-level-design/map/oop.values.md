@@ -8,7 +8,7 @@ Entities vs value objects, equality semantics, enums with behavior, why immutabi
 - [[fowler-value-object|ValueObject (Martin Fowler, bliki)]]
 
 ## Drills
-- [[splitwise|Drill: Splitwise (Expense Sharing)]]
+- [[splitwise|Splitwise (Expense Sharing)]]
 
 ## Cards (5)
 - [[oop-entity-vs-value-object]]

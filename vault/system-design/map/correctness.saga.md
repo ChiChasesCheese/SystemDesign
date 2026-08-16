@@ -9,6 +9,9 @@ Long-running workflows via compensating actions when a distributed transaction i
 ## Readings
 - [[microservices-io-saga|Saga (microservices.io, Chris Richardson)]]
 
+## Drills
+- [[design-ticket-booking|Design seat booking]]
+
 ## Cards (6)
 - [[correctness-saga-compensation-limits]]
 - [[correctness-saga-compensation-race]]

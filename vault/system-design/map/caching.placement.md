@@ -9,7 +9,8 @@ Client, CDN, gateway, application, and database layers — what each layer can a
 - [[memcache-at-facebook|Scaling Memcache at Facebook (NSDI '13)]]
 
 ## Drills
-- [[design-rate-limiter|Drill: Design a distributed rate limiter]]
+- [[design-rate-limiter|Design a distributed rate limiter]]
+- [[design-typeahead|Design search typeahead]]
 
 ## Cards (6)
 - [[caching-cache-shard-blast-radius]]

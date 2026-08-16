@@ -9,7 +9,7 @@ Singleton, factory method, abstract factory, builder, prototype — who creates 
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
 ## Drills
-- [[parking-lot|Drill: Parking Lot]]
+- [[parking-lot|Parking Lot]]
 
 ## Cards (6)
 - [[patterns-builder-when]]
