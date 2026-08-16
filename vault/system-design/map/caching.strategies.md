@@ -4,6 +4,10 @@
 
 Cache-aside, read-through, write-through, write-behind, refresh-ahead — who populates the cache and when.
 
+## Drills
+- [[design-news-feed|Design a social news feed]]
+- [[design-url-shortener|Design a URL shortener]]
+
 ## Cards (6)
 - [[caching-aside-vs-read-through]]
 - [[caching-cache-warming]]

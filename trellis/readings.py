@@ -39,6 +39,7 @@ class Reading:
     nodes: list[str]
     url: str = ""
     tags: list[str] = field(default_factory=list)
+    body: str = ""
 
     @property
     def link_target(self) -> str:
@@ -80,6 +81,7 @@ def parse_reading(path: str | Path) -> Reading:
         nodes=list(nodes),
         url=str(meta.get("url", "") or ""),
         tags=list(tags),
+        body=body,
     )
 
 

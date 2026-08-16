@@ -8,8 +8,9 @@ Noun–verb extraction, finding entities and invariants, sequence-of-interaction
 - [[hellointerview-lld|Hello Interview: Low-Level Design Guide]]
 
 ## Drills
-- [[parking-lot|Drill: Parking Lot]]
-- [[splitwise|Drill: Splitwise (Expense Sharing)]]
+- [[chess-game|Chess]]
+- [[parking-lot|Parking Lot]]
+- [[splitwise|Splitwise (Expense Sharing)]]
 
 ## Cards (5)
 - [[method-cross-object-invariant]]

@@ -8,6 +8,9 @@ The five principles as concrete refactoring triggers, with the violation each on
 - [[cleancoder-srp|The Single Responsibility Principle (Robert C. Martin)]]
 - [[digitalocean-solid|SOLID: The First Five Principles of Object-Oriented Design (DigitalOcean)]]
 
+## Drills
+- [[notification-dispatcher|Notification dispatcher library]]
+
 ## Cards (6)
 - [[principles-dip-trigger]]
 - [[principles-isp-trigger]]

@@ -4,6 +4,9 @@
 
 Performance vs scalability, latency vs throughput, availability vs consistency — the axes every later choice moves along.
 
+## Drills
+- [[design-news-feed|Design a social news feed]]
+
 ## Cards (5)
 - [[foundations-availability-vs-consistency-axis]]
 - [[foundations-elastic-vs-manual-scaling]]

@@ -8,6 +8,9 @@ Adapter, decorator, facade, composite, proxy, bridge, flyweight — composing ob
 - [[refactoring-guru-decorator|Decorator (refactoring.guru)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
+## Drills
+- [[notification-dispatcher|Notification dispatcher library]]
+
 ## Cards (6)
 - [[patterns-adapter-vs-facade]]
 - [[patterns-bridge-when]]

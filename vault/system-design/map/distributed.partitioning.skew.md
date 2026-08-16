@@ -4,6 +4,10 @@
 
 Detecting and defusing hot partitions — key salting, splitting, and request-level caches.
 
+## Drills
+- [[design-news-feed|Design a social news feed]]
+- [[design-ride-matching|Design ride matching]]
+
 ## Cards (5)
 - [[distributed-data-skew-vs-access-skew]]
 - [[distributed-hot-key-detection]]

@@ -10,6 +10,10 @@ Data formats as contracts between code versions — JSON, Protobuf, Avro; forwar
 - [[ddia-2e|Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)]]
 - [[kleppmann-schema-evolution|Schema evolution in Avro, Protocol Buffers and Thrift (Kleppmann)]]
 
+## Drills
+- [[design-collaborative-editor|Design a collaborative document editor]]
+- [[design-zero-downtime-migration|Split a table and a service without downtime]]
+
 ## Cards (5)
 - [[storage-avro-schema-resolution]]
 - [[storage-encoding-compat-directions]]

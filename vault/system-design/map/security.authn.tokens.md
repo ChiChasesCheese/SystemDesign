@@ -4,6 +4,9 @@
 
 Server sessions vs JWTs, access/refresh pairs, rotation and reuse detection, sender-constrained tokens.
 
+## Drills
+- [[design-api-platform|Design a public API platform]]
+
 ## Cards (4)
 - [[security-access-refresh-tokens]]
 - [[security-refresh-rotation-reuse]]

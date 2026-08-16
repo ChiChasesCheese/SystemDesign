@@ -7,6 +7,9 @@ Nines, serial vs parallel composition, redundancy patterns, failover modes and t
 ## Readings
 - [[google-sre-embracing-risk|Embracing Risk (Google SRE Book, ch. 3)]]
 
+## Drills
+- [[design-multi-region-failover|Take a single-region service multi-region]]
+
 ## Cards (6)
 - [[reliability-correlated-failures]]
 - [[reliability-failover-modes-tradeoff]]

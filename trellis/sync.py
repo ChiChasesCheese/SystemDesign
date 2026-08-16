@@ -19,6 +19,7 @@ from pathlib import Path
 
 from .cards import Card
 from .clippings import Clipping, canonical_url
+from .drills import drill_title
 from .readings import Reading
 from .skeleton import Node, Skeleton
 
@@ -74,7 +75,7 @@ def _node_body(
     node_drills = [d for d in drills if node.id in d.nodes]
     if node_drills:
         lines += ["", "## Drills"]
-        lines += [f"- [[{d.link_target}|{d.title}]]" for d in node_drills]
+        lines += [f"- [[{d.link_target}|{drill_title(d)}]]" for d in node_drills]
     node_cards = [c for c in cards if c.node == node.id]
     if node_cards:
         lines += ["", f"## Cards ({len(node_cards)})"]

@@ -7,6 +7,9 @@ Idempotent producers, transactional consume-process-produce, and why end-to-end 
 ## Readings
 - [[confluent-exactly-once-kafka|Exactly-once Semantics is Possible: Here's How Apache Kafka Does it (Neha Narkhede)]]
 
+## Drills
+- [[design-ad-click-aggregation|Design ad click aggregation]]
+
 ## Cards (5)
 - [[async-eos-boundary-choice]]
 - [[async-eos-sink-determinism]]

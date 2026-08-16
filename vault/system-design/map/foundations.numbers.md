@@ -7,6 +7,10 @@ Orders of magnitude every engineer should know — memory vs SSD vs disk vs same
 ## Readings
 - [[latency-numbers|Latency Numbers Every Programmer Should Know (interactive, by year)]]
 
+## Drills
+- [[design-typeahead|Design search typeahead]]
+- [[design-video-platform|Design a video platform]]
+
 ## Cards (7)
 - [[foundations-coordinated-omission]]
 - [[foundations-latency-memory-ssd-disk]]

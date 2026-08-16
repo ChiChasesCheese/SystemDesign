@@ -7,6 +7,9 @@ Read committed to serializable through the anomalies each level permits — dirt
 ## Readings
 - [[hermitage-isolation-levels|Hermitage: Testing the "I" in ACID (Kleppmann)]]
 
+## Drills
+- [[design-ticket-booking|Design seat booking]]
+
 ## Cards (5)
 - [[distributed-isolation-anomalies]]
 - [[distributed-phantoms-predicate-locks]]

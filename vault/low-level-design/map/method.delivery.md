@@ -9,7 +9,7 @@ Requirement scoping, choosing core flows, time-boxing design vs code vs demo, dr
 - [[hellointerview-delivery|The Low Level Design Delivery Framework (Hello Interview)]]
 
 ## Drills
-- [[elevator-system|Drill: Elevator System]]
+- [[elevator-system|Elevator System]]
 
 ## Cards (5)
 - [[method-design-pitch-before-coding]]

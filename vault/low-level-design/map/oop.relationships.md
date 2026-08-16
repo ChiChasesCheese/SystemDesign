@@ -11,7 +11,7 @@ Association vs aggregation vs composition vs dependency; lifetime ownership and 
 - [[uml-distilled|UML Distilled (Martin Fowler)]]
 
 ## Drills
-- [[parking-lot|Drill: Parking Lot]]
+- [[parking-lot|Parking Lot]]
 
 ## Cards (5)
 - [[oop-association-vs-dependency]]

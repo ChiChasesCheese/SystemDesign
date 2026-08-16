@@ -32,7 +32,7 @@ from .clippings import (
     write_clipping,
 )
 from .drills import Drill, load_drills
-from .obsidian import vault_name
+from .obsidian import note_names, vault_name
 from .path import study_path
 from .readings import Reading, load_readings
 from .scaffold import import_cards, scaffold_prompt
@@ -56,11 +56,13 @@ class Project:
     drills: list[Drill] = field(default_factory=list)
     drill_errors: list[str] = field(default_factory=list)
     clippings: dict[str, Clipping] = field(default_factory=dict)
+    notes: Counter = field(default_factory=Counter)
 
     def report(self):
         return validate(self.skeleton, self.cards, self.card_errors,
                         self.readings, self.reading_errors,
-                        self.drills, self.drill_errors, self.clippings)
+                        self.drills, self.drill_errors, self.clippings,
+                        self.notes)
 
     def content_dir(self, root: Path) -> Path:
         """This domain's folder inside the Obsidian vault. Not the vault
@@ -103,6 +105,8 @@ def _load(root: Path, domain: str) -> Project:
         project.drills, project.drill_errors = load_drills(vault / "drills")
     if (vault / CLIPPINGS_DIRNAME).exists():
         project.clippings = load_clippings(vault / CLIPPINGS_DIRNAME)
+    # Wikilinks resolve over the whole vault, not this domain's folder.
+    project.notes = note_names(root / "vault")
     return project
 
 
@@ -155,6 +159,7 @@ def cmd_build(args, project: Project) -> int:
 
 
 def cmd_stats(args, project: Project) -> int:
+    from .drills import drill_coverage, drilled_leaves
     from .links import coverage, leaves_without_readable_source
     s = project.skeleton
     per_node = Counter(c.node for c in project.cards)
@@ -162,8 +167,12 @@ def cmd_stats(args, project: Project) -> int:
     pct = f"{linked_all / total_all:.0%}" if total_all else "n/a"
     hunting = leaves_without_readable_source(s, project.readings, project.clippings)
     readable = len(s.leaves()) - len(hunting)
+    drilled_all, leaf_total = drill_coverage(s, project.drills)
+    drill_pct = f"{drilled_all / leaf_total:.0%}" if leaf_total else "n/a"
+    drilled = drilled_leaves(s, project.drills)
     print(f"{s.title} — {len(project.cards)} cards, {len(project.readings)} readings, "
           f"{len(project.drills)} drills, link coverage {pct}, "
+          f"drill coverage {drill_pct}, "
           f"readable sources {readable}/{len(s.leaves())} leaves, "
           f"{len(project.card_errors)} unparseable")
     for root_node in s.roots:
@@ -175,14 +184,17 @@ def cmd_stats(args, project: Project) -> int:
         covered = sum(1 for n in leaves if per_node.get(n.id))
         linked, total = coverage(s, branch_cards, project.readings)
         link_pct = f"{linked / total:>4.0%}" if total else " n/a"
+        drills_here = sum(1 for n in leaves if n.id in drilled)
         print(f"  {root_node.title:<28} {total:>4} cards   "
-              f"{covered:>2}/{len(leaves):<2} leaves   links {link_pct}")
+              f"{covered:>2}/{len(leaves):<2} leaves   links {link_pct}   "
+              f"drills {drills_here:>2}/{len(leaves):<2}")
     return 0
 
 
 def cmd_path(args, project: Project) -> int:
     _checked(project, "generating the path")
-    body = study_path(project.skeleton, project.cards, weeks=args.weeks)
+    body = study_path(project.skeleton, project.cards, weeks=args.weeks,
+                      drills=project.drills)
     out = project.content_dir(args.root) / "Study Path.md"
     changed = write_managed(out, body)
     print(f"{'updated' if changed else 'unchanged'}: {out}")

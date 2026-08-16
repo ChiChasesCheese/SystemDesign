@@ -7,6 +7,10 @@ SLIs worth measuring, percentiles over averages, and error budgets as a release 
 ## Readings
 - [[google-sre-slo|Service Level Objectives (Google SRE Book, ch. 4)]]
 
+## Drills
+- [[design-inference-service|Design an LLM inference service]]
+- [[design-metrics-platform|Design a metrics and alerting platform]]
+
 ## Cards (6)
 - [[reliability-burn-rate-alerting]]
 - [[reliability-error-budget-throttle]]

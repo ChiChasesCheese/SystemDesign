@@ -8,7 +8,8 @@ Why wall clocks lie, logical clocks, and detecting failure with timeouts you can
 - [[kleppmann-distributed-locking|How to do distributed locking (Kleppmann, the Redlock critique)]]
 
 ## Drills
-- [[design-rate-limiter|Drill: Design a distributed rate limiter]]
+- [[design-chat-system|Design a chat system]]
+- [[design-rate-limiter|Design a distributed rate limiter]]
 
 ## Cards (6)
 - [[distributed-failure-detection]]

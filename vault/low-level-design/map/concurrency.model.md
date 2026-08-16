@@ -8,6 +8,9 @@ Concurrency vs parallelism, thread lifecycle, visibility and reordering, why dat
 - [[java-concurrency-in-practice|Java Concurrency in Practice (Goetz et al.)]]
 - [[jenkov-java-memory-model|Java Memory Model (Jakob Jenkov)]]
 
+## Drills
+- [[job-scheduler|In-process job scheduler]]
+
 ## Cards (4)
 - [[concurrency-check-then-act]]
 - [[concurrency-data-race-definition]]

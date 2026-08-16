@@ -11,6 +11,9 @@ Mapping problem smells to patterns, pattern pairs that get confused, and over-en
 - [[gpp-architecture-performance|Architecture, Performance, and Games (Game Programming Patterns, Bob Nystrom)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
+## Drills
+- [[notification-dispatcher|Notification dispatcher library]]
+
 ## Cards (4)
 - [[patterns-extensibility-followup]]
 - [[patterns-misuse-traps]]

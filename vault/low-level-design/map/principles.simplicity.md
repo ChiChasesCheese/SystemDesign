@@ -9,6 +9,9 @@ The simplicity principles and their failure mode — premature abstraction and s
 ## Readings
 - [[fowler-yagni|Yagni (Martin Fowler, bliki)]]
 
+## Drills
+- [[refactor-order-pricing|Refactor a legacy pricing method]]
+
 ## Cards (5)
 - [[principles-dry-limit]]
 - [[principles-shallow-abstraction-test]]

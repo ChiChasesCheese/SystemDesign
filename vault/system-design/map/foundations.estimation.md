@@ -7,6 +7,10 @@ QPS, storage, and bandwidth sizing from DAU and access patterns; when an estimat
 ## Readings
 - [[latency-numbers|Latency Numbers Every Programmer Should Know (interactive, by year)]]
 
+## Drills
+- [[design-url-shortener|Design a URL shortener]]
+- [[design-video-platform|Design a video platform]]
+
 ## Cards (5)
 - [[foundations-dau-to-qps]]
 - [[foundations-fanout-estimation]]

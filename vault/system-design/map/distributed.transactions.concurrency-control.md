@@ -7,6 +7,9 @@
 ## Readings
 - [[hermitage-isolation-levels|Hermitage: Testing the "I" in ACID (Kleppmann)]]
 
+## Drills
+- [[design-ticket-booking|Design seat booking]]
+
 ## Cards (5)
 - [[distributed-2pl-vs-ssi]]
 - [[distributed-deadlock-handling]]

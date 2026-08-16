@@ -14,7 +14,7 @@ The append-only log as system of record; partitions, consumer groups, offsets, r
 - [[turning-the-database-inside-out|Turning the Database Inside-Out (Kleppmann)]]
 
 ## Drills
-- [[design-payment-ledger|Drill: Design a payment ledger service]]
+- [[design-payment-ledger|Design a payment ledger service]]
 
 ## Cards (6)
 - [[async-consumer-groups-offsets]]

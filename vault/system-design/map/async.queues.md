@@ -10,6 +10,11 @@ Queues vs pub-sub, backpressure, consumer scaling, and when async is the wrong c
 - [[aws-queue-backlogs|Avoiding insurmountable queue backlogs (AWS Builders' Library)]]
 - [[queues-dont-fix-overload|Queues Don't Fix Overload (Fred Hébert)]]
 
+## Drills
+- [[design-news-feed|Design a social news feed]]
+- [[design-notification-fanout|Design a notification service]]
+- [[design-web-crawler|Design a web crawler]]
+
 ## Cards (6)
 - [[async-broker-selection]]
 - [[async-competing-consumers-ordering]]

@@ -9,6 +9,9 @@ Timeout budgets, deadline propagation, exponential backoff with jitter, retry st
 ## Readings
 - [[google-sre-handling-overload|Handling Overload (Google SRE Book, ch. 21)]]
 
+## Drills
+- [[design-notification-fanout|Design a notification service]]
+
 ## Cards (5)
 - [[reliability-deadline-propagation]]
 - [[reliability-retry-storm]]

@@ -8,6 +8,9 @@ B-tree indexes, composite and covering indexes, leftmost-prefix rule, when index
 - [[postgres-btree-internals|Indexes in PostgreSQL — 4 (Btree) (Egor Rogov)]]
 - [[use-the-index-luke|Use The Index, Luke! (Markus Winand)]]
 
+## Drills
+- [[design-ticket-booking|Design seat booking]]
+
 ## Cards (5)
 - [[storage-covering-index]]
 - [[storage-index-leftmost-prefix]]

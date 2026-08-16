@@ -7,6 +7,9 @@ Resolution path, record types, TTL as a blunt failover and traffic-steering inst
 ## Readings
 - [[cloudflare-dns|What is DNS? (Cloudflare Learning Center)]]
 
+## Drills
+- [[design-url-shortener|Design a URL shortener]]
+
 ## Cards (6)
 - [[networking-anycast-vs-geodns]]
 - [[networking-dns-lb-failover-layers]]

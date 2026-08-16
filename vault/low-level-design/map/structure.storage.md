@@ -9,8 +9,8 @@ Repository pattern, id generation, secondary indexes, and thread-safe in-memory 
 - [[msdocs-persistence-layer|Designing the Infrastructure Persistence Layer (Microsoft .NET Architecture)]]
 
 ## Drills
-- [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]
-- [[parking-lot|Drill: Parking Lot]]
+- [[lru-cache|LRU Cache (then make it thread-safe)]]
+- [[parking-lot|Parking Lot]]
 
 ## Cards (4)
 - [[structure-storage-chm-compound-ops]]

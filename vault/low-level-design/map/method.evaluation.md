@@ -7,6 +7,10 @@ What interviewers grade — extensibility, readability, testability, and verifyi
 ## Readings
 - [[hellointerview-lld|Hello Interview: Low-Level Design Guide]]
 
+## Drills
+- [[chess-game|Chess]]
+- [[job-scheduler|In-process job scheduler]]
+
 ## Cards (5)
 - [[method-extension-live-change]]
 - [[method-extension-probe]]

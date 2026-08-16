@@ -17,7 +17,7 @@ What the database promises around concurrent access — and what it charges for 
 - [[ddia-2e|Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)]]
 
 ## Drills
-- [[design-payment-ledger|Drill: Design a payment ledger service]]
+- [[design-payment-ledger|Design a payment ledger service]]
 %% trellis:end %%
 
 ## Notes

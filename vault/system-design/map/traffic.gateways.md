@@ -7,6 +7,9 @@ What a gateway centralizes — TLS termination, auth, routing, quotas — and th
 ## Readings
 - [[microservices-io-api-gateway|API Gateway Pattern (microservices.io, Chris Richardson)]]
 
+## Drills
+- [[design-api-platform|Design a public API platform]]
+
 ## Cards (6)
 - [[traffic-bff-pattern]]
 - [[traffic-gateway-buffering]]

@@ -10,6 +10,9 @@ Chunking, retrieval, reranking, and grounding as a data pipeline — where quali
 - [[anthropic-contextual-retrieval|Introducing Contextual Retrieval (Anthropic)]]
 - [[pinecone-learn|Pinecone Learning Center]]
 
+## Drills
+- [[design-rag-assistant|Design a retrieval-augmented assistant]]
+
 ## Cards (5)
 - [[ai-chunking-failure-modes]]
 - [[ai-grounding-citations]]

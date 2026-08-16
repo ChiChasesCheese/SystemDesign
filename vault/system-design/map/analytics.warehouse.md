@@ -9,6 +9,9 @@ Warehouse vs data lake vs lakehouse; open table formats (Iceberg/Delta) over obj
 ## Readings
 - [[iceberg-table-format|Apache Iceberg Table Format (spec + docs)]]
 
+## Drills
+- [[design-ad-click-aggregation|Design ad click aggregation]]
+
 ## Cards (5)
 - [[analytics-lake-vs-warehouse-vs-lakehouse]]
 - [[analytics-lakehouse-compaction]]

@@ -9,8 +9,8 @@ Small stable interfaces, fluent builders, method contracts, and evolving an API 
 - [[philosophy-of-software-design|A Philosophy of Software Design (John Ousterhout)]]
 
 ## Drills
-- [[lru-cache|Drill: LRU Cache (then make it thread-safe)]]
-- [[splitwise|Drill: Splitwise (Expense Sharing)]]
+- [[lru-cache|LRU Cache (then make it thread-safe)]]
+- [[splitwise|Splitwise (Expense Sharing)]]
 
 ## Cards (4)
 - [[structure-api-builder-required-fields]]

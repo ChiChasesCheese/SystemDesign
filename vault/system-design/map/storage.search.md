@@ -10,6 +10,11 @@ Inverted indexes, relevance basics, and keeping a search cluster in sync with th
 - [[build-a-full-text-search-engine|Let's build a full-text search engine (Artem Krylysov)]]
 - [[stanford-ir-book|Introduction to Information Retrieval (Manning, Raghavan, Schütze)]]
 
+## Drills
+- [[design-rag-assistant|Design a retrieval-augmented assistant]]
+- [[design-ride-matching|Design ride matching]]
+- [[design-typeahead|Design search typeahead]]
+
 ## Cards (6)
 - [[storage-inverted-index]]
 - [[storage-search-deep-pagination]]

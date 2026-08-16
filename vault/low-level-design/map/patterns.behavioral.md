@@ -11,7 +11,8 @@ Strategy, observer, command, state, template method, iterator, chain of responsi
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
 ## Drills
-- [[elevator-system|Drill: Elevator System]]
+- [[chess-game|Chess]]
+- [[elevator-system|Elevator System]]
 
 ## Cards (7)
 - [[patterns-chain-of-responsibility]]

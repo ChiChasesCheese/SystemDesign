@@ -9,7 +9,7 @@ The four deadlock conditions and their breakers, livelock, starvation, lock orde
 - [[ostep-concurrency-bugs|Common Concurrency Problems (OSTEP, Arpaci-Dusseau — free chapter)]]
 
 ## Drills
-- [[elevator-system|Drill: Elevator System]]
+- [[elevator-system|Elevator System]]
 
 ## Cards (5)
 - [[concurrency-deadlock-detect-vs-prevent]]
