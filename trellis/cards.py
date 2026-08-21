@@ -55,6 +55,17 @@ class Card:
     text: str = ""  # cloze body
     tags: list[str] = field(default_factory=list)
     source: str = ""
+    tr: dict = field(default_factory=dict)  # lang -> {question, answer} | {text}
+
+    def render(self, lang: str = "") -> tuple[str, str]:
+        """(question, answer) for a qa card, (text, "") for a cloze —
+        in `lang` where it exists, in English where it does not, so an
+        untranslated card still builds."""
+        parts = self.tr.get(lang, {}) if lang else {}
+        if self.type == "cloze":
+            return parts.get("text") or self.text, ""
+        return (parts.get("question") or self.question,
+                parts.get("answer") or self.answer)
 
 
 def _split_frontmatter(raw: str, path: Path) -> tuple[dict, str]:
@@ -70,13 +81,56 @@ def _split_frontmatter(raw: str, path: Path) -> tuple[dict, str]:
     return meta, body.strip()
 
 
-def _split_qa(body: str, path: Path) -> tuple[str, str]:
-    match = re.match(r"^##\s*Q\s*\n(.*?)\n##\s*A\s*\n(.*)$", body, re.DOTALL)
-    if not match:
-        raise CardError(f"{path}: qa card body must be '## Q' section then '## A' section")
-    question, answer = match.group(1).strip(), match.group(2).strip()
+_SECTION_RE = re.compile(r"^##[ \t]+(.+?)[ \t]*$", re.MULTILINE)
+_LANG_RE = re.compile(r"^(?:(q|a)[ \t]+)?([a-z]{2}(?:-[a-z]{2})?)$")
+
+
+def _sections(body: str) -> tuple[str, dict[str, str]]:
+    """Split a card body into its `##` sections, keeping whatever precedes
+    the first heading (a cloze card is written without headings)."""
+    marks = list(_SECTION_RE.finditer(body))
+    preamble = (body[: marks[0].start()] if marks else body).strip()
+    out: dict[str, str] = {}
+    for i, mark in enumerate(marks):
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(body)
+        out[mark.group(1).strip().lower()] = body[mark.end():end].strip()
+    return preamble, out
+
+
+def _translations(sections: dict[str, str], path: Path, cloze: bool) -> dict:
+    """Language variants written beside the English body: `## Q zh` and
+    `## A zh` for a qa card, `## zh` for a cloze. English is never
+    replaced, so a translation can always be redone or dropped."""
+    langs: dict[str, dict[str, str]] = {}
+    for name, content in sections.items():
+        if name in ("q", "a"):
+            continue
+        match = _LANG_RE.match(name)
+        if not match:
+            raise CardError(
+                f"{path}: unknown section '## {name}' — expected 'Q'/'A', "
+                "a translated 'Q <lang>'/'A <lang>', or '<lang>' for a cloze"
+            )
+        part, lang = match.group(1), match.group(2)
+        if cloze and part is None:
+            langs.setdefault(lang, {})["text"] = content
+        elif not cloze and part is not None:
+            langs.setdefault(lang, {})["question" if part == "q" else "answer"] = content
+        else:
+            raise CardError(f"{path}: '## {name}' does not fit a {'cloze' if cloze else 'qa'} card")
+    for lang, parts in langs.items():
+        missing = ({"question", "answer"} if not cloze else {"text"}) - set(parts)
+        if missing:
+            raise CardError(f"{path}: {lang} translation is missing {sorted(missing)}")
+        if cloze and not _CLOZE_RE.search(parts["text"]):
+            raise CardError(f"{path}: {lang} cloze translation has no {{{{c1::...}}}} deletion")
+    return langs
+
+
+def _split_qa(sections: dict[str, str], path: Path) -> tuple[str, str]:
+    question, answer = sections.get("q", ""), sections.get("a", "")
     if not question or not answer:
-        raise CardError(f"{path}: empty question or answer")
+        raise CardError(f"{path}: qa card body must be '## Q' section then '## A' section")
     return question, answer
 
 
@@ -108,9 +162,13 @@ def parse_card(path: str | Path) -> Card:
         tags=list(tags),
         source=str(meta.get("source", "") or ""),
     )
+    preamble, sections = _sections(body)
     if card_type == "qa":
-        card.question, card.answer = _split_qa(body, path)
+        card.question, card.answer = _split_qa(sections, path)
+        card.tr = _translations(sections, path, cloze=False)
     else:
+        body = preamble
+        card.tr = _translations(sections, path, cloze=True)
         if not body:
             raise CardError(f"{path}: empty cloze body")
         if not _CLOZE_RE.search(body):

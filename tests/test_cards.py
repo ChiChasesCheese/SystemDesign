@@ -64,3 +64,69 @@ def test_load_cards_collects_errors_without_hiding_good_files(tmp_path):
     cards, errors = load_cards(tmp_path)
     assert [c.id for c in cards] == ["my-card"]
     assert len(errors) == 1
+
+
+TRANSLATED = """---
+id: my-card
+node: alpha.one
+type: qa
+---
+## Q
+What is X?
+
+## A
+X is **Y**.
+
+## Q zh
+X 是什么？
+
+## A zh
+X 是 **Y**。
+"""
+
+CLOZE_TRANSLATED = """---
+id: my-cloze
+node: alpha.one
+type: cloze
+---
+The formula is {{c1::W + R > N}}.
+
+## zh
+公式是 {{c1::W + R > N}}。
+"""
+
+
+def test_translation_sits_beside_the_english_never_replacing_it(tmp_path):
+    card = parse_card(write(tmp_path, "my-card.md", TRANSLATED))
+    assert card.question == "What is X?"          # English is untouched
+    assert card.render() == ("What is X?", "X is **Y**.")
+    assert card.render("zh") == ("X 是什么？", "X 是 **Y**。")
+
+
+def test_a_card_without_the_language_falls_back_to_english(tmp_path):
+    card = parse_card(write(tmp_path, "my-card.md", QA))
+    assert card.render("zh") == ("What is X?", "X is **Y**.")
+
+
+def test_cloze_translation_keeps_its_deletion(tmp_path):
+    card = parse_card(write(tmp_path, "my-cloze.md", CLOZE_TRANSLATED))
+    assert card.render("zh")[0] == "公式是 {{c1::W + R > N}}。"
+
+
+@pytest.mark.parametrize("mutation, fragment", [
+    (TRANSLATED.replace("## A zh\nX 是 **Y**。\n", ""), "missing \\['answer'\\]"),
+    (CLOZE_TRANSLATED.replace("{{c1::W + R > N}}。", "W + R > N。"), "no \\{\\{c1"),
+    (TRANSLATED.replace("## Q zh", "## Notes"), "unknown section"),
+])
+def test_half_a_translation_is_rejected(tmp_path, mutation, fragment):
+    with pytest.raises(CardError, match=fragment):
+        parse_card(write(tmp_path, "bad.md", mutation))
+
+
+def test_language_does_not_change_a_cards_identity(tmp_path):
+    """The same card in two languages is one card: same id, so re-importing
+    a translated build replaces the text in place and review history lives."""
+    import genanki
+    en = parse_card(write(tmp_path, "my-card.md", QA))
+    zh = parse_card(write(tmp_path, "my-card.md", TRANSLATED))
+    assert genanki.guid_for(f"trellis:{en.id}") == genanki.guid_for(f"trellis:{zh.id}")

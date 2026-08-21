@@ -167,6 +167,7 @@ def cmd_build(args, project: Project) -> int:
         vault=args.vault_name or vault_name(args.root / "vault"),
         clippings=project.clippings,
         cases=project.cases,
+        lang=args.lang,
     )
     print(f"wrote {result['path']}: {result['notes']} notes in {result['decks']} decks")
     return 0
@@ -184,6 +185,10 @@ def cmd_stats(args, project: Project) -> int:
           f"{len(project.drills)} drills, link coverage {pct}, "
           f"readable sources {readable}/{len(s.leaves())} leaves, "
           f"{len(project.card_errors)} unparseable")
+    langs = Counter(lang for c in project.cards for lang in c.tr)
+    for lang, n in sorted(langs.items()):
+        print(f"  translated into {lang}: {n}/{len(project.cards)} cards "
+              f"({n / len(project.cards):.0%})")
     for root_node in s.roots:
         subtree = [root_node] + [n for n in s.walk()
                                  if n.id.startswith(root_node.id + ".")]
@@ -381,6 +386,12 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("sync", help="regenerate Obsidian map notes from the skeleton")
     p_build = sub.add_parser("build", help="compile vault into an Anki .apkg")
     p_build.add_argument("-o", "--output", type=Path)
+    p_build.add_argument(
+        "--lang", default="",
+        help="render cards in this language where a translation exists "
+             "(e.g. zh); card ids are unchanged, so re-importing swaps the "
+             "text in place and keeps review history",
+    )
     p_build.add_argument(
         "--vault-name",
         help="Obsidian vault name used in obsidian:// links "

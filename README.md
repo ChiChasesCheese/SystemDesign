@@ -138,6 +138,38 @@ the live collection follow.
   notes (your own text outside the `%% trellis %%` markers is preserved). The
   graph view is the mind map.
 
+## Languages
+
+A card is written in English and keeps it. A translation is **appended**, never
+substituted, so nothing is lost if one is wrong or missing:
+
+```markdown
+## Q
+A hot key expires and 10k requests hit the database at once…
+
+## A
+**Cache stampede.** Request coalescing, or jittered TTLs…
+
+## Q zh
+一个热点 key 过期，1 万个请求同时打到数据库……
+
+## A zh
+**缓存击穿（cache stampede）。** 请求合并，或给 TTL 加抖动……
+```
+
+A cloze card takes a single `## zh` section instead, with its `{{c1::…}}`
+deletions kept byte-identical — the deletion is the answer being tested.
+
+```bash
+trellis build --lang zh     # cards render in Chinese where a translation exists
+```
+
+**Switching language is not a new deck.** Card ids — and therefore Anki note
+GUIDs — do not depend on language, so re-importing a translated build swaps the
+text in place and your review history survives. Technical terms stay in English
+by policy; see [the translation spec](docs/translation-spec.md). `trellis stats`
+reports translation coverage per language.
+
 ## Card format
 
 One file per card under `vault/<domain>/cards/<branch>/`, filename = card id:

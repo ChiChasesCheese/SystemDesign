@@ -12,7 +12,10 @@ nodes:
     children:
       - id: foundations.premia
         title: Risk Premia & Expected Return
-        summary: Risk premium vs alpha vs beta, expected return as a discount rate, and Ilmanen's building-block decomposition of any asset's return.
+        summary: Risk premium vs alpha vs beta, expected return as a discount rate, "bad returns in bad times", and Ilmanen's four building blocks — asset class premia, illiquidity, style premia, alpha.
+      - id: foundations.asset-class-premia
+        title: The Asset Class Premia
+        summary: The equity risk premium and its puzzle, the bond, credit and commodity premia, and the illiquidity premium charged by private and thinly traded assets.
       - id: foundations.efficiency
         title: Efficiency & Limits to Arbitrage
         summary: The three forms of EMH, the joint-hypothesis problem, behavioural biases, and why limits to arbitrage let mispricings survive contact with smart money.
@@ -33,7 +36,7 @@ nodes:
         summary: Reg NMS and the NBBO, fragmentation across lit and dark venues, maker-taker and payment for order flow, and the opening and closing auctions.
       - id: equities.short-selling
         title: Short Selling & Securities Lending
-        summary: Locates and borrow fees, hard-to-borrow names and recalls, short squeezes, and shorting costs as the classic limit to arbitrage.
+        summary: Locates and borrow fees, hard-to-borrow names and recalls, short squeezes, and borrow cost as the price of the constraint that lets overpricing persist.
       - id: equities.indices
         title: Indices & ETFs
         summary: Index construction and cap vs equal weighting, ETF creation/redemption arbitrage, and the flow effects of index inclusion and rebalancing.
@@ -83,7 +86,7 @@ nodes:
     children:
       - id: fixed-income.curve
         title: Yield Curve & Term Premium
-        summary: Spot, par and forward curves and their bootstrapping; level/slope/curvature as the three PCs; the expectations hypothesis, its failure, and the term premium that replaces it.
+        summary: Spot, par and forward curves and their bootstrapping; level/slope/curvature as the three PCs; the expectations hypothesis, its rejection, and the countercyclical term premium that replaces it.
       - id: fixed-income.risk
         title: Duration & Convexity
         summary: Duration, DV01, convexity and key-rate exposures — the units a rates desk speaks in and the hedges they imply.
@@ -165,7 +168,7 @@ nodes:
         summary: A factor as a long-short portfolio, characteristics vs covariances, and the lineage CAPM to Fama-French 3, Carhart 4, FF5, the q-factor model and mispricing factors.
       - id: factors.rationale
         title: Why Premia Exist
-        summary: The three defences of any premium — risk compensation, behavioural bias, limits to arbitrage — and how to argue which one your signal is actually standing on.
+        summary: The three defences of any premium — risk compensation, behavioural bias, limits to arbitrage — plus the question that disciplines all three — who is on the other side of this trade, and why do they keep paying?
         requires: [foundations.efficiency]
       - id: factors.zoo
         title: The Factor Zoo & Decay
@@ -185,7 +188,7 @@ nodes:
         summary: 12-1 relative strength, industry and residual momentum, the under-reaction story, and the momentum crashes that follow bear-market rebounds.
       - id: momentum.trend
         title: Time-Series Momentum & Trend Following
-        summary: TSMOM and managed futures across asset classes, the lookback-straddle payoff behind the crisis-alpha claim, and the whipsaw cost of manufacturing that convexity.
+        summary: TSMOM and managed futures across asset classes, the lookback-straddle payoff behind the crisis-alpha claim, and the awkward fact that time-series trend is largely cross-sectional momentum plus a net long.
         requires: [futures.term-structure]
       - id: momentum.fundamental
         title: Fundamental Momentum
@@ -231,11 +234,11 @@ nodes:
     children:
       - id: defensive.low-risk
         title: Low Risk & Betting Against Beta
-        summary: The low-volatility anomaly and BAB, leverage constraints and lottery preferences as explanations, and the beta-neutral construction the trade requires.
+        summary: The low-volatility anomaly and BAB, the four competing stories (leverage constraints, benchmarking, lottery demand, and "it is just profitability and size"), and the beta-neutral construction the trade demands.
         requires: [foundations.capm]
       - id: defensive.quality
         title: Quality & Profitability
-        summary: Quality Minus Junk, profitability and investment factors, accruals and earnings quality — the accounting-side cousin of low risk.
+        summary: Quality Minus Junk and its profitability/growth/safety legs, gross profitability and asset growth, accruals, and the distress puzzle where the riskiest firms earn the least.
       - id: defensive.size-liquidity
         title: Size & Illiquidity
         summary: The size premium and its shrinking evidence, size as a conditioner on other factors, and the illiquidity premium of Amihud and Pastor-Stambaugh.
@@ -247,7 +250,7 @@ nodes:
     children:
       - id: volatility.vrp
         title: The Variance Risk Premium
-        summary: Why implied volatility persistently exceeds realised, who is paying for it, and the negatively skewed payoff of harvesting it.
+        summary: Why implied volatility persistently exceeds realised, who is paying for it, why the premium lives at the front of the curve, and the negatively skewed payoff of harvesting it.
         requires: [options.surface]
       - id: volatility.correlation
         title: Correlation & Dispersion
@@ -270,7 +273,7 @@ nodes:
         summary: Net share issuance and buybacks, IPO and SEO underperformance, spin-offs and index-driven forced trades.
       - id: events.calendar
         title: Calendar & Announcement Effects
-        summary: The scheduled-announcement premium around FOMC and macro releases, earnings-day risk, index rebalance flows and the vanishing index effect, and month and quarter-end cash demand.
+        summary: The scheduled-announcement premium around FOMC and macro releases, index rebalance flows and the vanishing index effect, month and quarter-end cash demand, and same-calendar-month return seasonality.
 
   - id: macro
     order: 16

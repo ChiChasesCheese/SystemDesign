@@ -134,6 +134,7 @@ def build_package(
     vault: str | None = None,
     clippings: dict | None = None,
     cases: list | None = None,
+    lang: str = "",
 ) -> dict:
     """Write the .apkg. Returns {'notes': int, 'decks': int, 'path': str}."""
     readings = readings or []
@@ -156,17 +157,18 @@ def build_package(
             tags.append(f"src::{card.source}")
         footer = _sources_html(skeleton, readings, card.node, vault,
                                clippings, cases)
+        question, answer = card.render(lang)
         if card.type == "qa":
             note = genanki.Note(
                 model=qa_model,
-                fields=[_html(card.question), _html(card.answer) + footer, crumb],
+                fields=[_html(question), _html(answer) + footer, crumb],
                 guid=genanki.guid_for(f"trellis:{card.id}"),
                 tags=tags,
             )
         else:
             note = genanki.Note(
                 model=cloze_model,
-                fields=[_html(card.text) + footer, crumb],
+                fields=[_html(question) + footer, crumb],
                 guid=genanki.guid_for(f"trellis:{card.id}"),
                 tags=tags,
             )
