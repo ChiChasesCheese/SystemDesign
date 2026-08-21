@@ -161,6 +161,18 @@ def cmd_build(args, project: Project) -> int:
             print(f"{project.skeleton.domain}: skeleton only, no cards to build yet")
             return 0
         _fail(f"{project.skeleton.domain}: no cards to build")
+    if args.lang:
+        from .cards import suspect_translations
+        suspect = [c for c in project.cards if args.lang in suspect_translations(c)]
+        if suspect and not args.force:
+            for card in suspect[:5]:
+                print(f"  {card.path.name}", file=sys.stderr)
+            more = f" (and {len(suspect) - 5} more)" if len(suspect) > 5 else ""
+            _fail(
+                f"{len(suspect)} card(s){more} have a {args.lang} translation that "
+                "looks rewritten rather than translated — repair them, or pass "
+                "--force to ship the deck anyway"
+            )
     out = args.output or args.root / "dist" / f"{project.skeleton.domain}.apkg"
     result = build_package(
         project.skeleton, project.cards, out, project.readings,
@@ -185,6 +197,11 @@ def cmd_stats(args, project: Project) -> int:
           f"{len(project.drills)} drills, link coverage {pct}, "
           f"readable sources {readable}/{len(s.leaves())} leaves, "
           f"{len(project.card_errors)} unparseable")
+    from .cards import suspect_translations
+    flagged = Counter(lang for c in project.cards for lang in suspect_translations(c))
+    for lang, n in sorted(flagged.items()):
+        print(f"  warning: {n} {lang} translation(s) look rewritten rather than "
+              f"translated — `build --lang {lang}` refuses until repaired")
     langs = Counter(lang for c in project.cards for lang in c.tr)
     for lang, n in sorted(langs.items()):
         print(f"  translated into {lang}: {n}/{len(project.cards)} cards "
@@ -386,6 +403,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("sync", help="regenerate Obsidian map notes from the skeleton")
     p_build = sub.add_parser("build", help="compile vault into an Anki .apkg")
     p_build.add_argument("-o", "--output", type=Path)
+    p_build.add_argument(
+        "--force", action="store_true",
+        help="build a language even though some translations look rewritten")
     p_build.add_argument(
         "--lang", default="",
         help="render cards in this language where a translation exists "

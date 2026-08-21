@@ -16,22 +16,13 @@ Costs:
 Alternative: **interface + a composed helper** — the algorithm lives in a collaborator that takes the varying step as a strategy object. Java's compromise is the *skeletal implementation* pattern: publish the interface, offer `AbstractFoo` as an optional convenience so implementers who need their own hierarchy can forward to it instead.
 
 ## Q zh
-abstract class 可以有实现。它何时比接口更好的选择是「工作的一半已经完成」？
+你把共享逻辑放进一个带 `protected` 钩子的抽象基类（模板方法）。这份复用你要付出什么代价，替代方案是什么形状？
 
 ## A zh
-**答案**：当子类*实际上重用*共同的实现时。
+代价：
 
-例如：一个 repository 有通用的 CRUD、分页、缓存逻辑。每个具体 repository（UserRepo、ProductRepo）覆盖只有 `query()` 和 `rowMapper()`。具体逻辑住在基类中；子类专注于特定域。
+- **你花掉了唯一的单继承名额** —— 子类以后再也不能继承别的东西了。
+- **`protected` 成员对子类来说就是公开 API**：以后不能随意改名或调整调用顺序而不破坏每一个子类，基类的调用顺序也变成了一份契约。
+- 基类**难以单独测试**（需要一个假的子类），子类也无法脱离基类的行为单独测试。
 
-```java
-abstract class Repository<T> {
-    List<T> findAll() { /* 通用分页和缓存 */ }
-    protected abstract String query();
-}
-```
-
-**成本**：
-- 子类继承所有数据成员；不能多继承或轻易更改基类。
-- 过度设计：如果只有**一个**子类，base 中的共享代码只是噪声。
-
-**只有在以下情况下回报**：≥2个子类，*实际上*每个子类节省 20+ 行代码。
+替代方案：**接口 + 一个组合的 helper** —— 算法住在一个协作对象里，把会变化的那一步作为 strategy 对象传入。Java 的折中方案是 *skeletal implementation*（骨架实现）模式：发布接口，把 `AbstractFoo` 作为一个可选的便利类提供出来，这样需要自建继承体系的实现者可以转而委托给它。

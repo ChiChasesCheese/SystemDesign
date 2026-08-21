@@ -128,9 +128,29 @@ def _translations(sections: dict[str, str], path: Path, cloze: bool,
         missing = ({"question", "answer"} if not cloze else {"text"}) - set(parts)
         if missing:
             raise CardError(f"{path}: {lang} translation is missing {sorted(missing)}")
+
         if cloze:
             _check_cloze_faithful(sections_text, parts["text"], lang, path)
     return langs
+
+
+def suspect_translations(card: "Card") -> list[str]:
+    """Languages whose translation looks rewritten rather than translated.
+
+    A translation carrying a code block its English side never had is the
+    signature of a model that answered the question from its own knowledge
+    instead of translating it — measured on a real batch, it marked
+    corrupted cards and nothing else. It is reported rather than raised:
+    the English card is still correct and must keep building. What it does
+    block is shipping that language (see `build --lang`).
+    """
+    out = []
+    for lang, parts in card.tr.items():
+        for part, english in (("question", card.question), ("answer", card.answer)):
+            if parts.get(part, "").count("```") > english.count("```"):
+                out.append(lang)
+                break
+    return out
 
 
 _CLOZE_FULL_RE = re.compile(r"\{\{c(\d+)::(.*?)\}\}", re.DOTALL)

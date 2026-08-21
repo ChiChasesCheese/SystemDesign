@@ -158,3 +158,21 @@ def test_a_faithful_cloze_translation_passes(tmp_path):
             "需要 {{c1::W + R > N}}，在 {{c3::3}} 副本下容忍 {{c2::一个}} 节点故障。\n")
     card = parse_card(write(tmp_path, "c.md", body))
     assert "{{c2::一个}}" in card.render("zh")[0]
+
+
+def test_a_rewritten_translation_is_flagged_without_breaking_the_english_card(tmp_path):
+    """A model that answers the question from its own knowledge tends to
+    bring a code block the English card never had. That must not take the
+    English card down with it — it is still correct — so it is reported,
+    and shipping that language is what gets blocked."""
+    from trellis.cards import suspect_translations
+
+    body = QA + "\n## Q zh\nX 是什么？\n\n## A zh\n看这段代码：\n\n```java\nclass X {}\n```\n"
+    card = parse_card(write(tmp_path, "my-card.md", body))
+    assert card.render()[0] == "What is X?"      # English unharmed
+    assert suspect_translations(card) == ["zh"]
+
+
+def test_a_faithful_translation_is_not_flagged(tmp_path):
+    from trellis.cards import suspect_translations
+    assert suspect_translations(parse_card(write(tmp_path, "c.md", TRANSLATED))) == []

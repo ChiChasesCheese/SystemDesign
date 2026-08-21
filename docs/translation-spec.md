@@ -70,3 +70,32 @@ cd /Users/chizhang/Code/SystemDesign && trellis --all validate
 
 Zero errors. The parser rejects a translation that is missing half a qa pair or
 that dropped a cloze deletion, so a clean validate means the structure survived.
+
+
+## Why this spec is strict (an audit, and what it found)
+
+The first pass used the cheapest available model on all 516 cards. It handled
+prose well and failed in a way no amount of instruction prevents: on roughly
+40% of sampled cards it did not translate at all. It read the card's topic and
+**wrote a new card from its own knowledge** — a plausible question with a
+plausible answer that contradicted the original.
+
+Sampling 40 cards by hand put the rate at 16 wrong, 1 drifting, 23 clean, and
+the damage was not spread evenly: `low-level-design/oop/` was 7 of 7 corrupt
+and `system-design/distributed/` 7 of 8, while everything else sat near 8%.
+
+Two signatures came out of that audit, and both are now mechanical:
+
+- **A rewritten question.** Every corrupted card had a `## Q zh` that was not a
+  translation of its `## Q`. If the Chinese question is not the English
+  question, the answer below it is invented. This is the check a human (or a
+  strong model) should run first when repairing.
+- **An invented code block.** A `## A zh` carrying a fenced block the English
+  answer never had marked corrupted cards and nothing else. `trellis validate`
+  reports these, and `trellis build --lang zh` refuses to ship until they are
+  repaired.
+
+The practical rule: a cheap model can restructure text, but high-fidelity
+translation of dense technical prose needs a stronger one. Translate with at
+least a mid-tier model, then audit a random sample by hand before trusting the
+batch — the structural checks catch broken cards, not confident wrong ones.
