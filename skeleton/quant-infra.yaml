@@ -1,0 +1,333 @@
+# The Quant Infrastructure skeleton: study order top-to-bottom, `requires` edges
+# mark real cross-topic prerequisites. Cards attach to leaf ids.
+# Scope: everything that makes a quant platform *correct* — point-in-time data,
+# research method, backtest validity, portfolio construction, execution, and the
+# live stack. Asset-class and factor-family knowledge lives in `markets`.
+domain: quant-infra
+title: Quant Infrastructure
+nodes:
+  - id: foundations
+    order: 1
+    title: Research Foundations
+    summary: How quant research is organized, and why most of what it finds is false before a line of code is written.
+    children:
+      - id: foundations.pipeline
+        title: The Research Assembly Line
+        summary: Splitting research into data curation, feature analysis, strategy, backtesting and deployment stations instead of letting one researcher run a strategy end to end.
+      - id: foundations.hypothesis
+        title: Hypothesis Before Data
+        summary: Demanding an economic mechanism and a written prediction before the backtest, and logging every trial so the search cost stays countable.
+      - id: foundations.fundamental-law
+        title: Fundamental Law of Active Management
+        summary: Information ratio as IC times root breadth times transfer coefficient — what each term buys and how implementation friction caps the product.
+      - id: foundations.return-statistics
+        title: Statistics of Financial Returns
+        summary: Fat tails, serial correlation, regime dependence, and an effective sample size far smaller than the row count implies.
+
+  - id: data
+    order: 2
+    title: Data Correctness
+    summary: The inputs, and the handful of ways every one of them lies about what was knowable at the time.
+    children:
+      - id: data.point-in-time
+        title: Point-in-Time Discipline
+        summary: Reconstructing what was actually knowable on a past date rather than what the database says today.
+        children:
+          - id: data.point-in-time.as-of
+            title: As-Of Storage & Restatements
+            summary: Bitemporal tables separating effective date from knowledge date, as-reported versus restated fundamentals, filing and announcement lags, and vendor vintages.
+          - id: data.point-in-time.universe
+            title: Historical Universe & Survivorship
+            summary: Rebuilding the tradable universe as of each date — delistings, bankruptcies, point-in-time index membership, and the backfill bias in vendor histories.
+      - id: data.security-master
+        title: Security Master & Corporate Actions
+        summary: Identifier mapping across ticker reuse, mergers and CUSIP/ISIN/FIGI churn, plus split, dividend and spinoff adjustment factors and total- versus price-return series.
+      - id: data.market-data
+        title: Market Data
+        summary: What arrives off the wire, and how it becomes something a model can index.
+        children:
+          - id: data.market-data.bars
+            title: Ticks, Quotes & Bar Construction
+            summary: Trade conditions and busted prints, consolidated versus direct feeds, and why volume, dollar and imbalance bars sample information more evenly than clock time.
+          - id: data.market-data.book
+            title: Order Book Data
+            summary: L1/L2/L3 depth, snapshot-plus-delta reconstruction, sequence numbers, and what one dropped packet does to every downstream feature.
+          - id: data.market-data.time
+            title: Timestamps, Calendars & Clocks
+            summary: Exchange versus capture versus ingest timestamps, session and holiday calendars, timezone and DST handling, and clock sync as a correctness requirement.
+      - id: data.quality
+        title: Data Quality Controls
+        summary: Automated checks for stale prices, missing bars, unit changes and outliers; cross-vendor reconciliation, quarantine, and corrections that replay deterministically.
+
+  - id: features
+    order: 3
+    title: Features & Labels
+    summary: Turning raw series into supervised-learning inputs without smuggling the future into either side.
+    children:
+      - id: features.construction
+        title: Feature Construction
+        summary: Stationarity versus memory via fractional differentiation, cross-sectional ranking and winsorizing, and neutralizing a feature against exposures you are not paid to hold.
+      - id: features.labeling
+        title: Labeling
+        summary: Defining what the model is asked to predict — the choice that silently fixes horizon, cost and sample.
+        children:
+          - id: features.labeling.targets
+            title: Horizons & Triple Barrier
+            summary: Fixed-horizon returns versus profit-taking, stop-loss and time barriers, and why path-dependent labels match how a position is actually held.
+          - id: features.labeling.weights
+            title: Sample Uniqueness & Weights
+            summary: Overlapping outcomes break the IID assumption — concurrency-based uniqueness, sequential bootstrap, time decay and return-attribution weights.
+          - id: features.labeling.meta
+            title: Meta-Labeling
+            summary: A secondary model that sizes or vetoes a primary model's calls, converting a recall-heavy signal into a precision-managed bet.
+      - id: features.leakage
+        title: Leakage Taxonomy
+        summary: Target leakage, features computed with future data, full-sample normalization and cross-ticker group leakage — and the test that catches each one.
+        requires: [data.point-in-time]
+      - id: features.selection
+        title: Feature Importance & Selection
+        summary: MDI versus MDA versus single-feature importance, substitution effects among correlated features, and why in-sample importance is a multiple-testing artifact.
+      - id: features.store
+        title: Feature & Factor Store
+        summary: Feature definitions as versioned code with lineage and backfills, serving identical point-in-time semantics to research and to live.
+        requires: [data.point-in-time]
+
+  - id: backtest
+    order: 4
+    title: Backtesting
+    summary: Simulating a strategy honestly, then measuring how far the search that produced it bent the result.
+    children:
+      - id: backtest.engines
+        title: Engine Architecture
+        summary: Vectorized versus event-driven simulation, the state an event loop must own — orders, positions, cash — and which classes of error vectorization hides.
+      - id: backtest.mechanics
+        title: Simulation Mechanics
+        summary: The bookkeeping that decides whether a backtest is fiction — when you decide, what you pay, and what you could actually get filled.
+        children:
+          - id: backtest.mechanics.timing
+            title: Decision & Execution Timing
+            summary: Signal timestamp versus order timestamp versus fill timestamp, bar-close-to-next-open conventions, and budgeting the decision latency live will really have.
+            requires: [data.market-data.time]
+          - id: backtest.mechanics.fills
+            title: Fill Modeling
+            summary: Marketable versus resting orders, participation caps against printed volume, partial fills, and the queue-position assumption hiding inside every limit fill.
+          - id: backtest.mechanics.costs
+            title: Cost & Slippage Assumptions
+            summary: Commissions, fees, spread crossing, borrow and financing, taxes — stated as an explicit cost model you will later calibrate against real fills.
+          - id: backtest.mechanics.events
+            title: Halts, Limits & Corporate Events
+            summary: Simulating trading halts, limit up/down bands, hard-to-borrow names, delisting proceeds and dividends received while a position is open.
+            requires: [data.security-master]
+      - id: backtest.metrics
+        title: Performance Metrics
+        summary: Sharpe annualization under autocorrelation, drawdown and time under water, turnover and holding period, and how much each one moves on a single parameter nudge.
+      - id: backtest.validation
+        title: Validation Protocols
+        summary: Splitting a time series so the test set is genuinely unseen.
+        children:
+          - id: backtest.validation.walk-forward
+            title: Walk-Forward & Purged K-Fold
+            summary: Why shuffled cross-validation is invalid on overlapping labels, and how purging plus an embargo restores a defensible train/test boundary.
+            requires: [features.labeling.weights]
+          - id: backtest.validation.cpcv
+            title: Combinatorial Purged CV
+            summary: Generating many backtest paths from held-out group combinations to obtain a distribution of Sharpe instead of one lucky number.
+            requires: [backtest.validation.walk-forward]
+          - id: backtest.validation.synthetic
+            title: Resampled & Synthetic Backtests
+            summary: Block bootstrap, Monte Carlo and generated price paths as a second opinion on the single historical path — and what they cannot tell you.
+      - id: backtest.overfitting
+        title: Overfitting Control
+        summary: Treating a backtest result as a statistic contaminated by the number of trials that produced it.
+        children:
+          - id: backtest.overfitting.multiple-testing
+            title: Multiple Testing & Selection Bias
+            summary: Counting trials honestly, family-wise error versus false discovery control, and the expected maximum Sharpe a pure-noise search will hand you.
+            requires: [backtest.validation]
+          - id: backtest.overfitting.deflated-sharpe
+            title: Probabilistic & Deflated Sharpe
+            summary: Adjusting Sharpe for skew, kurtosis, track length and trial count, and using minimum track record length to answer how long until you believe it.
+            requires: [backtest.metrics]
+          - id: backtest.overfitting.pbo
+            title: Probability of Backtest Overfitting
+            summary: Combinatorially symmetric cross-validation — how often the in-sample best configuration lands below median out of sample, and reading the degradation plot.
+            requires: [backtest.validation.cpcv]
+
+  - id: portfolio
+    order: 5
+    title: Risk Models & Portfolio Construction
+    summary: Turning forecasts into positions under a risk model, a constraint set and a cost budget.
+    children:
+      - id: portfolio.risk-models
+        title: Factor Risk Models
+        summary: Explaining covariance with a handful of factors instead of estimating N-squared numbers from too little data.
+        children:
+          - id: portfolio.risk-models.structure
+            title: Model Structure
+            summary: Fundamental versus statistical versus macro models — exposures, factor covariance, specific risk, and what each form assumes about stability.
+          - id: portfolio.risk-models.covariance
+            title: Covariance Estimation
+            summary: Sample covariance noise when history is short relative to breadth, shrinkage, random-matrix denoising, and EWMA half-life as a responsiveness dial.
+          - id: portfolio.risk-models.attribution
+            title: Risk Attribution
+            summary: Splitting portfolio variance into factor and specific components, marginal contribution to risk, and surfacing the unintended bets nobody sized.
+      - id: portfolio.optimization
+        title: Optimization
+        summary: The mapping from alphas and risk to weights, and its notorious sensitivity to its own inputs.
+        requires: [portfolio.risk-models]
+        children:
+          - id: portfolio.optimization.mvo
+            title: Mean-Variance & Robust Alternatives
+            summary: Why unconstrained mean-variance maximizes estimation error, and what Black-Litterman, resampling, risk parity and hierarchical risk parity do about it.
+          - id: portfolio.optimization.constraints
+            title: Constraints, Turnover & Costs
+            summary: Position, sector and beta limits and tracking-error budgets as implicit views; turnover penalties, no-trade bands and cost-aware objectives.
+      - id: portfolio.combination
+        title: Combining Signals
+        summary: Blending correlated alphas across horizons — orthogonalization, IC-weighted and covariance-aware combination, and matching forecast horizon to holding period.
+        requires: [foundations.fundamental-law]
+      - id: portfolio.sizing
+        title: Bet Sizing & Leverage
+        summary: Kelly and why practitioners run a fraction of it, volatility targeting, mapping signal strength to size, and gross and net leverage limits.
+        requires: [foundations.return-statistics]
+
+  - id: execution
+    order: 6
+    title: Microstructure & Execution
+    summary: How an intended position becomes fills, and what that translation costs.
+    children:
+      - id: execution.microstructure
+        title: Market Mechanics
+        summary: The rules of the venue you are trading against.
+        children:
+          - id: execution.microstructure.book
+            title: Limit Order Book & Priority
+            summary: Order types and time-in-force, price-time versus pro-rata matching, queue position as an asset, and what a cancel/replace costs you in the queue.
+          - id: execution.microstructure.sessions
+            title: Auctions & Session Structure
+            summary: Opening and closing auctions, halts and reopenings, tick and lot size regimes, and why so much volume prints in the last minutes of the day.
+          - id: execution.microstructure.fragmentation
+            title: Fragmentation & Routing
+            summary: Multiple lit venues and dark pools, consolidated tape versus direct feeds, order protection rules, and the adverse selection a slow router pays.
+      - id: execution.spread
+        title: Spread & Adverse Selection
+        summary: The bid-ask spread as compensation for inventory risk and informed flow, with quoted, effective and realized spread as the diagnostic trio.
+      - id: execution.impact
+        title: Market Impact
+        summary: Temporary versus permanent impact, the square-root law in participation rate, Almgren-Chriss and I-Star style models, impact decay, and the capacity ceiling they imply.
+        requires: [execution.microstructure.book]
+      - id: execution.algos
+        title: Execution Algorithms
+        summary: VWAP, TWAP and POV versus arrival-price schedules, the impact-against-timing-risk trade-off, and passive or aggressive child order placement.
+        requires: [execution.impact]
+      - id: execution.tca
+        title: Transaction Cost Analysis
+        summary: Decomposing implementation shortfall into delay, impact, timing and opportunity cost against a chosen benchmark, then feeding realized costs back into the backtest cost model.
+        requires: [backtest.mechanics.costs, execution.impact]
+
+  - id: platform
+    order: 7
+    title: Research Platform Engineering
+    summary: The engineering that makes a result reproducible today and identical in production tomorrow.
+    children:
+      - id: platform.parity
+        title: Research-Production Parity
+        summary: One code path for features, signals and accounting across sim and live, with config-driven venues and automated sim-versus-live divergence tests.
+        requires: [features.store]
+      - id: platform.experiments
+        title: Experiment Tracking & Reproducibility
+        summary: Run manifests pinning code commit, config, dataset snapshot and seeds so any past number can be regenerated and every trial stays auditable.
+      - id: platform.pipelines
+        title: Compute & Orchestration
+        summary: Research DAGs with idempotent tasks, incremental versus full recompute, backfill semantics, and caching keyed on data version rather than wall clock.
+      - id: platform.testing
+        title: Testing a Quant Codebase
+        summary: Golden-file P&L regressions, property tests on accounting invariants, synthetic data with known answers, deterministic replay, and an explicit float tolerance policy.
+        requires: [backtest.engines]
+      - id: platform.promotion
+        title: Promoting a Strategy
+        summary: Paper and shadow trading, canary sizing, written promotion criteria and rollback triggers — a release process rather than a launch decision.
+        requires: [platform.testing]
+
+  - id: trading
+    order: 8
+    title: Trading Systems
+    summary: The live path from a target portfolio to acknowledged fills, and the books that track it.
+    children:
+      - id: trading.oms-ems
+        title: OMS vs EMS
+        summary: Who owns the parent order, allocations and compliance state versus who slices and routes children, and the FIX session that carries both.
+      - id: trading.order-lifecycle
+        title: Order State & Idempotency
+        summary: The order state machine, client order ids, cancel/replace races, ack timeouts, and duplicate protection when the gateway's answer never arrives.
+        requires: [trading.oms-ems]
+      - id: trading.accounting
+        title: Positions, Cash & P&L
+        summary: Real-time versus official positions, mark-to-market with realized and unrealized split, multi-currency cash, and applying corporate actions to a live book.
+        requires: [data.security-master]
+      - id: trading.connectivity
+        title: Venue Connectivity
+        summary: Session lifecycle and sequence-number recovery, resend requests, drop copies as an independent record, and start-of-day and end-of-day procedures.
+      - id: trading.latency
+        title: Latency Engineering
+        summary: A tick-to-trade budget across feed handler, strategy and gateway, why jitter and tail latency dominate the mean, and recognizing when latency is not the constraint.
+
+  - id: controls
+    order: 9
+    title: Live Risk & Controls
+    summary: The machinery that keeps a bug from becoming a headline.
+    children:
+      - id: controls.pre-trade
+        title: Pre-Trade Risk Checks
+        summary: Fat-finger size and notional caps, price collars, restricted and hard-to-borrow lists and duplicate-order detection, enforced in the order path rather than in the strategy.
+        requires: [trading.order-lifecycle]
+      - id: controls.limits
+        title: Runtime Limits & Kill Switches
+        summary: Position, exposure, loss and message-rate limits with defined breach actions — throttle, block, flatten — and a named human allowed to override them.
+      - id: controls.monitoring
+        title: Live Monitoring
+        summary: Alerting on stale data, signal health, position drift against target and fill quality, with thresholds tight enough to matter and few enough to be read.
+      - id: controls.reconciliation
+        title: Post-Trade Reconciliation
+        summary: Daily reconciliation of the internal book against broker, custodian and drop copy, break classification, and settlement and corporate-action mismatches.
+        requires: [trading.accounting]
+      - id: controls.incidents
+        title: Trading Incidents
+        summary: Runbooks for a runaway algo, the flatten-versus-hold decision under uncertainty, deployment failures of the Knight Capital family, and blameless postmortems.
+
+  - id: lifecycle
+    order: 10
+    title: Live Strategy Lifecycle
+    summary: Watching a strategy after it goes live, and deciding when to refit it or kill it.
+    children:
+      - id: lifecycle.divergence
+        title: Backtest vs Live Divergence
+        summary: Attributing the gap between simulated and realized P&L to costs, capacity, timing, data differences or plain bugs before blaming the market.
+        requires: [backtest.metrics, execution.tca]
+      - id: lifecycle.attribution
+        title: Live P&L Attribution
+        summary: Decomposing realized P&L by factor exposure, by signal, by execution and by residual, so the unexplained part stays small and named.
+        requires: [portfolio.risk-models.attribution]
+      - id: lifecycle.decay
+        title: Alpha Decay & Regime Breaks
+        summary: Measuring signal half-life and crowding, separating a drawdown consistent with the backtest from a structural break, and pre-committing retirement criteria.
+      - id: lifecycle.retraining
+        title: Retraining & Model Registry
+        summary: Refit cadence and drift triggers, champion-challenger comparison, versioned model artifacts, and treating every unscheduled refit as another trial to count.
+        requires: [platform.experiments]
+
+  - id: governance
+    order: 11
+    title: Compliance & Governance
+    summary: The obligations and paper trail a trading operation carries whether or not it has an alpha.
+    children:
+      - id: governance.compliance
+        title: Trading Compliance
+        summary: Short-sale locates and rules, restricted lists and information barriers, self-trade prevention, market-abuse patterns, and best-execution obligations.
+      - id: governance.audit
+        title: Audit Trail & Provenance
+        summary: Immutable order and decision logs reconstructable to the millisecond, provenance linking a live model to the research run that produced it, and retention rules.
+        requires: [platform.experiments]
+      - id: governance.model-risk
+        title: Model Risk Management
+        summary: Independent validation of a strategy's assumptions, documented limitations and monitoring plan, and sign-off before capital — model risk management in the SR 11-7 shape.

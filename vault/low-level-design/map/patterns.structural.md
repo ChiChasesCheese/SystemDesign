@@ -8,6 +8,9 @@ Adapter, decorator, facade, composite, proxy, bridge, flyweight — composing ob
 - [[refactoring-guru-decorator|Decorator (refactoring.guru)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
+## Cases
+- [[qs-the-tax-on-an-optional-dependency|The tax on an optional dependency, and what a wrapper really is]] — `quant-stroller`
+
 ## Cards (6)
 - [[patterns-adapter-vs-facade]]
 - [[patterns-bridge-when]]

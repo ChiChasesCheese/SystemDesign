@@ -1,0 +1,244 @@
+{
+  "codebase": "quant-stroller",
+  "ref": "4dae805d2955",
+  "items": [
+    {
+      "artefact": "contracts:.importlinter#module-graph-tiers",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "principles.coupling"
+      ],
+      "slug": "qs-layering-as-a-checked-import-direction",
+      "title": "Layering is a claim about import direction — check it or lose it",
+      "body": "A layered design is a claim about which direction imports may point, and a claim that lives only in a diagram decays within weeks. Encoding the tiers as a machine-checked contract — a higher tier may import a lower one, never the reverse — turns the diagram into a build failure.\n\nTwo wrinkles appear once you try it. First, a checker that walks every package treats same-tier packages as independent siblings and will happily allow one to import another, quietly re-creating the tangle the layering was meant to prevent; declaring one representative package per tier as a spine keeps the check meaningful. Second, imports that exist only for type annotations are not runtime dependencies, so excluding them keeps the graph honest instead of forcing fake indirection just to satisfy a linter.\n\nThe cost is real. Legitimate shortcuts become illegal, exceptions accumulate as an explicit ignore list, and every entry on that list is a small lie you have chosen to keep visible. What you buy is architecture that is falsifiable: a newcomer — or a code-generating agent that never read your wiki — learns the boundary from a failing check in seconds rather than from a reviewer's memory.",
+      "confidence": "high"
+    },
+    {
+      "artefact": "contracts:.importlinter#protect-tradable-seal",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "patterns.creational"
+      ],
+      "slug": "qs-sealed-constructor-as-unforgeable-permission",
+      "title": "Sealed constructors: when holding the object is the proof",
+      "body": "Some objects are permissions: holding one means a check was passed — this strategy is cleared to trade, this boot sequence reconciled, this batch was charged. The value only means something if it cannot be forged, so restrict construction to exactly one module. The constructor demands a sentinel that lives in a private module; everyone else must call that module's function and be refused when the check fails. Possession then *is* the proof, and downstream code can stop re-validating.\n\nThat rule needs enforcement, because any caller can import the sentinel and mint its own. A module-level import contract does it: the sentinel may be imported only by its minting module, and the layers most tempted to self-certify are named explicitly.\n\nTwo details decide whether the guard actually holds. Import-graph tools see modules, not symbols, so `from x import _SEAL` needs an extra syntactic check alongside. And the sanctioned door must stay open: forbidding the module that legitimately *calls* the minting function would forbid using the feature at all — the rule is \"nobody mints their own permission\", not \"nobody may ask\".\n\nThe cost is an awkward private module plus two checkers. The gain is that the bypass becomes structurally impossible rather than review-dependent.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "contracts:.importlinter#forbid-alpha-to-execution",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "principles.coupling"
+      ],
+      "slug": "qs-one-sanctioned-route-to-the-dangerous-layer",
+      "title": "Forbidding the edge to the dangerous layer",
+      "body": "When research code can reach the execution layer directly, a stray experiment can place a live order — and worse, the live path silently diverges from the measured one, because the bypass is invisible: nothing about it looks different from ordinary code. The remedy has two halves. Name one sanctioned route (every order is expressed as a registered declarative spec that the execution layer consumes), then forbid the edge itself so the shortcut cannot even be written.\n\nA forbidden-import contract is the cheapest form of this. It converts a review convention — \"please don't call the broker from a signal module\" — into a build failure, and it holds against contributors and code generators who never read the convention. What you buy is one audit point and one place to enforce risk limits: every order that exists passed through the same door.\n\nWhat you pay is a serialization boundary in the hot path and a permanent tax on convenience. The signal side can no longer ask the venue a question directly, so anything it genuinely needs — fees, lot sizes, current positions — must be passed into it or lifted into a lower shared module. That tax is the point: it forces coupling to be declared rather than improvised.",
+      "confidence": "high"
+    },
+    {
+      "artefact": "contracts:.importlinter#forbid-data-to-experiment",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "principles.solid"
+      ],
+      "slug": "qs-sink-the-shared-type-dont-invert-the-layer",
+      "title": "When a low layer needs a high layer's type, sink the type",
+      "body": "A low-level module needs a type defined in a high-level one — a result object, an enum, an error class. Three moves are available: import upward (creating a cycle and inverting the layering), copy the definition (two models of one concept, guaranteed to drift), or sink the shared type into a neutral module both sides may depend on.\n\nThe third is the dependency-inversion principle in its most mundane form. Dependencies should point toward stability, and shared vocabulary is more stable than either party that uses it. The refactoring trigger to watch for is precisely this shape: a stable, widely-used module reaching up into a volatile one for a definition.\n\nHaving performed the move, add the forbidden edge as a contract, so the regression cannot return the next time someone is in a hurry — otherwise the fix survives only as long as the memory of it.\n\nThe failure mode of doing this repeatedly is a core package that everything imports and that therefore can never change. Keep it to types and pure functions with no dependencies of its own, and treat behaviour migrating into it as a warning. The signal that you sank the wrong thing is the core module starting to import back out.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "contracts:.importlinter#alpha-broker-independent",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "principles.coupling"
+      ],
+      "slug": "qs-mutual-independence-is-stronger-than-layering",
+      "title": "Independence: neither side may know the other",
+      "body": "Layering says a dependency may point one way. Independence is the stronger claim that two subsystems may not know about each other in *either* direction. It is worth paying for when both must be substitutable and separately testable: the decision-making side can be exercised with no external system in sight, and a new external system can be added without touching a single decision module.\n\nThe mechanism is a contract that fails the build on any import path between the two packages, in either direction — not a review habit, because the violating import is always locally convenient and globally expensive.\n\nThe cost lands immediately on shared vocabulary. Two modules that must not see each other still need to agree on what an order, an identifier, or a result is, so those definitions must move down into a common module, and that module tends to accumulate. Independence also removes the shortcut symmetrically: the execution side cannot peek at the logic that produced a target, so everything it needs must travel in the message.\n\nChoose independence where the boundary is a genuine substitution point. Where one side is honestly built on the other, a one-way layer rule says so and costs less.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "contracts:.importlinter#quant-acyclic-siblings",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "principles.coupling"
+      ],
+      "slug": "qs-package-cycles-and-the-shrink-only-ratchet",
+      "title": "Package cycles, and the exception list that may only shrink",
+      "body": "Two packages that import each other are one package wearing two names: you cannot test, release, reason about, or delete either alone, and the cycle only tightens with time. The acyclic-dependency principle says sibling packages should form a DAG, and a checker can prove that on every commit. Breaking a discovered cycle is a choice of which edge to reverse — usually by sinking a shared type into a lower module, or by having the lower module accept a callback instead of importing the higher one.\n\nThe interesting part is what to do with the cycles that already exist. Failing the build outright means the check never lands; deleting the check means it never helps. The middle path is a ratchet: enumerate the existing cycle-closing edges as explicit exceptions, forbid any new one, and require each exception to name the ticket that will remove it. The list may only shrink.\n\nThat makes debt visible, bounded and attributable instead of ambient, and turns an all-or-nothing cleanup into background work. The cost is that a ratchet with no owner quietly becomes permanent — if nobody ever reviews the list, you have merely written the tangle down in a tidier font.",
+      "confidence": "high"
+    },
+    {
+      "artefact": "contracts:.importlinter#forbid-alpha-to-web",
+      "verdict": "skip",
+      "why": "A third statement of the same layering direction already carried by the tiers-spine contract (presentation sits above signal). The specific pair adds no mechanism a reader would not derive from the general rule; carding it again dilutes."
+    },
+    {
+      "artefact": "contracts:.importlinter#protect-battery-seal",
+      "verdict": "skip",
+      "why": "Same sealed-capability mechanism as the tradable-seal contract, expressed with the checker's `protected` rule instead of `forbidden`. Carded once; a second and third copy of one pattern teach nothing new."
+    },
+    {
+      "artefact": "contracts:.importlinter#protect-boot-seal",
+      "verdict": "skip",
+      "why": "Third instance of the sealed-capability pattern (only the boot-reconcile module may mint a boot clearance). The clearance's meaning is repo-specific; the transferable mechanism is already carded once."
+    },
+    {
+      "artefact": "decisions:0001-strategy-stack-not-layer",
+      "verdict": "gap",
+      "lens": "system-design",
+      "proposed_leaf": "storage.record-modeling",
+      "why": "The decision is about the shape of records inside one system of record: when two kinds of thing get conflated in reports, add a discriminating dimension to a single honest ledger rather than splitting it into two stores — splitting destroys any accounting that must span both kinds (here, cumulative multiple-testing charges per research family) and doubles the tooling, while the presentation layer can group by the dimension instead. The second half is naming: the obvious field name was already the canonical word for an unrelated axis in the same system, and one word carrying two meanings was the root cause of the misreading that triggered the change. The storage.* leaves cover engines, partitioning, indexing and encoding; none covers how to shape the records themselves, and `distributed.partitioning.schemes` is about placing data across nodes, which is not the question being decided. A leaf on record modelling — discriminator dimensions versus separate stores, and vocabulary collision as a schema hazard — is what is missing.",
+      "confidence": "low"
+    },
+    {
+      "artefact": "decisions:0002-data-stages-raw-bars-panel-not-lake-layers",
+      "verdict": "case",
+      "lens": "system-design",
+      "nodes": [
+        "analytics.derived"
+      ],
+      "slug": "qs-materialize-the-archive-derive-the-rest",
+      "title": "Materialize the archive, derive the rest",
+      "body": "A data pipeline usually has three stages: an immutable archive of what a source actually sent, a canonical per-entity series, and an aligned cross-entity view for analysis. The design question is which of these are bytes on disk and which are computed on read.\n\nMaterializing only the archive means cleaning rules can change without a migration, there is never a reconciliation problem between stages, and every derived table can be rebuilt from the record; the price is recomputation on every read, plus the *option* — not the obligation — to materialize later when that cost bites.\n\nNormalization belongs in a per-source adapter at the boundary between archive and canonical series: the archive is partitioned by source, each source brings its own quirks and its own adapter, and everything above the boundary is source-agnostic. Adding a source is then one partition plus one adapter. The tell that you got this wrong is a source that reaches analysis by its own private path, so every downstream consumer grows a special case.\n\nNaming is not cosmetic here. Borrowed jargon that misdescribes the physical reality (calling a single-source archive a \"lake\") and numbered layers that collide with another axis in the same system both cost every future reader time; nouns already present in your own API are free.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "decisions:0003-embedded-data-platform-duckdb-dbt-sealed-snapshots",
+      "verdict": "case",
+      "lens": "system-design",
+      "nodes": [
+        "analytics.warehouse",
+        "analytics.batch"
+      ],
+      "slug": "qs-embedded-warehouse-and-a-hand-rolled-commit-log",
+      "title": "An embedded warehouse and a hand-rolled commit log",
+      "body": "The modern-data-stack shape — warehouse, declarative transforms, orchestrator, table format — can be had at small scale without running a single server.\n\nAn embedded analytical engine that queries files in place gives SQL and columnar scans with no daemon to operate, and the same engine in tests as in production, so \"tested against a real database\" costs a temp file rather than a container. Transforms move from imperative read-time code into a declarative SQL DAG with per-model schema tests, lineage, and selective rebuild of one subtree.\n\nOrchestration is where teams overspend. A resident scheduler exists for unattended timers and sensor polling; if a human triggers the run, a single command that ingests, validates, rebuilds the affected subtree, tests, and exits is enough. Add the daemon when nobody is watching, not before.\n\nHistory, rollback and locking come from the commit-log idea in miniature: partitions are append-only and immutable; a batch becomes visible only when a manifest (batch id, row counts, checksums, validation verdict) is written *after* the checks pass; readers see sealed partitions only; rollback moves a CURRENT pointer and derived tables rebuild from the archive. Open table formats formalize exactly this — you can buy most of it by hand and adopt one later.\n\nOne operational note: give the transform toolchain its own lockfile, so its dependencies cannot silently bump the main one.",
+      "confidence": "high"
+    },
+    {
+      "artefact": "decisions:0004-experiment-ledger-event-log-not-rdbms",
+      "verdict": "case",
+      "lens": "system-design",
+      "nodes": [
+        "async.log",
+        "analytics.derived"
+      ],
+      "slug": "qs-write-model-is-a-log-read-model-is-a-projection",
+      "title": "Write model as immutable log, read model as projection",
+      "body": "Ask of every dataset: is this the source of truth, or a projection of it?\n\nA source of truth is well served by an append-only log where each event is one immutable file published by atomic rename. That shape buys concurrency for free — many workers, several machines, no locks, and no half-written file ever visible to a reader — and it makes merging across machines a copy rather than a transaction. Everything else (rankings, running totals, dashboards) is recomputed from the log, so it may be deleted and rebuilt without touching the record.\n\nThe standing pressure is to \"put it in a database\", trading that lock-free write path for one mutable store and its write contention. That is the right trade when queries are the bottleneck. It is the wrong one when a full scan of a few hundred small files is microseconds and no ticket asks for speed.\n\nNote what an engine migration would not fix. The pain usually blamed on file storage is semantic: two aliases for one entity inflating counts, dangling references between stores, older rows missing columns. Those are validation, a canonical registry, and a write-time schema contract — no database merges two names for you.\n\nWhen reads do get heavy, materialize a projection beside the log, and never let the write path change to serve it.",
+      "confidence": "high"
+    },
+    {
+      "artefact": "decisions:0005-scout-idea-funnel-event-log-agent-triage",
+      "verdict": "case",
+      "lens": "system-design",
+      "nodes": [
+        "correctness.idempotency"
+      ],
+      "slug": "qs-content-addressed-intake-with-recorded-rejections",
+      "title": "Content-addressed intake, with rejections on the record",
+      "body": "An intake funnel that pulls candidates from many sources and turns some of them into work has three failure modes: re-fetching creates duplicates, rejected items vanish and are rediscovered forever, and the decisions are unreproducible.\n\nOne shape fixes all three. Derive each item's id from a hash of its source plus natural key and store it as one immutable file named by that id: re-harvesting the same item is a no-op, so the fetcher can crash, restart, or run twice with no coordination. This is an idempotency key that the payload carries rather than the caller invents — no dedup window to tune, because identity is intrinsic. Record decisions in a second log, one immutable verdict per item, including rejections and their reasons, so \"we looked and said no\" is durable, auditable, and prevents a second review. The work queue is then not a mutable status column but a derived set difference: items with no verdict yet.\n\nThis replaces the tempting design of one mutable file per day rewritten in place, which loses updates the moment two writers overlap — a race hidden for as long as exactly one writer exists.\n\nThe last piece is the seam: deterministic code owns the verbs (harvest, list queue, apply verdict) and stays testable; judgment — score, priority, accept or reject — lives outside it. The cost is two logs and no single row saying \"current status\".",
+      "confidence": "high"
+    },
+    {
+      "artefact": "decisions:0006-eodhd-raw-archive-contract",
+      "verdict": "case",
+      "lens": "system-design",
+      "nodes": [
+        "correctness.idempotency",
+        "traffic.rate-limiting"
+      ],
+      "slug": "qs-resumable-ingestion-against-a-metered-api",
+      "title": "Resumable ingestion against a metered API",
+      "body": "Bulk-pulling a corpus from a metered third-party API poses two problems: staying inside quota, and resuming after an interruption.\n\nQuota is a budget you enforce on the client side. Give each endpoint a cost weight, keep a local counter, and every few hundred calls reconcile against the provider's own reported usage, taking the maximum of the two. A mis-guessed local weight then cannot silently blow through the real cap. When the budget is spent, sleep until the provider's reset boundary rather than retrying into rejections.\n\nResumption is an append-only completion log: load the recorded keys into a set at startup and skip any unit whose key is present. Two choices make it safe. The key is written only *after* the unit's output is durably on disk, so an interrupted unit leaves no key and is redone whole — key granularity is exactly the amount of work you are willing to repeat. And freshness is encoded in the key: a per-day or per-month stamp makes re-running a no-op until the stamp rolls, while entities that can never change again get a stamp-free key and are frozen forever. There is no `--resume` flag; re-running *is* the resume path.\n\nOne trap with incremental appends: re-fetch an overlap window and compare it against what you stored. If the source restated the series, refetch it whole rather than concatenating two incompatible bases into one file.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "decisions:0007-research-loop-checkpoint-hitl-wrap-cli",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "structure.state-machines"
+      ],
+      "slug": "qs-durable-phase-machine-that-decides-nothing",
+      "title": "A durable phase machine that decides nothing",
+      "body": "A long-lived process with human checkpoints is far easier to reason about as an explicit state machine than as a script with flags.\n\nThree parts do the work. A fixed tuple of phases is the single source of order, so \"what comes next\" is data rather than control flow scattered across functions. A durable checkpoint holds current phase, status, and an append-only history, giving crash resumption and replay — and it is the history, not the current value, that makes an incident reviewable afterwards. Human approval is modelled as a state, not a boolean: after certain phases the machine parks in an `awaiting-approval` state and the tick function refuses to advance until an explicit approval with a note is recorded.\n\nThe important constraint is what the orchestrator is allowed to know. It wraps existing entry points and reads only their exit codes; it never re-implements a decision it sequences. The moment sequencing code also computes a verdict, that verdict has two implementations, they will diverge, and the one users see will be the wrong one.\n\nPhases with no automation yet are wired as empty steps that stop for a human. The funnel's shape is therefore complete before its automation is, and a later change can fill in a step without renegotiating the order.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "decisions:0008-live-event-driven-nautilus-not-lean",
+      "verdict": "case",
+      "lens": "system-design",
+      "nodes": [
+        "async.streaming"
+      ],
+      "slug": "qs-one-implementation-two-drivers-replay-parity",
+      "title": "One implementation, two drivers: replay/live parity",
+      "body": "The recurring trap in systems that both replay history and run live is two implementations of one logic that drift — the offline one is what you measured, the online one is what acts.\n\nParity is achievable only when every output depends solely on the prefix of the stream. Given that, feeding the code a truncated prefix at each step must reproduce exactly what the whole-history pass produced at that index. That identity is testable offline and cheaply, before any socket is involved, which converts \"probably the same\" into a property. It also reframes the ban on lookahead: it is not only statistical hygiene, it is the precondition for streaming the same code at all.\n\nWith the property in hand, adopting an engine whose simulation and production modes share one architecture buys parity, venue adapters and reconciliation reports instead of hand-building an order bus and its recovery paths.\n\nBut keep two tiers deliberately: a cheap approximate engine for the search loop and a faithful one for execution. A measured 74x per-run gap — widening with data volume — does not mean \"slower\", it means nobody will run the full sweep, and the honest trial count quietly starts lying.\n\nFinally, order the work: reconciliation at startup that halts on mismatch, persisted order lifecycle with idempotent recovery, and a runtime kill switch come before any new capability.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "decisions:0009-canonical-ledger-outside-worktree-git-mirror",
+      "verdict": "case",
+      "lens": "system-design",
+      "nodes": [
+        "distributed.replication.multi-leader"
+      ],
+      "slug": "qs-two-writers-and-the-conflict-you-cannot-see",
+      "title": "Two writers and the conflict you cannot see",
+      "body": "Two lessons about where a system of record lives.\n\nFirst, never keep it inside a directory that tooling is allowed to rebuild or clean. Records removed by a routine cleanup are indistinguishable from records that never existed, and partial loss of an event log silently corrupts every aggregate that assumes completeness — a correctness bug arriving through storage topology rather than code. Put the source of truth outside the working copy, commit a derived snapshot for consumers that cannot reach it, and label that snapshot a mirror so nobody promotes it to truth. If \"which store am I writing to\" is a free-form path parameter, make it a type with named constructors and make the conservative reading the default for a bare path.\n\nSecond, distrust the sentence \"the files are immutable and content-named, so copying can never conflict\". Verify it. Here one field was stamped from the destination rather than the record, and a later pass rewrote existing rows — so the premise was false. With it false, a copy tool told to skip existing files is not avoiding conflicts; it is resolving them last-writer-wins by arrival order, dropping a record.\n\nThe fix is the multi-leader playbook: compare by content, not bytes (serializers change bytes); classify some differences as provenance rather than conflict; on a real conflict keep both siblings where reader queries cannot see them, alert, and exit non-zero for a human.",
+      "confidence": "high"
+    },
+    {
+      "artefact": "decisions:0010-nautilus-as-hard-dependency-retire-parallel-abstractions",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "patterns.structural"
+      ],
+      "slug": "qs-the-tax-on-an-optional-dependency",
+      "title": "The tax on an optional dependency, and what a wrapper really is",
+      "body": "Making a heavy dependency optional sounds like a kindness to users, but the bill is paid inside the code: lazy class factories that exist only to avoid a top-level import, functions typed as `Any` because the real types may be absent, and a type checker consequently blind in the layer that most needs checking. Those are not designs, they are evasions. Before paying the tax, ask who actually installs without the extra — if CI installs it and every operator installs it, the lightweight path has no consumers and the optionality is pure cost.\n\nPromoting it to a hard dependency then raises a sharper question: which in-house abstractions existed only to hold the vendor at arm's length? The discriminating test is not \"this looks duplicated\" but \"delete it — can the vendor do this natively, and at what cost?\"\n\nBy that test, a one-way narrowing translation between your model and theirs, with an exhaustive table that raises on an unmapped member, is an anti-corruption layer rather than a duplicate model: one call site, and a new enum member fails loudly instead of mis-mapping a live order. A wrapper interface that lets you support cases the vendor never will is an extension point, not debt. What genuinely must go is two models of one concept, each separately maintained and separately believed.",
+      "confidence": "medium"
+    },
+    {
+      "artefact": "decisions:0011-decisionmoment-unifies-time-cadence-becomes-constructor",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "principles.simplicity"
+      ],
+      "slug": "qs-unify-the-declaration-fork-the-implementation",
+      "title": "Unify the declaration, fork the implementation",
+      "body": "Two models of the same concept can coexist for years — each complete, each well tested, neither aware of the other — because nothing ever forces them to meet. That is a hazard, not untidiness: the canonical example is a firm that lost $440M when a nine-year-old dead code path was reactivated on one of eight servers by a reused flag. Duplicate activation paths and dormant siblings are the same family of risk.\n\nMerging them is a conclusion to be proven, not assumed, because the wrong abstraction costs more than the duplication it replaces. The usable discipline: tabulate the dimensions on which the two models differ and show each one is either absorbed by the merged model or a strict generalization of the old. Here five of six were absorbed and three were generalizations — the new model expressed shapes neither old one could. The sixth difference was recorded as theoretical, with no instance in production, and deliberately not designed for.\n\nThe subtler result: inside the merged model, one variant differed on every dimension that mattered — reactive rather than timed, with no meaningful \"next occurrence\" and no cheap way to evaluate it. The right structure was to unify the declaration layer, where callers only enumerate, and fork the implementation explicitly instead of forcing one path.\n\nWatch, too, for the declarative field with zero consumers: an interface nobody uses is a hypothesis, not a design.",
+      "confidence": "high"
+    },
+    {
+      "artefact": "decisions:0012-findings-carry-executable-probes",
+      "verdict": "gap",
+      "lens": "low-level-design",
+      "proposed_leaf": "quality.fitness-functions",
+      "why": "The decision makes an executable check the entry ticket for any architectural claim: a probe that exits non-zero while the defect exists and zero once it is fixed; a mandatory positive control, because a probe that can never go red is measuring something else (one claim here measured 'no delisted names' against a calendar-padded archive and could never have been right); and the probe stays in CI after the fix, so the defect cannot silently regress or be rediscovered as a new finding. Related mechanisms in the same family: allowlists that may only shrink, and the rule that prose describes intent while probes describe fact — a stale comment asserting a guard that no longer exists is worse than no comment, because it stops readers checking. The measured payoff was a 62% correction rate on claims that had not been probed first. The quality.* leaves cover smells, refactoring, testability seams and error design; none covers tests whose subject is the codebase and its architecture rather than a unit's behaviour, nor evidence-before-claim as a working discipline. `quality.testability` is about seams and doubles, and stretching it there would lose the point.",
+      "confidence": "low"
+    },
+    {
+      "artefact": "decisions:0013-deletion-requires-retired-outdated-duplicate",
+      "verdict": "case",
+      "lens": "low-level-design",
+      "nodes": [
+        "quality.smells"
+      ],
+      "slug": "qs-deleting-code-needs-positive-evidence",
+      "title": "Dead code needs positive evidence, not silence",
+      "body": "Static reachability is only as trustworthy as your model of who the callers are. A dead-code sweep that counts importers across a repository will confidently delete anything reached by reflection, plugin registries, notebooks, operators at a REPL — or, increasingly, agents that import a helper, take a result, and leave no committed caller behind. Absence of evidence of life is not evidence of death: here the naive criterion nominated tens of thousands of lines and roughly half had to be restored.\n\nThe durable fix is to require positive evidence in named categories. RETIRED: a decision record says so, or the engine it depends on is gone, or another implementation supersedes it wholesale. OUTDATED: it points at infrastructure that is dead, or was a one-shot migration that has already run. DUPLICATE: a second implementation exists and is demonstrably equivalent, with the comparison published.\n\n\"Nobody imports it\" is explicitly not a fourth category. A zero-importer module that people call on demand is a capability; the answer is to register its role in a generated module map so the next reader does not have to guess from the import graph. Moving it out of the importable namespace counts as deleting it for those callers.\n\nThe cost is honest: a permanent population of zero-importer modules, and line count retired as a progress metric.",
+      "confidence": "medium"
+    }
+  ]
+}

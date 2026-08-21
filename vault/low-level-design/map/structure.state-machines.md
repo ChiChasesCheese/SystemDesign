@@ -9,6 +9,9 @@ Modeling lifecycles (order, elevator, game) as explicit states and transitions i
 ## Readings
 - [[gpp-state|State (Game Programming Patterns, Bob Nystrom)]]
 
+## Cases
+- [[qs-durable-phase-machine-that-decides-nothing|A durable phase machine that decides nothing]] — `quant-stroller`
+
 ## Drills
 - [[elevator-system|Drill: Elevator System]]
 

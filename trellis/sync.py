@@ -50,6 +50,7 @@ def _node_body(
     cards: list[Card],
     readings: list[Reading],
     drills: list[Reading],
+    cases: list[Reading],
 ) -> str:
     crumbs = " / ".join(n.title for n in node.path()[:-1])
     lines = [f"# {node.title}"]
@@ -71,6 +72,11 @@ def _node_body(
     if node_readings:
         lines += ["", "## Readings"]
         lines += [f"- [[{r.link_target}|{r.title}]]" for r in node_readings]
+    node_cases = [c for c in cases if node.id in c.nodes]
+    if node_cases:
+        lines += ["", "## Cases"]
+        lines += [f"- [[{c.path.stem}|{c.title}]] — `{c.extra.get('codebase')}`"
+                  for c in node_cases]
     node_drills = [d for d in drills if node.id in d.nodes]
     if node_drills:
         lines += ["", "## Drills"]
@@ -116,12 +122,14 @@ def sync(
     vault_dir: str | Path,
     readings: list[Reading] | None = None,
     drills: list[Reading] | None = None,
+    cases: list[Reading] | None = None,
     clippings: dict[str, "Clipping"] | None = None,
 ) -> dict:
     """Regenerate map notes and the managed tail of each reading note.
     Returns {'written': [...], 'orphans': [...]}."""
     readings = readings or []
     drills = drills or []
+    cases = cases or []
     clippings = clippings or {}
     vault = Path(vault_dir)
     map_dir = vault / "map"
@@ -133,7 +141,7 @@ def sync(
 
     for node in skeleton.walk():
         path = map_dir / f"{node.id}.md"
-        if write_managed(path, _node_body(skeleton, node, cards, readings, drills)):
+        if write_managed(path, _node_body(skeleton, node, cards, readings, drills, cases)):
             written.append(str(path))
 
     for reading in readings:

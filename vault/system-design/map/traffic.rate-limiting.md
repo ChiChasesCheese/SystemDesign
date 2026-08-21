@@ -7,6 +7,9 @@ Token bucket vs sliding window, local vs distributed enforcement, and what to re
 ## Readings
 - [[stripe-rate-limiters|Scaling your API with Rate Limiters (Stripe)]]
 
+## Cases
+- [[qs-resumable-ingestion-against-a-metered-api|Resumable ingestion against a metered API]] — `quant-stroller`
+
 ## Drills
 - [[design-rate-limiter|Drill: Design a distributed rate limiter]]
 

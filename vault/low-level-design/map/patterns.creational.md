@@ -8,6 +8,9 @@ Singleton, factory method, abstract factory, builder, prototype — who creates 
 - [[refactoring-guru-builder|Builder (refactoring.guru)]]
 - [[refactoring-guru-patterns|Design Patterns Catalog (refactoring.guru)]]
 
+## Cases
+- [[qs-sealed-constructor-as-unforgeable-permission|Sealed constructors: when holding the object is the proof]] — `quant-stroller`
+
 ## Drills
 - [[parking-lot|Drill: Parking Lot]]
 

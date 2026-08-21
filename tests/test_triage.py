@@ -125,3 +125,17 @@ def test_index_groups_a_codebases_harvest_by_lens(project):
     index = codebase_index(project, "cb", ["demo"])
     assert "## demo" in index and "[[cb-a-choice|A choice]]" in index
     assert "1 case(s) accepted." in index
+
+
+def test_a_card_offers_the_cases_on_its_leaf(project):
+    """The payoff: reviewing a principle surfaces the real system that
+    instantiates it, one tap away in Obsidian."""
+    from trellis.build import _sources_html
+    from trellis.cases import load_cases
+
+    accept(_proposal(project, [GOOD_CASE]), project, _skeletons(project), set())
+    cases = load_cases(project / "vault" / "demo" / "cases")[0]
+    html = _sources_html(_skeletons(project)["demo"], [], "alpha.one",
+                         vault="vault", cases=cases)
+    assert 'href="obsidian://open?vault=vault&file=cb-a-choice"' in html
+    assert "A choice" in html

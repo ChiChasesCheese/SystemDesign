@@ -93,6 +93,9 @@ nodes:
       - id: storage.nosql
         title: NoSQL Families
         summary: Key-value, document, wide-column, graph — the access patterns each one exists to serve.
+      - id: storage.record-modeling
+        title: Record Modeling
+        summary: Shaping the records themselves — one table with a discriminating dimension versus separate stores, and vocabulary collision as a schema hazard.
       - id: storage.object
         title: Object Storage & Separation
         summary: S3-style object stores, storage-compute separation, and the modern default of parking cold and big data there.

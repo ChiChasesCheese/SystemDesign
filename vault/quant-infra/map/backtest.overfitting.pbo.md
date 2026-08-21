@@ -1,0 +1,10 @@
+%% trellis:begin %%
+# Probability of Backtest Overfitting
+*Backtesting / Overfitting Control*
+
+Combinatorially symmetric cross-validation — how often the in-sample best configuration lands below median out of sample, and reading the degradation plot.
+
+**Requires:** [[backtest.validation.cpcv|Combinatorial Purged CV]]
+%% trellis:end %%
+
+## Notes

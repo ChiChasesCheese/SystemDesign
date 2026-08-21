@@ -1,0 +1,10 @@
+%% trellis:begin %%
+# Crypto Return Drivers
+*Crypto Markets*
+
+Funding and basis carry, cross-sectional and time-series momentum, and the open question of which equity-style factors survive in a market this reflexive.
+
+**Requires:** [[futures.term-structure|Basis, Carry & Roll]]
+%% trellis:end %%
+
+## Notes

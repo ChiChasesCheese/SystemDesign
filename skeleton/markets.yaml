@@ -1,0 +1,323 @@
+# Markets & Factors: the subject knowledge — what is traded, how each market is
+# plumbed, and where returns come from. A catalogue more than a chain, so
+# `requires` edges are rare: most branches are siblings, studied in any order.
+# Platform engineering and research methodology live in a sibling skeleton.
+domain: markets
+title: Markets & Factors
+nodes:
+  - id: foundations
+    order: 1
+    title: Return Foundations
+    summary: Where returns come from, stated before any instrument or signal is named.
+    children:
+      - id: foundations.premia
+        title: Risk Premia & Expected Return
+        summary: Risk premium vs alpha vs beta, expected return as a discount rate, and Ilmanen's building-block decomposition of any asset's return.
+      - id: foundations.efficiency
+        title: Efficiency & Limits to Arbitrage
+        summary: The three forms of EMH, the joint-hypothesis problem, behavioural biases, and why limits to arbitrage let mispricings survive contact with smart money.
+      - id: foundations.capm
+        title: CAPM, Beta & Risk Vocabulary
+        summary: CAPM and the security market line with beta as the first factor, plus the volatility/Sharpe/drawdown/skew vocabulary every premium gets quoted in.
+
+  - id: equities
+    order: 2
+    title: Equities & Equity Structure
+    summary: The most-traded asset class — what a share is, where it trades, and how the plumbing bends returns.
+    children:
+      - id: equities.instruments
+        title: Shares & Corporate Actions
+        summary: Common vs preferred, share classes and free float, dividends, splits, spin-offs and ADRs — and why every backtest needs adjusted prices.
+      - id: equities.structure
+        title: US Equity Market Structure
+        summary: Reg NMS and the NBBO, fragmentation across lit and dark venues, maker-taker and payment for order flow, and the opening and closing auctions.
+      - id: equities.short-selling
+        title: Short Selling & Securities Lending
+        summary: Locates and borrow fees, hard-to-borrow names and recalls, short squeezes, and shorting costs as the classic limit to arbitrage.
+      - id: equities.indices
+        title: Indices & ETFs
+        summary: Index construction and cap vs equal weighting, ETF creation/redemption arbitrage, and the flow effects of index inclusion and rebalancing.
+
+  - id: futures
+    order: 3
+    title: Futures & Forwards
+    summary: Margined, leveraged exposure to almost anything, and the carry arithmetic that prices it.
+    children:
+      - id: futures.mechanics
+        title: Contract Mechanics
+        summary: Contract specs, initial vs variation margin, central clearing and daily marking, delivery vs cash settlement, and where a future stops being a forward.
+      - id: futures.term-structure
+        title: Basis, Carry & Roll
+        summary: Cost of carry and convergence, contango vs backwardation, roll yield, calendar spreads, and how continuous series get stitched.
+      - id: futures.sectors
+        title: Sector Conventions
+        summary: What actually differs across equity index, bond, STIR, FX, energy, metals and agricultural contracts — specs, seasonality, and curve shape.
+
+  - id: options
+    order: 4
+    title: Options & Volatility Instruments
+    summary: Convexity as a tradable object — payoffs, the pricing model everyone knows is wrong, and the products built on volatility itself.
+    children:
+      - id: options.payoffs
+        title: Payoffs & Put-Call Parity
+        summary: Calls and puts as payoff diagrams, put-call parity as a no-arbitrage identity, moneyness, and the standard spread and combination structures.
+      - id: options.pricing
+        title: Pricing Models
+        summary: Risk-neutral valuation, Black-Scholes-Merton and binomial trees, and the real-world failure mode hiding behind each assumption.
+      - id: options.greeks
+        title: The Greeks & Hedging
+        summary: Delta, gamma, vega, theta and rho as a hedging vocabulary, and the gamma-theta trade every option position either pays or collects.
+        requires: [options.pricing]
+      - id: options.surface
+        title: The Volatility Surface
+        summary: Implied volatility as a quoting convention, equity skew and FX smile, term structure, and sticky-strike vs sticky-delta dynamics.
+        requires: [options.greeks]
+      - id: options.vol-products
+        title: Volatility Products
+        summary: VIX and its futures curve, variance and volatility swaps, vol ETPs and their roll drag, and the exotics (barriers, autocallables) worth recognising.
+
+  - id: fixed-income
+    order: 5
+    title: Rates & Credit
+    summary: The largest markets in the world — discounting, duration, funding, and the price of default.
+    children:
+      - id: fixed-income.curve
+        title: Yield Curve & Term Premium
+        summary: Spot, par and forward curves and their bootstrapping; level/slope/curvature as the three PCs; the expectations hypothesis, its failure, and the term premium that replaces it.
+      - id: fixed-income.risk
+        title: Duration & Convexity
+        summary: Duration, DV01, convexity and key-rate exposures — the units a rates desk speaks in and the hedges they imply.
+        requires: [fixed-income.curve]
+      - id: fixed-income.instruments
+        title: Government Bonds & Swaps
+        summary: Bills, notes and bonds; futures with conversion factors and the cheapest-to-deliver option; the cash-futures basis trade; swaps, OIS discounting and the LIBOR-to-SOFR transition.
+      - id: fixed-income.funding
+        title: Repo & Funding Markets
+        summary: Repo and reverse repo, collateral and haircuts, money-market rates, and funding spreads as the market's stress gauge.
+      - id: fixed-income.credit
+        title: Corporate Credit & CDS
+        summary: Corporate bonds and spread measures (G-spread, Z-spread, OAS), ratings and seniority, CDS mechanics and indices, and the CDS-bond basis.
+      - id: fixed-income.credit-premium
+        title: The Credit Risk Premium
+        summary: The credit spread puzzle — decomposing a spread into expected default, illiquidity, and genuine risk compensation, and credit's equity-like factor exposure.
+        requires: [fixed-income.credit]
+
+  - id: fx
+    order: 6
+    title: Foreign Exchange
+    summary: The deepest and most decentralised market, priced almost entirely off interest rate differentials.
+    children:
+      - id: fx.mechanics
+        title: Spot, Forwards & FX Swaps
+        summary: Quoting and settlement conventions, outright forwards and FX swaps, NDFs, and the dealer/ECN structure of a 24-hour OTC market.
+      - id: fx.parity
+        title: Parity Conditions & the Basis
+        summary: Covered interest parity as arbitrage, uncovered parity as a failed prediction, the forward premium puzzle, and the post-2008 cross-currency basis.
+      - id: fx.drivers
+        title: Currency Drivers
+        summary: PPP and real exchange rates, terms of trade, pegs and intervention, EM vs G10 behaviour, and the dollar as a global risk factor.
+
+  - id: crypto
+    order: 7
+    title: Crypto Markets
+    summary: A young asset class with familiar premia and thoroughly unfamiliar plumbing.
+    children:
+      - id: crypto.instruments
+        title: Spot, Perps & Crypto Derivatives
+        summary: Spot venues, perpetual swaps and the funding-rate mechanism, dated futures and their basis, and the options market's shape.
+      - id: crypto.structure
+        title: Crypto Market Structure
+        summary: Centralised vs decentralised venues, AMMs and impermanent loss, MEV and the public mempool, liquidation cascades, exchange credit risk, and what on-chain data exposes that TradFi hides.
+      - id: crypto.premia
+        title: Crypto Return Drivers
+        summary: Funding and basis carry, cross-sectional and time-series momentum, and the open question of which equity-style factors survive in a market this reflexive.
+        requires: [futures.term-structure]
+
+  - id: microstructure
+    order: 8
+    title: Market Microstructure
+    summary: Who is on the other side, what a quote costs to make, and how a price actually forms.
+    children:
+      - id: microstructure.participants
+        title: Traders & Their Motives
+        summary: Harris's taxonomy — informed, value, news and utilitarian traders, dealers, front-runners and bluffers — and why each one is at the table.
+      - id: microstructure.order-book
+        title: Orders & the Limit Order Book
+        summary: Order types, price-time priority and matching, continuous trading vs call auctions, and quote-driven vs order-driven market designs.
+      - id: microstructure.spread
+        title: Spreads & Adverse Selection
+        summary: The three components of the bid-ask spread, Glosten-Milgrom adverse selection and Kyle's lambda, and why a resting quote is a free option written to the informed.
+        requires: [microstructure.order-book]
+      - id: microstructure.liquidity
+        title: Liquidity & Price Impact
+        summary: Liquidity as tightness, depth, immediacy and resiliency; the square-root impact law; temporary vs permanent impact and order-flow imbalance as a price signal.
+      - id: microstructure.market-making
+        title: Market Making & HFT
+        summary: The economics of supplying liquidity — inventory risk, queue position, rebates — the HFT strategy families, and what flash events reveal about them.
+
+  - id: factors
+    order: 9
+    title: Factor Foundations
+    summary: The grammar of systematic returns — what a factor is, which models are canonical, and how much of the zoo is real.
+    children:
+      - id: factors.models
+        title: Asset Pricing Models
+        summary: A factor as a long-short portfolio, characteristics vs covariances, and the lineage CAPM to Fama-French 3, Carhart 4, FF5, the q-factor model and mispricing factors.
+      - id: factors.rationale
+        title: Why Premia Exist
+        summary: The three defences of any premium — risk compensation, behavioural bias, limits to arbitrage — and how to argue which one your signal is actually standing on.
+        requires: [foundations.efficiency]
+      - id: factors.zoo
+        title: The Factor Zoo & Decay
+        summary: Harvey-Liu-Zhu's multiple-testing hurdle, Hou-Xue-Zhang's replication failures, McLean-Pontiff's post-publication decay, and open-source asset pricing as the reality check.
+        requires: [factors.models]
+      - id: factors.cycles
+        title: Factor Cycles, Crowding & Timing
+        summary: Factor drawdowns and cyclicality, crowding and capacity limits, and the timing debate between valuation spreads and "factor timing is hard".
+
+  - id: momentum
+    order: 10
+    title: Momentum & Trend
+    summary: The premium that should not exist and refuses to die, in its cross-sectional and time-series forms.
+    children:
+      - id: momentum.cross-sectional
+        title: Cross-Sectional Momentum
+        summary: 12-1 relative strength, industry and residual momentum, the under-reaction story, and the momentum crashes that follow bear-market rebounds.
+      - id: momentum.trend
+        title: Time-Series Momentum & Trend Following
+        summary: TSMOM and managed futures across asset classes, the lookback-straddle payoff behind the crisis-alpha claim, and the whipsaw cost of manufacturing that convexity.
+        requires: [futures.term-structure]
+      - id: momentum.fundamental
+        title: Fundamental Momentum
+        summary: Post-earnings-announcement drift, analyst revisions and earnings momentum — price momentum's slower-moving fundamental cousin.
+
+  - id: value
+    order: 11
+    title: Value & Mean Reversion
+    summary: Paying less than something is worth, and betting that stretched prices snap back.
+    children:
+      - id: value.equity
+        title: Equity Value
+        summary: Book-to-market and HML, alternative multiples, the intangibles critique, the value spread, and the 2018-2020 drawdown that reopened the argument.
+      - id: value.cross-asset
+        title: Value Across Assets
+        summary: Value everywhere — real yields in bonds, PPP in currencies, five-year reversal in commodities, and index-level equity value.
+        requires: [value.equity]
+      - id: value.reversal
+        title: Reversal & Statistical Arbitrage
+        summary: Short-horizon reversal as paid liquidity provision, long-horizon reversal, and cointegration-based pairs trading and stat arb.
+
+  - id: carry
+    order: 12
+    title: Carry
+    summary: Ilmanen's third pillar — the return you earn if absolutely nothing moves.
+    children:
+      - id: carry.concept
+        title: Carry as a Concept
+        summary: Carry defined as expected return under an unchanged price, its split from roll-down and spot drift, and the cross-asset unification of Koijen et al.
+      - id: carry.rates-fx
+        title: FX & Rates Carry
+        summary: FX carry and the forward premium puzzle, curve carry and rolldown in rates, credit carry — and the crash risk that funds all three.
+        requires: [fx.parity]
+      - id: carry.commodities
+        title: Commodity Carry
+        summary: The theory of storage and convenience yield, Keynesian hedging pressure and normal backwardation, and roll return as the bulk of long-run commodity futures returns.
+        requires: [futures.term-structure]
+
+  - id: defensive
+    order: 13
+    title: Defensive, Quality & Size
+    summary: The premia paid for owning the boring, the profitable, and the small and illiquid.
+    children:
+      - id: defensive.low-risk
+        title: Low Risk & Betting Against Beta
+        summary: The low-volatility anomaly and BAB, leverage constraints and lottery preferences as explanations, and the beta-neutral construction the trade requires.
+        requires: [foundations.capm]
+      - id: defensive.quality
+        title: Quality & Profitability
+        summary: Quality Minus Junk, profitability and investment factors, accruals and earnings quality — the accounting-side cousin of low risk.
+      - id: defensive.size-liquidity
+        title: Size & Illiquidity
+        summary: The size premium and its shrinking evidence, size as a conditioner on other factors, and the illiquidity premium of Amihud and Pastor-Stambaugh.
+
+  - id: volatility
+    order: 14
+    title: Volatility as a Premium
+    summary: Selling insurance, buying convexity, and the persistent gap between implied and realised.
+    children:
+      - id: volatility.vrp
+        title: The Variance Risk Premium
+        summary: Why implied volatility persistently exceeds realised, who is paying for it, and the negatively skewed payoff of harvesting it.
+        requires: [options.surface]
+      - id: volatility.correlation
+        title: Correlation & Dispersion
+        summary: Implied correlation, index vs single-name volatility, dispersion trading, and correlation as the thing that spikes exactly when you need it not to.
+        requires: [options.surface]
+      - id: volatility.tail
+        title: Skew, Convexity & Tail Hedging
+        summary: The skew premium, long-volatility and tail-hedge strategies, and the bleed of carrying protection that pays once a decade.
+
+  - id: events
+    order: 15
+    title: Event-Driven Premia
+    summary: Returns earned around a dated corporate or calendar event rather than a state of the world.
+    children:
+      - id: events.merger-arb
+        title: Merger Arbitrage
+        summary: Deal spreads as compensation for break risk, cash vs stock deal hedging, and merger arb's short-put payoff profile.
+      - id: events.corporate
+        title: Issuance & Corporate Events
+        summary: Net share issuance and buybacks, IPO and SEO underperformance, spin-offs and index-driven forced trades.
+      - id: events.calendar
+        title: Calendar & Announcement Effects
+        summary: The scheduled-announcement premium around FOMC and macro releases, earnings-day risk, index rebalance flows and the vanishing index effect, and month and quarter-end cash demand.
+
+  - id: macro
+    order: 16
+    title: Macro & Cross-Asset
+    summary: The state variables every asset is a bet on, whether or not the strategy names them.
+    children:
+      - id: macro.growth-inflation
+        title: Growth & Inflation Regimes
+        summary: The growth/inflation quadrant framework, real yields and breakevens, and which assets win in each cell.
+      - id: macro.policy
+        title: Policy & Liquidity
+        summary: The central bank reaction function, QE and QT, fiscal shocks, and reading the priced policy path off the front of the curve.
+        requires: [fixed-income.curve]
+      - id: macro.cross-asset
+        title: Stock-Bond Correlation & Allocation
+        summary: The stock-bond correlation, why inflation volatility flips its sign, and what a positive correlation does to 60/40 and to levered risk parity.
+
+  - id: regimes
+    order: 17
+    title: Regimes, Crowding & Crises
+    summary: How every premium behaves once the market stops behaving.
+    children:
+      - id: regimes.volatility
+        title: Volatility & Correlation Regimes
+        summary: Volatility clustering and the leverage effect, calm vs stressed states, asymmetric downside correlation and tail dependence — diversification thinning exactly when it is needed.
+      - id: regimes.crowding
+        title: Crowding & Deleveraging
+        summary: Crowded trades and forced-unwind spirals, funding vs market liquidity (Brunnermeier-Pedersen), and the August 2007 quant quake as the template.
+        requires: [microstructure.liquidity]
+      - id: regimes.crises
+        title: Crisis Case Studies
+        summary: LTCM, 2008, Volmageddon, the March 2020 dash for cash and the 2022 LDI spiral — each a lesson about which premium was really being harvested.
+
+  - id: alt-data
+    order: 18
+    title: Alternative Data & ML Signals
+    summary: The newest signal families — what they measure, how fast they decay, and what nonlinearity actually buys.
+    children:
+      - id: alt-data.families
+        title: Alternative Data Families
+        summary: Satellite, card transaction, web-scrape, app-usage and shipping data — what each proxies, its lag and coverage, and its capacity and decay profile.
+      - id: alt-data.text
+        title: Text & NLP Signals
+        summary: News sentiment, filings and earnings-call language as signals, and what text adds beyond the numbers already in the filing.
+      - id: alt-data.positioning
+        title: Positioning & Flow Signals
+        summary: CFTC commitments of traders, short interest, dealer gamma and the gamma flip, and fund flows — reading positioning as a level to fade against flow as a rate to follow.
+      - id: alt-data.ml
+        title: Machine Learning Signals
+        summary: What ML adds to a linear factor model — nonlinearity, interactions and wide predictor sets (Gu-Kelly-Xiu) — and the signal it cannot manufacture.
