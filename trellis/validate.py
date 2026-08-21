@@ -29,12 +29,15 @@ def validate(
     drills: list[Reading] | None = None,
     drill_errors: list[str] | None = None,
     clippings: dict | None = None,
+    cases: list[Reading] | None = None,
+    case_errors: list[str] | None = None,
 ) -> Report:
     report = Report(
         errors=list(card_errors) + list(reading_errors or []) + list(drill_errors or [])
+        + list(case_errors or [])
     )
 
-    for note in list(readings or []) + list(drills or []):
+    for note in list(readings or []) + list(drills or []) + list(cases or []):
         for node_id in note.nodes:
             if node_id not in skeleton.by_id:
                 report.errors.append(

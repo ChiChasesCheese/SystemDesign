@@ -39,13 +39,14 @@ class Reading:
     nodes: list[str]
     url: str = ""
     tags: list[str] = field(default_factory=list)
+    extra: dict = field(default_factory=dict)
 
     @property
     def link_target(self) -> str:
         return self.path.stem
 
 
-def parse_reading(path: str | Path) -> Reading:
+def parse_reading(path: str | Path, allowed_extra: frozenset[str] = frozenset()) -> Reading:
     path = Path(path)
     raw = path.read_text(encoding="utf-8")
     if not raw.startswith("---\n"):
@@ -66,7 +67,7 @@ def parse_reading(path: str | Path) -> Reading:
     tags = meta.get("tags", []) or []
     if not (isinstance(tags, list) and all(isinstance(t, str) for t in tags)):
         raise ReadingError(f"{path}: tags must be a list of strings")
-    unknown = set(meta) - {"nodes", "url", "tags", "title"}
+    unknown = set(meta) - {"nodes", "url", "tags", "title"} - set(allowed_extra)
     if unknown:
         raise ReadingError(f"{path}: unknown frontmatter keys {sorted(unknown)}")
 
@@ -80,15 +81,18 @@ def parse_reading(path: str | Path) -> Reading:
         nodes=list(nodes),
         url=str(meta.get("url", "") or ""),
         tags=list(tags),
+        extra={k: meta[k] for k in allowed_extra if k in meta},
     )
 
 
-def load_readings(readings_dir: str | Path) -> tuple[list[Reading], list[str]]:
+def load_readings(readings_dir: str | Path,
+                  allowed_extra: frozenset[str] = frozenset(),
+                  ) -> tuple[list[Reading], list[str]]:
     readings: list[Reading] = []
     errors: list[str] = []
     for path in sorted(Path(readings_dir).rglob("*.md")):
         try:
-            readings.append(parse_reading(path))
+            readings.append(parse_reading(path, allowed_extra))
         except ReadingError as exc:
             errors.append(str(exc))
     return readings, errors

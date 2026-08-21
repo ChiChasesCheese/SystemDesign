@@ -1,0 +1,32 @@
+# The quant research and trading platform, studied as a learning target.
+repo: ChiChasesCheese/Quant-Stroller
+ref: main
+
+harvest:
+  # Architecture rules that carry their own rationale — the densest decisions
+  # in the repository, and invisible to any heuristic that looks in docs/.
+  - path: .importlinter
+    kind: contracts
+
+  - path: docs/adr/*.md
+    kind: decisions
+
+  # Subject matter: the platform and its research methodology.
+  - path: docs/concepts/*.md
+    kind: subject
+    lens: quant-infra
+  - path: docs/deep/*.md
+    kind: subject
+    lens: quant-infra
+  - path: docs/architecture/*.md
+    kind: subject
+    lens: quant-infra
+
+  # Subject matter: what is traded and where returns come from.
+  - path: docs/catalog/*.md
+    kind: subject
+    lens: markets
+
+  # Compared against our own language, never imported.
+  - path: CONTEXT.md
+    kind: glossary

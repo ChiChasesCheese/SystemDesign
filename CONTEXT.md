@@ -89,3 +89,42 @@ The share of cards that have a road onward — an inline link, or a reading
 inherited from their node or its ancestors. Tracked because a card with no way
 deeper is a gap in the index.
 _Avoid_: link rate, source coverage
+
+### Ingesting a codebase
+
+**Codebase**:
+A repository studied as a learning target, declared by one `codebases/<name>.yaml`
+that maps its paths to what they hold. The repository itself stays where it is;
+nothing here is a fork of it.
+_Avoid_: source, project, target repo
+
+**Lens**:
+The angle a codebase is examined through — `system-design`, `low-level-design`,
+`quant-infra`, `markets`. A lens decides which skeleton an artefact attaches to
+and, more importantly, in whose vocabulary it gets rewritten.
+_Avoid_: perspective, view, angle
+
+**Harvest kind**:
+What a declared path holds, and therefore how it is treated: `contracts` and
+`decisions` become Cases, `subject` becomes readings and clippings, `glossary`
+is only compared against our own language.
+_Avoid_: category, type, material
+
+**Triage**:
+Deciding, artefact by artefact, which lens and which leaf a piece of a codebase
+belongs to and what it should become. Produces a proposal for review, never
+writes into the vault directly.
+_Avoid_: ingestion, import, classification
+
+**Case**:
+A decision taken from a codebase and rewritten in a lens's vocabulary, frozen at
+the commit it was read from. It attaches to an existing leaf as evidence — "a
+real system did this" — and is read like a reading. It is never a copy of the
+artefact and never restates it as a card.
+_Avoid_: example, sample, exhibit, snippet
+
+**Gap**:
+Either an artefact triage could not place — which is a proposal to grow the
+skeleton, not an error — or a leaf carrying no cards. Gaps are the point of
+mapping a codebase onto a skeleton authored independently of it.
+_Avoid_: miss, unmatched, hole

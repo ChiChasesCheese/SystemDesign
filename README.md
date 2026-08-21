@@ -4,6 +4,9 @@ Skeleton-constrained knowledge base. One YAML mind map defines the topics, their
 study order, and their prerequisite edges. Two kinds of content attach to its
 nodes, both plain Obsidian markdown:
 
+- **Cases** — decisions taken from a real codebase, rewritten in a lens's
+  vocabulary and attached to the leaf whose principle they instantiate. Evidence
+  for cards, never cards themselves. See [Studying a codebase](#studying-a-codebase).
 - **Cards** — atomic Q&A / cloze fragments for spare-time review; the build
   compiles them into an Anki `.apkg` you can re-import forever without duplicates.
 - **Readings** — long-form, authoritative material (papers, engineering-blog
@@ -16,13 +19,14 @@ Cards and readings reference each other with ordinary wikilinks, and every node'
 generated map note lists both — so the Obsidian graph connects topic ↔ reading ↔
 card.
 
-Ships with a **System Design** domain: a 66-node map (318 cards, 13 readings,
-every leaf covered), structured against DDIA 2nd edition's chapter framework
-and spanning the classic interview canon plus what the 2017-era resources
-miss — consensus, CRDTs, encoding & schema evolution, delivery semantics,
-idempotency/outbox/saga/ledger patterns, OLAP/lakehouse/batch/derived data,
-SLOs, multi-region, and AI-serving infrastructure. The `ddia-2e` reading note
-maps every DDIA chapter to its skeleton nodes.
+Ships with two domains. **System Design** — a 92-node map (391 cards, 72
+readings) structured against DDIA 2nd edition and spanning the interview canon
+plus what the 2017-era resources miss: consensus, CRDTs, encoding and schema
+evolution, delivery semantics, idempotency/outbox/saga/ledger, OLAP and
+lakehouse, SLOs, multi-region, AI serving. **Low-Level Design** — a 33-node map
+(125 cards) covering the machine-coding round: object modelling, SOLID as
+refactoring triggers, the GoF catalogue by intent, code smells, concurrency,
+and program structure. Every leaf in both is covered.
 
 ## Why a skeleton
 
@@ -101,11 +105,12 @@ by hand with the extension (point it at `<domain>/clippings/`) is picked up
 identically. Pages that are the resource itself (videos) or that hide behind
 JavaScript are skipped with a reason and stay web links.
 
-Clippings are **gitignored on purpose**: they are verbatim copies of other
-people's writing and this repo is public. They are personal and reproducible —
-`trellis clip` rebuilds them anywhere. To read them on a phone, sync the vault
-with Obsidian Sync or iCloud (a git clone won't carry ignored files); to commit
-them instead, make the repo private first and drop the ignore rule.
+Clippings **are committed**, because this repository is private and a clone is
+how the archive reaches a phone. They remain other people's writing: making the
+repository public again means removing them first (`git rm -r --cached
+vault/*/clippings` and restoring the ignore rule that is kept, commented, in
+`.gitignore`). They are reproducible either way — `trellis clip` rebuilds them
+anywhere.
 
 - **Anki**: import `dist/system-design.apkg`. After editing or adding cards,
   rebuild and re-import — note GUIDs are stable, so edits update in place and
@@ -184,6 +189,50 @@ trellis sync && trellis build
 One file per drill under `vault/<domain>/drills/`; same frontmatter as
 readings (`nodes` lists every topic the exercise exercises). Body: prompt,
 constraints, grading points, attempt log. Node map notes list their drills.
+
+## Studying a codebase
+
+A repository can be ingested as a learning target. It is *declared*, not
+discovered — the sharpest decisions in a real codebase are rarely where a
+heuristic would look (in the first one ingested, nine architecture rules with
+their rationale live in a lint config):
+
+```yaml
+# codebases/quant-stroller.yaml
+repo: ChiChasesCheese/Quant-Stroller
+ref: main
+harvest:
+  - path: .importlinter        # architecture rules -> Case
+    kind: contracts
+  - path: docs/adr/*.md        # decision records  -> Case
+    kind: decisions
+  - path: docs/concepts/*.md   # subject matter    -> reading + clipping
+    kind: subject
+    lens: quant-infra
+```
+
+```bash
+trellis triage quant-stroller --kinds decisions,contracts --lens system-design,low-level-design
+# hand proposals/quant-stroller.prompt.md to an LLM, save its JSON answer
+trellis accept proposals/quant-stroller.json
+```
+
+`triage` shallow-clones into a gitignored cache, pins the commit, and writes a
+prompt listing every artefact beside every leaf it could attach to. The LLM
+answers with a proposal; `accept` validates it against the skeletons and writes
+files all-or-nothing — the LLM never touches the vault.
+
+**A decision becomes a [Case](CONTEXT.md)**: rewritten in the lens's vocabulary,
+attached to the leaf whose principle it instantiates, frozen at the commit it
+was read from. Cases are evidence for cards, never cards themselves — a card
+asking "what did we decide about X" tests recall of your own conclusion and is
+worthless in an interview.
+
+**An artefact that fits no leaf is a `gap`**, not an error: it proposes growing
+the skeleton. That is why skeletons are authored from the field first and
+codebases are mapped onto them afterwards — see
+[ADR 0002](docs/adr/0002-skeletons-are-authored-from-the-field.md) and
+[ADR 0003](docs/adr/0003-a-codebase-enters-as-cases-and-subject-material.md).
 
 ## Adding a domain
 
