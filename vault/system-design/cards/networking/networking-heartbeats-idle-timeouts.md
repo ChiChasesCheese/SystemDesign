@@ -15,3 +15,27 @@ App-level heartbeats every ~30 s do two jobs:
 - **Refresh idle timers** in NATs, LBs, and proxies, which commonly kill connections idle for ~60 s.
 
 Heartbeat interval must therefore be shorter than the smallest idle timeout on the path.
+
+## Q zh
+为什么长生命周期连接需要应用级 ping/pong 当 TCP 已经有 keepalive？
+
+## A zh
+死对等体没有流量是纯沉默 — 与空闲无法区分。TCP keepalive 默认为**2 小时**，通常被中间盒禁用，并且对**应用**是否活着一无所知。
+
+应用级心跳每约 30 s 做两项工作：
+
+- **检测半开连接**（对等体崩溃、网络路径消失）在数秒内 — 缺少 N 个 pong → 关闭并回收套接字、注册表条目和队列。
+- **刷新 NAT、LB 和代理中的空闲定时器**，这些通常会杀死空闲约 60 s 的连接。
+
+心跳间隔因此必须短于路径上最小的空闲超时。
+
+为什么长连接需要应用级 ping/pong 当 TCP 已经有 keepalive？
+
+一个死对等体没有流量是纯粹的沉默 — 无法区分空闲。TCP keepalive 默认为 **2 小时**，通常被中间件禁用，关于*应用*是否活着什么都不说。
+
+每约 30 秒的应用级心跳做两个工作：
+
+- **检测半开连接**（对等体崩溃、网络路径消失）在数秒内 — 错过 N 个 pong → 关闭并回收套接字、registry 项、队列。
+- **刷新空闲计时器**在 NAT、LB 和代理中，通常杀死空闲约 60 秒的连接。
+
+心跳间隔因此必须比路径上最小的空闲超时更短。

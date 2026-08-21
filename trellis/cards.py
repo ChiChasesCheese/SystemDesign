@@ -93,11 +93,17 @@ def _sections(body: str) -> tuple[str, dict[str, str]]:
     out: dict[str, str] = {}
     for i, mark in enumerate(marks):
         end = marks[i + 1].start() if i + 1 < len(marks) else len(body)
-        out[mark.group(1).strip().lower()] = body[mark.end():end].strip()
+        name = mark.group(1).strip().lower()
+        if name in out:
+            # Two writers appending a translation to the same card would
+            # otherwise leave one silently shadowing the other.
+            raise CardError(f"repeated section '## {mark.group(1).strip()}'")
+        out[name] = body[mark.end():end].strip()
     return preamble, out
 
 
-def _translations(sections: dict[str, str], path: Path, cloze: bool) -> dict:
+def _translations(sections: dict[str, str], path: Path, cloze: bool,
+                  sections_text: str = "") -> dict:
     """Language variants written beside the English body: `## Q zh` and
     `## A zh` for a qa card, `## zh` for a cloze. English is never
     replaced, so a translation can always be redone or dropped."""
@@ -122,9 +128,47 @@ def _translations(sections: dict[str, str], path: Path, cloze: bool) -> dict:
         missing = ({"question", "answer"} if not cloze else {"text"}) - set(parts)
         if missing:
             raise CardError(f"{path}: {lang} translation is missing {sorted(missing)}")
-        if cloze and not _CLOZE_RE.search(parts["text"]):
-            raise CardError(f"{path}: {lang} cloze translation has no {{{{c1::...}}}} deletion")
+        if cloze:
+            _check_cloze_faithful(sections_text, parts["text"], lang, path)
     return langs
+
+
+_CLOZE_FULL_RE = re.compile(r"\{\{c(\d+)::(.*?)\}\}", re.DOTALL)
+_NUMBER_RE = re.compile(r"\d+(?:[.,]\d+)*")
+
+
+def _check_cloze_faithful(english: str, translated: str, lang: str, path: Path) -> None:
+    """A translated cloze must test exactly what the English one tests.
+
+    Prose inside a deletion may be translated — an answer you are meant to
+    produce should be in the language you are studying in. What may not
+    change is which deletions exist and the numbers inside them: a dropped
+    deletion silently removes a probe, and a re-worded quantity teaches
+    something false. Both were produced by translation models in practice,
+    which is why this is enforced rather than asked for.
+    """
+    src = _CLOZE_FULL_RE.findall(english)
+    dst = _CLOZE_FULL_RE.findall(translated)
+    if not dst:
+        raise CardError(f"{path}: {lang} cloze translation has no {{{{c1::...}}}} deletion")
+    src_idx = sorted({i for i, _ in src})
+    dst_idx = sorted({i for i, _ in dst})
+    if src_idx != dst_idx:
+        raise CardError(
+            f"{path}: {lang} translation has deletions {dst_idx} but the English "
+            f"card has {src_idx} — a translation may not add or drop a probe"
+        )
+    by_index: dict[str, str] = {}
+    for i, text in dst:
+        by_index[i] = by_index.get(i, "") + " " + text
+    for i, text in src:
+        want = set(_NUMBER_RE.findall(text))
+        missing = sorted(want - set(_NUMBER_RE.findall(by_index.get(i, ""))))
+        if missing:
+            raise CardError(
+                f"{path}: {lang} deletion c{i} lost the number(s) {missing} — "
+                "quantities inside a deletion are the answer and must survive"
+            )
 
 
 def _split_qa(sections: dict[str, str], path: Path) -> tuple[str, str]:
@@ -162,13 +206,16 @@ def parse_card(path: str | Path) -> Card:
         tags=list(tags),
         source=str(meta.get("source", "") or ""),
     )
-    preamble, sections = _sections(body)
+    try:
+        preamble, sections = _sections(body)
+    except CardError as exc:
+        raise CardError(f"{path}: {exc}") from None
     if card_type == "qa":
         card.question, card.answer = _split_qa(sections, path)
         card.tr = _translations(sections, path, cloze=False)
     else:
         body = preamble
-        card.tr = _translations(sections, path, cloze=True)
+        card.tr = _translations(sections, path, cloze=True, sections_text=preamble)
         if not body:
             raise CardError(f"{path}: empty cloze body")
         if not _CLOZE_RE.search(body):

@@ -13,3 +13,23 @@ gRPC's four call types — match each to its use, and name the operational cavea
 - **Bidirectional**: chat, sync protocols, interactive sessions.
 
 Caveat: a stream lives on one HTTP/2 connection, so it **pins to one backend** for its lifetime — draining and rebalancing need max-connection-age or app-level reconnects ([[traffic-http2-connection-pinning]]).
+
+## Q zh
+gRPC 的四种调用类型 — 将各自匹配到其用途，并命名长连接流创建的运维警告。
+
+## A zh
+- **一元**：普通请求/响应 — 默认。
+- **服务器流**：订阅和源 — 用推送增量替代客户端轮询。
+- **客户端流**：上传和遥测 — 将许多消息批处理为一个调用、单一响应。
+- **双向**：聊天、同步协议、交互式会话。
+
+警告：一个流生存在一个 HTTP/2 连接上，所以它**在其生命周期内固定在一个后端** — 排空和重新平衡需要 max-connection-age 或应用级重连接（[[traffic-http2-connection-pinning]]）。
+
+gRPC 的四种调用类型 — 将每种与其用途匹配，并命名长生命周期流创建的运维警告。
+
+- **Unary**：普通请求/响应 — 默认值。
+- **Server-streaming**：订阅和数据源 — 用推送增量替换客户端轮询。
+- **Client-streaming**：上传和遥测 — 将许多消息批处理为一个调用，单个响应。
+- **Bidirectional**：聊天、同步协议、交互式会话。
+
+警告：流存在于一个 HTTP/2 连接上，所以它在其生命周期内**固定到一个后端** — 耗尽和重新平衡需要 max-connection-age 或应用级重连（[[traffic-http2-connection-pinning]]）。

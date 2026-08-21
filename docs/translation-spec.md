@@ -37,9 +37,15 @@ Leaderless replication needs {{c1::W + R > N}} to guarantee read-your-writes.
 ## Rules
 
 1. **Never touch the frontmatter or the English sections.** Append only.
-2. **Keep the cloze deletions byte-identical** — `{{c1::...}}` including what is
-   inside it. Translate the prose around them. The deletion is the answer being
-   tested; changing it changes the card.
+2. **A cloze translation must test exactly what the English one tests.** Prose
+   inside a deletion *should* be translated — an answer you are meant to produce
+   belongs in the language you are studying in. Two things may not change, and
+   `trellis validate` rejects the card if they do:
+   - **The set of deletions.** If the English card has `c1 c2 c3`, so does the
+     Chinese one. Dropping `c3` silently deletes a probe; adding `c4` invents
+     one. This is the single most common failure — check it before saving.
+   - **The numbers inside a deletion.** `~0.5 ms` stays `~0.5 ms`; `W + R > N`
+     stays `W + R > N`. A re-worded quantity teaches something false.
 3. **Technical terms stay in English.** Write natural Chinese around them:
    quorum、write skew、idempotency key、LSM-tree、outbox、backpressure、
    implementation shortfall. On a term's first appearance in a card you may

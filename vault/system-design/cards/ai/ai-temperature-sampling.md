@@ -13,3 +13,14 @@ The model outputs a **probability distribution over next tokens**; the sampler p
 - **Higher (0.7–1)**: brainstorming, creative drafts, generating diverse candidates.
 
 It is a dial on the **sampler**, not the model — no request-time setting makes the model "know" more.
+
+## Q zh
+LLM 请求上的 `temperature` 参数实际上控制什么，何时设置低 vs 高？
+
+## A zh
+模型输出 **下一个 token 上的概率分布**；采样器选择一个。温度重塑该分布：**0 ≈ 总是选择最可能的 token**（接近确定性 — 不保证在运行中相同），**更高的值展平它** 所以不太可能的 token 被选择更多，给出多样性和更多脱轨。`top_p` 是一个兄弟旋钮，切断不太可能的尾部。
+
+- **低（0–0.3）**：提取、分类、代码、工具调用、eval — 任何你验证或比较的。
+- **更高（0.7–1）**：头脑风暴、创意草稿、生成多样候选。
+
+它是 **采样器** 上的旋钮，而不是模型 — 没有请求时间设置使模型"知道"更多。

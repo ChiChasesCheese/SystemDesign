@@ -17,3 +17,14 @@ Check:
 4. **Transaction/locality alignment** — rows that must be mutated together (order + order_items) hash to the same partition, so you never need a distributed transaction.
 
 Interview move: state the dominant query and the atomicity unit *first*, then derive the key from them.
+
+## Q zh
+为什么选择分片键是一个单向门？
+
+## A zh
+分片键决定数据如何分布。一旦部署后：
+- 改变它需要**重新分片** — 移动所有数据到新分片（停机或复杂的在线迁移）。
+- 坏选择会导致**热点**（某些分片承载大部分负载）。
+- 不能后来"添加"分片键（已经存储的数据没有新维度）。
+
+单向性：决定后很难更改而不显著中断服务。关键选择点 — 系统设计时必须仔细考虑访问模式和增长。

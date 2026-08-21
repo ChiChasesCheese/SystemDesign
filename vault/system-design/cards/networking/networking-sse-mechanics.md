@@ -11,3 +11,19 @@ Two built-in SSE features that you'd otherwise hand-build on raw WebSockets?
 - **Plain HTTP transport**: works through proxies, LBs, and HTTP/2 multiplexing with normal auth headers — no protocol upgrade, no special infra.
 
 Limits to state alongside: one direction only (server→client), text frames only.
+
+## Q zh
+两个内置 SSE 特性，否则你会在原始 WebSocket 上手工构建？
+
+## A zh
+- **自动重连接带恢复**：浏览器在下降时重连并在 `Last-Event-ID` 中发送最后接收的事件 id，所以服务器可以重放丢失的内容。
+- **普通 HTTP 传输**：通过代理、LB 和 HTTP/2 多路复用工作带正常身份验证头 — 没有协议升级、没有特殊基础设施。
+
+限制旁边的状态：单向（服务器→客户端）、仅文本帧。
+
+两个内置的 SSE 特性，你否则会在原始 WebSocket 上手工构建？
+
+- **自动重连并恢复**：浏览器在断开时重连并在 `Last-Event-ID` 中发送最后接收的事件 id，所以服务器可以重放错过的。
+- **普通 HTTP 传输**：通过代理、LB 和 HTTP/2 多路复用工作，带有普通 auth 头 — 无协议升级、无特殊基础设施。
+
+旁边的限制状态：仅一个方向（server→client）、仅文本帧。

@@ -13,3 +13,14 @@ Data files are **immutable**; a commit writes new data + a new metadata tree, th
 - **Writers** use optimistic concurrency: if the pointer moved since you read it, your CAS fails and you retry/rebase the commit.
 
 The entire ACID story reduces to one atomic pointer swap; everything else is immutable files.
+
+## Q zh
+对象存储没有 transaction。Iceberg/Delta 如何在顶部提供快照隔离和原子提交？
+
+## A zh
+数据文件是**不可变的**；提交写新数据 + 新元数据树，然后原子性地摆动单一**根指针** — 通过 catalog compare-and-swap 或条件 PUT（`If-None-Match`/`If-Match`，S3 现在支持）。
+
+- **Reader** 钉住他们开始的根，所以他们看到整个查询的一个一致快照 — 快照隔离来自不可变性的自由。
+- **Writer** 使用乐观并发：如果指针自读以来移动，你的 CAS 失败且你重试/rebase 提交。
+
+整个 ACID 故事减少到一个原子指针交换；其他所有是不可变文件。

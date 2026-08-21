@@ -13,3 +13,11 @@ A **phantom**: one transaction's write (an insert, or an update moving a row int
 - Real systems use **index-range (next-key) locks**: lock the index entries covering the searched range, including gaps, so a conflicting insert blocks (InnoDB next-key locking; serializable 2PL generally). No usable index → the lock degrades to the whole table.
 
 Same read-predicate-then-write shape as [[distributed-write-skew]], but on rows that don't exist yet.
+
+## Q zh
+什么是幻读？谓词锁如何防止它？
+
+## A zh
+**幻读**：事务重复相同的范围查询但得到不同的行数，因为另一个事务在该范围内插入了。例如：BEGIN; SELECT * FROM users WHERE age > 18; ... (另一个事务插入 age 21 的用户) ... SELECT * FROM users WHERE age > 18; 返回不同的行。
+
+**谓词锁**：lock 不是单个行而是查询谓词（age > 18）。如果事务声明对该范围感兴趣，插入必须检查是否冲突。实现困难：需要跟踪所有活跃谓词并在插入时检查。大多数数据库改用范围锁或重复读隔离级别（MVCC）。

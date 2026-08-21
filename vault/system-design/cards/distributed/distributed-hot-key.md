@@ -14,3 +14,16 @@ Adding shards rebalances *keys*, but all this load is on **one key** — it stil
 - Isolate: move the hot key/tenant to its own dedicated partition or handling path.
 
 Detection matters: per-key traffic metrics, because salting everything makes all reads scatter-gather.
+
+## Q zh
+热 key 是什么，会导致什么问题？
+
+## A zh
+**热 key**：某个 key 被访问频率远高于平均，如明星用户、热点新闻的阅读量。
+
+**问题**：
+- **分片过载**：该 key 所在分片的 CPU 和网络流量爆炸，成为性能瓶颈。
+- **缓存失效**：缓存一旦过期，大量并发请求打到存储→缓存击穿。
+- **副本不堪一击**：若热 key 所在副本故障，无其他副本承载该 key。
+
+**根本原因**：分片键选择不当，或业务自身的幂律分布（某些用户/内容远比其他受欢迎）。

@@ -17,3 +17,18 @@ Where it goes wrong:
 - **Coverage is thin in modern stacks**: HTTP/gRPC services, most cloud-managed datastores, and Kafka do not implement XA at all — so the pattern doesn't even apply to the microservice case people reach for it in.
 
 Modern default: outbox + idempotent consumers for DB↔broker, sagas for cross-service workflows.
+
+## Q zh
+XA（两阶段提交）在实践中为什么很少使用？
+
+## A zh
+**理论上**：XA 协调原子提交跨越多个数据库。
+
+**实践中的问题**：
+- **阻塞** — 参与者锁定资源直到协调器决定，长时间持有锁。
+- **协调器故障** — 如果协调器在第一阶段后崩溃，参与者冻结。
+- **性能** — 三轮（准备、承诺、确认）很慢，特别是跨地理位置。
+- **事务长度** — 典型 XA 事务长于 HTTP 请求；现代应用不能等。
+- **协调器成为瓶颈** — SPOF 和吞吐量限制。
+
+现代替代：Sagas（最终一致，无阻塞）或许多数据库中单主复制（所有分片通过主协调）。

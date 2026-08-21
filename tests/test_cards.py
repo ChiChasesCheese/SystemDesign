@@ -130,3 +130,31 @@ def test_language_does_not_change_a_cards_identity(tmp_path):
     en = parse_card(write(tmp_path, "my-card.md", QA))
     zh = parse_card(write(tmp_path, "my-card.md", TRANSLATED))
     assert genanki.guid_for(f"trellis:{en.id}") == genanki.guid_for(f"trellis:{zh.id}")
+
+
+@pytest.mark.parametrize("zh, fragment", [
+    # what a cheap model actually did to these cards, in miniature
+    # dropped two probes
+    ("公式是 {{c1::W + R > N}}。", "deletions \\['1'\\] but the English card has"),
+    # invented a fourth probe
+    ("{{c1::W + R > N}}，容忍 {{c2::一个}}，{{c3::3}} 副本，{{c4::多余的}}。",
+     "may not add or drop"),
+    # re-worded a quantity into prose
+    ("需要 {{c1::W + R > N}}，容忍 {{c2::一个}} 节点，在 {{c3::三}} 副本下。",
+     "lost the number"),
+])
+def test_a_translation_may_not_change_what_a_cloze_tests(tmp_path, zh, fragment):
+    body = ("---\nid: c\nnode: alpha.one\ntype: cloze\n---\n"
+            "Needs {{c1::W + R > N}}, tolerating {{c2::one}} node down "
+            "at {{c3::3}} replicas.\n\n## zh\n" + zh + "\n")
+    with pytest.raises(CardError, match=fragment):
+        parse_card(write(tmp_path, "c.md", body))
+
+
+def test_a_faithful_cloze_translation_passes(tmp_path):
+    body = ("---\nid: c\nnode: alpha.one\ntype: cloze\n---\n"
+            "Needs {{c1::W + R > N}}, tolerating {{c2::one}} node down "
+            "at {{c3::3}} replicas.\n\n## zh\n"
+            "需要 {{c1::W + R > N}}，在 {{c3::3}} 副本下容忍 {{c2::一个}} 节点故障。\n")
+    card = parse_card(write(tmp_path, "c.md", body))
+    assert "{{c2::一个}}" in card.render("zh")[0]
