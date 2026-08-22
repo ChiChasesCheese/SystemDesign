@@ -18,5 +18,5 @@ Design the idempotency-key flow for a `POST /payments` endpoint (Stripe-style). 
 ## A zh
 - **客户端生成** key（UUID），*每个操作意图* — 一个 key 对应一次"扣这个购物车"，在该意图的所有重试间复用，绝不是每个 HTTP 尝试一个。
 - 服务器在与副作用**同一事务**内，将 key 插入 keyed store（unique 约束），记录请求哈希，完成时记录**序列化响应**。
-- 用同一 key 重试返回**存储的原始响应**（相同状态码和请求体）— 不重新执行。
+- 用同一 key 重试返回**存储的原始响应**（相同状态码和响应体）— 不重新执行。
 - 如果重试的请求体与存储的哈希不同，拒绝返回 422：相同 key + 不同参数是客户端 bug，不是重试。

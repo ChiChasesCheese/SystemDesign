@@ -17,4 +17,4 @@ What systems achieve is **effectively-exactly-once *processing***: at-least-once
 ## A zh
 不能 — **exactly-once *投递*在不可靠网络上是不可能的**：如果 ack 丢失，发送者无法区分"已处理，ack 丢失"和"从不处理"，所以必须选择重试（重复）或不重试（丢失）。
 
-系统实现的是**事实上 exactly-once *处理*：at-least-once 投递 + consumer 端去重（idempotency key、transactional offsets-plus-output 如 Kafka transactions、或天然幂等的写）。保证存在于端点，不在管道中。
+系统实现的是**事实上 exactly-once *处理***：at-least-once 投递 + consumer 端去重（idempotency key、transactional offsets-plus-output 如 Kafka transactions、或天然幂等的写）。保证存在于端点，不在管道中。
