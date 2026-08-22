@@ -16,18 +16,13 @@ Steps: **detect** leader death (heartbeat timeout), **elect** the most up-to-dat
 That's why teams often keep failover **manual** for the system of record.
 
 ## Q zh
-故障转移的机制是什么？哪些问题可能发生？
+走一遍主从复制中的自动 leader 故障转移，并说出三个经典的隐患。
 
 ## A zh
-**流程**：
-1. 检测主库故障（心跳超时）。
-2. 选举新主库（从从库中选，可能丢失未复制的数据）。
-3. 将从库提升为主库。
-4. 更新客户端和从库的连接配置。
+步骤：**检测** leader 死亡（心跳超时）、**选举**最新的 follower 作为新 leader、**重新配置**让客户端和 follower 都指向它。
 
-**问题**：
-- **数据丢失**：未复制的写操作会丢失（async replication）。
-- **脑裂（split-brain）**：旧主库网络隔离但仍在运行，新主库也在运行→两个主库同时接收写，冲突。
-- **客户端不一致**：某些客户端先知道新主库，某些仍连着旧主库，导致暂时的写不一致。
+- **写丢失**：在异步复制下，新 leader 可能缺少旧 leader 最后确认过的写入；丢弃这些写入会破坏任何已经消费过它们的东西（GitHub 的一次事故：复用的自增 ID 导致 Redis 缓存把数据提供给了错误的用户）。
+- **脑裂（split brain）**：旧 leader 恢复后仍然以为自己是 leader；如果没有 fencing/STONITH，两边都会接受写入并各自分叉。
+- **超时选择不当**：太短 → 恰好在系统因负载变慢时触发不必要的故障转移，让故障更严重；太长 → 停机时间更长。
 
-缓解：使用 quorum 确认、fencing token、以及快速故障检测。
+这就是为什么很多团队对于系统记录（system of record）常常保留**手动**故障转移。

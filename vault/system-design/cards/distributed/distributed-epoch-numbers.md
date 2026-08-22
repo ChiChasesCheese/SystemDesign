@@ -15,13 +15,12 @@ Epochs solve "**which of two would-be leaders is current**" without relying on c
 The safety trick is that the two quorums **must intersect**: if a new leader was elected, every commit quorum of the old leader contains at least one node that has seen the higher epoch and therefore **rejects the old leader's proposals**. So a deposed leader can't commit anything behind the new leader's back — the generic mechanism behind Raft terms, Paxos ballots, and Viewstamped Replication views ([[distributed-raft-guarantees]] is the Raft instantiation).
 
 ## Q zh
-纪元号（epoch number）在分布式系统中的作用是什么？
+每个共识协议都带有一个纪元号（term/ballot/view），并运行两次 quorum 检查。纪元号解决了什么问题？这两次 quorum 是怎样相互作用的？
 
 ## A zh
-**作用**：标记系统状态的一个版本，用于检测过期的消息、检测新旧领导者的冲突。
+纪元号解决的是"两个候选 leader 中哪个才是当前的"这个问题，且不依赖时钟：在一个纪元内最多只有一个 leader，而**更高的纪元总是压过更低的**。
 
-**例子**：Raft 中的 term：每次选举产生新 term，新领导者会拒绝或覆盖旧 term 的消息。Dynamo 中的版本向量：包含纪元号和逻辑时钟，用于检测并发写。
+- **Quorum 1 —— 选举**：候选人为自己的纪元收集多数票。
+- **Quorum 2 —— 提交**：leader 为它提出的每个值获得多数确认。
 
-**防止的问题**：旧领导者在网络恢复后继续发送消息→用 term 检测并丢弃。客户端从过期副本读到旧数据→检测 epoch 确认最新。
-
-本质是用单调递增的数字将系统演化分阶段，阶段内操作有序，阶段间可以清晰界分。
+安全性的关键在于这两个 quorum **必须相交**：如果选出了新 leader，那么旧 leader 的每一个提交 quorum 里都至少有一个节点已经见过更高的纪元，因此会**拒绝旧 leader 的提议**。所以一个被废黜的 leader 无法背着新 leader 偷偷提交任何东西——这正是 Raft 的 term、Paxos 的 ballot、Viewstamped Replication 的 view 背后的通用机制（[[distributed-raft-guarantees]] 是 Raft 的具体实现）。

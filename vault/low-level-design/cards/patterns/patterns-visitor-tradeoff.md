@@ -15,27 +15,12 @@ Visitor flips the extension axis:
 Precondition: the element hierarchy is **stable** and the set of operations keeps growing (compilers, document models). If new element types arrive often, visitor is the wrong trade — use plain polymorphic methods. Mechanism worth naming: `element.accept(visitor)` → `visitor.visit(this)` is **double dispatch**, selecting behavior on both runtime types.
 
 ## Q zh
-Visitor 是什么，它在结构中增加什么，它何时被证明是值得的？
+Visitor 让一件事变容易、另一件事变难。分别是哪两件，使用它之前类层次必须满足什么性质？
 
 ## A zh
-**Visitor**：给树（AST、菜单、场景图）上的每个节点**注入新的操作**，而不修改节点类。
+Visitor 把扩展轴翻转了过来：
 
-```java
-interface Expr { Object accept(Visitor v); }
-class BinOp implements Expr { 
-    Object accept(Visitor v) { return v.visit(this); }
-}
-```
+- **变容易：新增操作。** 在整个层次上加一个新操作（类型检查、格式化输出、在 AST 上求值）就是一个新的 visitor 类 —— 完全不用碰元素类。
+- **变难：新增元素类型。** 加一个新元素会迫使**每一个已有的 visitor** 都增加一个 `visit` 方法 —— 这正是"给每个子类加一个方法"的镜像。
 
-**增加的复杂性**：
-- 两种方法分派（`accept()` + `visit()`）。
-- 添加节点类型需要更新所有访问者。
-- 代码在访问者中分散。
-
-**何时值得**：
-- **许多独立操作**（打印、类型检查、代码生成）在**固定的树结构**上。
-- 操作**经常改变**；节点类型**很少**改变。
-- 你避免了「把所有逻辑塞进节点」的诱惑。
-
-**何时不值得**：
-- 几个操作或常添加新节点类型。直接在节点中放置方法。
+前提条件：元素层次是**稳定的**，而操作集合还在不断增长（编译器、文档模型）。如果新元素类型经常出现，visitor 就是错误的取舍 —— 用普通的多态方法。值得点名的机制：`element.accept(visitor)` → `visitor.visit(this)` 是 **double dispatch**，根据两个运行时类型共同选择行为。

@@ -13,23 +13,10 @@ Coffee add-ons modeled as subclasses: `CoffeeWithMilk`, `CoffeeWithMilkAndSugar`
 Fix: make the varying dimension a composed object — decorators wrapping a `Beverage`, or a list of `AddOn` components. Composition lets independent axes vary independently.
 
 ## Q zh
-当你在继承中添加第二维变化时会发生什么，为什么是个问题？
+把咖啡的配料建模成子类：`CoffeeWithMilk`、`CoffeeWithMilkAndSugar`、`CoffeeWithSoyMilkAndSugar`……这个层次为什么会腐烂，用组合怎么修？
 
 ## A zh
-你最终得到类爆炸：
-```
-Animal
-  ├─ Dog
-  │  ├─ ServiceDog (does service work)
-  │  └─ PetDog (doesn't do service work)
-  └─ Cat
-     ├─ ServiceCat
-     └─ PetCat
-```
+- **组合爆炸**：n 个相互独立的配料 ⇒ 最多 2^n 个子类，因为继承把所有变化轴都硬塞进了同一棵树。
+- 基类的每次改动都会沿树扩散（fragile base class）。
 
-问题：
-- N 维变化导致 M^N 个类
-- 每个新概念都强制修改层次结构
-- 违反开-闭原则：要添加新的维度，你必须修改现有的类
-
-解决方案：使用组合或特性而不是继承的额外级别。
+修法：把那个变化的维度变成被组合进来的对象 —— 用 decorator 包住一个 `Beverage`，或者持有一组 `AddOn` 组件。组合让相互独立的轴能够独立变化。

@@ -23,24 +23,20 @@ Fix: **make the invalid state unconstructable** — take every required collabor
 Same smell, larger scale: two calls that must happen in order across classes — merge them into one method that owns the sequence.
 
 ## Q zh
-什么是时间耦合，为什么它是个问题？
+```java
+var svc = new ReportService();
+svc.setStore(store);
+svc.init();
+svc.run();          // 少走一步就 NPE / IllegalStateException
+```
+说出这种耦合的名字、它的两个检测信号，以及修法。
 
 ## A zh
-时间耦合发生在方法必须以特定顺序调用时，但代码没有强制这个顺序。
+**Temporal coupling（时序耦合）** —— 正确性依赖于一个类型本身并未表达出来的调用顺序。信号：
 
-例子：
-```
-user.setEmail(new_email);  // 必须在 validate 之前
-user.validate();
-user.save();
-```
+- 方法开头是 `if (!initialized) throw new IllegalStateException(...)`。
+- 为对象"没它就不能工作"的东西提供 setter（`setStore`），也就是说构造函数留下了一个非法的对象。
 
-问题：
-- 顺序对调用者来说不是显而易见的
-- 没有编译时检查；错误直到运行时才显现
-- 难以重构或并行化
+修法：**让非法状态压根构造不出来** —— 所有必需的协作者都从构造函数进来（或者用一个校验后返回就绪对象的 builder），把 `init()` 的内容并进去。当阶段确实互相不同时，就把阶段编码进*类型*里：`Connection.open()` 返回一个 `OpenConnection`，而只有它才有 `query()`。
 
-解决方案：
-- 创建一个方法强制顺序：`user.updateAndValidateAndSave(new_email)`
-- 使用生成器（Builder）分阶段进行
-- 使用返回"下一步"对象的 API 指导调用者
+同一个坏味道的放大版：跨类的两次调用必须按顺序发生 —— 把它们合并成一个方法，由它拥有这个顺序。
