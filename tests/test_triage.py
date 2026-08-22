@@ -139,3 +139,31 @@ def test_a_card_offers_the_cases_on_its_leaf(project):
                          vault="vault", cases=cases)
     assert 'href="obsidian://open?vault=vault&file=cb-a-choice"' in html
     assert "A choice" in html
+
+
+GOOD_READING = {
+    "artefact": "subject:a-topic", "verdict": "reading", "lens": "demo",
+    "nodes": ["alpha.one"], "slug": "cb-a-topic", "title": "A Topic",
+    "body": "Why this is worth reading.", "path": "docs/adr/0001-a-choice.md",
+}
+
+
+def test_subject_matter_becomes_a_reading_with_the_file_clipped_beside_it(project):
+    written, errors, _ = accept(
+        _proposal(project, [GOOD_READING]), project, _skeletons(project), set())
+    assert errors == [] and len(written) == 2
+
+    reading = (project / "vault" / "demo" / "readings" / "cb-a-topic.md").read_text()
+    assert "nodes:" in reading and "alpha.one" in reading
+    assert "blob/abc123/docs/adr/0001-a-choice.md" in reading  # pinned permalink
+
+    clip = (project / "vault" / "demo" / "clippings" / "cb-a-topic-clip.md").read_text()
+    assert "source: https://github.com/" in clip
+    assert "# A choice" in clip          # the file's own text came along
+
+
+def test_a_reading_without_its_path_is_refused(project):
+    written, errors, _ = accept(
+        _proposal(project, [{**GOOD_READING, "path": ""}]),
+        project, _skeletons(project), set())
+    assert written == [] and any("name the artefact's path" in e for e in errors)

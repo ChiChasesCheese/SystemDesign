@@ -14,6 +14,8 @@ from __future__ import annotations
 
 import json
 import re
+
+import yaml
 from pathlib import Path
 
 from .cases import CASES_DIRNAME, write_case
@@ -165,20 +167,70 @@ def accept(
         if verdict == "case" and item.get("artefact") is None:
             errors.append(f"{where}: a case must name the artefact it came from")
             continue
-        staged.append((root / "vault" / lens / CASES_DIRNAME, item))
+        if verdict == "reading" and not item.get("path"):
+            errors.append(f"{where}: a reading must name the artefact's path "
+                          "in the codebase, so its text can be clipped")
+            continue
+        staged.append((lens, item))
 
     if errors:
         return [], errors, gaps
 
     written: list[Path] = []
-    for directory, item in staged:
-        written.append(write_case(
-            directory, item["slug"],
-            title=item["title"], nodes=item["nodes"],
-            codebase=codebase, ref=ref, artefact=item["artefact"],
-            body=item["body"],
-        ))
+    for lens, item in staged:
+        content = root / "vault" / lens
+        if item["verdict"] == "case":
+            written.append(write_case(
+                content / CASES_DIRNAME, item["slug"],
+                title=item["title"], nodes=item["nodes"],
+                codebase=codebase, ref=ref, artefact=item["artefact"],
+                body=item["body"],
+            ))
+        else:
+            written += _write_reading_with_clipping(
+                content, root, codebase, ref, item)
     return written, [], gaps
+
+
+def _write_reading_with_clipping(
+    content: Path, root: Path, codebase: str, ref: str, item: dict
+) -> list[Path]:
+    """Subject matter from a codebase becomes a reading like any other,
+    with the file itself clipped beside it — the same shape a clipped web
+    article takes, so map notes and card footers need no special case."""
+    from .clippings import CLIPPINGS_DIRNAME
+
+    slug, path_in_repo = item["slug"], item["path"]
+    url = (f"https://github.com/{item.get('repo', codebase)}/blob/{ref}/"
+           f"{path_in_repo}")
+
+    reading = content / "readings" / f"{slug}.md"
+    reading.parent.mkdir(parents=True, exist_ok=True)
+    front = yaml.safe_dump(
+        {"nodes": item["nodes"], "title": item["title"], "url": url,
+         "tags": item.get("tags") or ["codebase"]},
+        allow_unicode=True, sort_keys=False,
+    )
+    reading.write_text(f"---\n{front}---\n\n# {item['title']}\n\n{item['body'].strip()}\n",
+                       encoding="utf-8")
+
+    written = [reading]
+    source = root / ".trellis" / "codebases" / codebase / path_in_repo
+    if source.exists():
+        clip = content / CLIPPINGS_DIRNAME / f"{slug}-clip.md"
+        clip.parent.mkdir(parents=True, exist_ok=True)
+        body = source.read_text(encoding="utf-8")
+        if body.startswith("---\n"):  # drop the source file's own frontmatter
+            parts = body.split("---\n", 2)
+            body = parts[2] if len(parts) == 3 else body
+        clip_front = yaml.safe_dump(
+            {"title": item["title"], "source": url, "codebase": codebase,
+             "clipped": ref[:12]},
+            allow_unicode=True, sort_keys=False,
+        )
+        clip.write_text(f"---\n{clip_front}---\n\n{body.strip()}\n", encoding="utf-8")
+        written.append(clip)
+    return written
 
 
 def codebase_index(root: Path, name: str, domains: list[str]) -> str:
