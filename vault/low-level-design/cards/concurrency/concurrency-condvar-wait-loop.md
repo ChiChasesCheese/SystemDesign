@@ -17,28 +17,14 @@ and never `if (queue.isEmpty()) notEmpty.await();`? Two reasons.
 The loop re-tests the predicate *while holding the lock*, so you only proceed when the condition truly holds. Rule: wait is always inside a loop guarding the predicate.
 
 ## Q zh
-为什么条件变量 wait 必须在循环中？虚假唤醒是什么？
+为什么条件变量的等待必须写成
+```java
+while (queue.isEmpty()) { notEmpty.await(); }
+```
+而绝不能写成 `if (queue.isEmpty()) notEmpty.await();`？两个理由。
 
 ## A zh
-条件变量 wait 必须在循环中（Spurious Wakeups）：
+- **虚假唤醒（spurious wakeup）**：平台可能在根本没有信号的情况下唤醒一个等待者 —— POSIX 和 JVM 都允许这样做。
+- **等你真正运行时谓词可能又不成立了**：在信号发出和你重新拿到锁之间，另一个被唤醒的（或插队的）线程可能已经把那个元素消费掉了。`signalAll` 正是要唤醒一批必须重新检查的线程。
 
-```java
-while (!condition) {
-    condVar.wait();  // 不要 if (condition)
-}
-```
-
-原因：
-1. **虚假唤醒**：OS 有时在没有相应的 notify 时唤醒线程
-2. **竞态条件**：另一个线程可能在 notify 和 wait 方法返回之间改变条件
-3. **多个消费者**：一个 notify 可能唤醒多个等待线程，但只有一个应该继续
-
-例子：
-```
-消费者 1 等待
-消费者 2 等待
-生产者发送一个项目，notify 一个
-消费者 1 唤醒，但... 队列仍然是空的！（消费者 2 已经取走了它）
-```
-
-所以总是检查条件后唤醒。
+循环会在*持有锁的状态下*重新检验谓词，所以只有条件真正成立时你才会往下走。规则：wait 永远放在一个守护谓词的循环里。

@@ -15,34 +15,12 @@ There is **no happens-before edge** between the write and the reads: the write c
 Key point: this is a **visibility** bug, not an atomicity bug — the write happened, it just isn't guaranteed to be seen.
 
 ## Q zh
-为什么一个普通布尔标志在无锁代码中是陈旧的？
+线程 A 把 `running` 设成了 false，但那个在 `while (running) {}` 上循环的工作线程永远不停 —— 没有崩溃，也没有异常。为什么会这样，有哪两种修法？
 
 ## A zh
-普通变量没有 happened-before 保证：
+这个写和那些读之间**没有 happens-before 边**：写可能还压在 store buffer 里，而 JIT 甚至可能把这次读整个提到循环外面（它"证明"了 `running` 在本线程内不会变）。
 
-```java
-boolean done = false;
+- 修法一：把这个标志声明为 `volatile` / 原子类型 —— 每次读都能看到最新的写。
+- 修法二：在**同一把锁**下读写它（释放锁 → 获取锁 建立了顺序关系）。
 
-// 线程 1：
-done = true;
-
-// 线程 2（其他核上）：
-while (!done) { }  // 可能永远不会看到 true！
-```
-
-为什么：
-- 写入可能留在线程 1 的 L1 缓存中
-- 线程 2 从其自己的 L1 缓存中读取
-- 没有缓存一致性消息或内存屏障
-- Java 内存模型对普通变量没有保证
-
-修复：
-```java
-volatile boolean done = false;  // 强制缓存一致性
-```
-
-`volatile` 添加了内存屏障，强制每次读都查看最新值。
-
-其他修复：
-- 使用锁：`synchronized`
-- 使用 `AtomicBoolean`
+关键：这是一个**可见性** bug，不是原子性 bug —— 那次写确实发生了，只是不保证被看见。

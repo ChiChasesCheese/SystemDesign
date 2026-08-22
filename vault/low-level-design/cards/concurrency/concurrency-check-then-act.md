@@ -20,27 +20,17 @@ if (!map.containsKey(key)) {
 `volatile` cannot help here — it fixes visibility, not atomicity.
 
 ## Q zh
-什么是 check-then-act 竞态条件，如何修复它？
-
-## A zh
-模式：
-```
-if (cache.containsKey(key)) {        // 线程 1：检查
-    // ... 线程 2 现在删除了 key
-    return cache.get(key);            // 线程 1：行动 —— 获取 null！
+```java
+if (!map.containsKey(key)) {
+    map.put(key, createExpensive(key));
 }
 ```
+`map` 是 `ConcurrentHashMap`，所以每次调用都是线程安全的。bug 在哪，怎么修？
 
-TOCTOU 漏洞（检查时间到使用时间）：检查和使用之间有一个窗口。
+## A zh
+**Check-then-act 竞态**：两个线程都在对方 put 之前通过了检查，于是两个都创建了值，其中一个覆盖掉另一个。一个*复合*操作并不会因为每一步都原子就变得原子。
 
-修复：
-1. **原子操作**：在一次锁定中检查和行动
-   ```java
-   synchronized(cache) {
-       if (cache.containsKey(key)) {
-           return cache.get(key);
-       }
-   }
-   ```
-2. **使用原子方法**：`putIfAbsent`, `getOrDefault` 等
-3. **CAS 循环**：在检查失败时重试
+- 修法：换成一个原子操作 —— `computeIfAbsent(key, k -> createExpensive(k))`（或 `putIfAbsent`）。
+- 或者拿一把锁，同时罩住**检查和动作两步**。
+
+`volatile` 在这里帮不上忙 —— 它解决的是可见性，不是原子性。

@@ -14,13 +14,11 @@ That buys: replicas can accept writes **independently with no coordination**, sy
 The catch: convergence ≠ correctness — the merged result is whatever the type's semantics say (e.g. add-wins), which may not be what the business rule wanted.
 
 ## Q zh
-CRDT 是如何保证所有副本最终收敛的？
+CRDT 的合并函数必须具备哪些代数性质？这些性质换来了哪些操作上的自由？
 
 ## A zh
-**交换律、结合律、幂等性**：CRDT 操作满足交换律（顺序无关）和结合律（分组无关），任何两个副本只要应用了相同的操作集合（不论顺序），最终状态就相同。
+合并必须是**交换的**（顺序无关）、**结合的**（分组无关）、**幂等的**（对同一状态合并两次也没有影响）——形式化地说，状态构成一个 join-半格（join-semilattice），合并就是取最小上界（least-upper-bound）。
 
-**因果序列**：用版本向量或操作日志跟踪因果依赖，确保不重复应用操作。
+这换来的是：副本可以**完全不经协调、独立地接受写入**，可以**以任意顺序、经由任意拓扑同步，消息重复或重发也没关系**，并且一旦看到相同的更新集合就能被证明收敛到同一状态。冲突是*由构造保证*被解决的，而不是先检测再上报处理。
 
-**最终对账**：通过反熵（全量交换）或 merkle tree，定期校验并补齐缺失的操作。
-
-关键：设计 CRDT 时操作必须天然具有幂等性和交换性。
+要注意：收敛不等于正确——合并出来的结果是这个类型的语义所决定的（例如 add-wins），而这未必是业务规则真正想要的。

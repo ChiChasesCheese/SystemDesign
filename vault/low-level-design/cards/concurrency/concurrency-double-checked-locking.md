@@ -21,30 +21,18 @@ Without `volatile`, the write `instance = new Expensive()` can be **reordered**:
 - Better in Java: the **holder-class idiom** (`static class H { static final Expensive I = new Expensive(); }`) — the classloader gives lazy init + safety with no locking code. An `enum` singleton works too.
 
 ## Q zh
-什么是双重检查锁定，为什么它在单线程中很危险？
-
-## A zh
-模式：
 ```java
-if (instance == null) {           // 第一次检查（无锁）
-    synchronized(lock) {
-        if (instance == null) {   // 第二次检查（有锁）
-            instance = new Foo();
-        }
+if (instance == null) {
+    synchronized (Lock.class) {
+        if (instance == null) instance = new Expensive();
     }
 }
 return instance;
 ```
+这段双重检查锁还有什么问题，两种正确的替代写法是什么？
 
-目标：避免在 singleton 初始化后每次都获取锁。
+## A zh
+没有 `volatile` 的话，`instance = new Expensive()` 这次写可能被**重排序**：引用在构造函数完成之前就被发布出去了。于是*第一次*（没加锁的）检查可能看到非 null，然后返回一个**构造了一半的对象**。
 
-危险：
-- 在 Java 5 之前，`instance` 必须是 `volatile`，否则另一个线程可能看到部分初始化的对象
-- 构造函数可能尚未完成，但 `instance != null` 已经为真
-- 编译器重新排序可能会暴露这个
-
-在现代 Java 中（5+）有效，如果：
-- 字段是 `volatile`
-- 或者使用更简单的方法（类初始化器、枚举）
-
-一般来说：避免这个模式。改用 eager 初始化、类初始化器或 holder 模式。
+- 修法：把 `instance` 声明为 **`volatile`**（volatile 的写→读禁止那种重排序）。
+- 在 Java 里更好的做法：**holder class 惯用法**（`static class H { static final Expensive I = new Expensive(); }`）—— 类加载器免费提供了延迟初始化加安全性，一行加锁代码都不用写。`enum` 单例同样可行。

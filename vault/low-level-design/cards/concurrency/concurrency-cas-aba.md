@@ -13,28 +13,10 @@ A lock-free stack pops by `compareAndSet(top, A, A.next)`. The CAS succeeds — 
 - In GC languages the classic node-reuse variant is rarer (a reachable A can't be reallocated), but logical ABA on values still bites.
 
 ## Q zh
-什么是 ABA 问题，为什么它在 CAS 中很危险？
+一个无锁栈用 `compareAndSet(top, A, A.next)` 来出栈。CAS 成功了 —— 栈却被搞坏了。发生了什么，怎么修？
 
 ## A zh
-ABA 问题：
-1. 线程读取值 A
-2. 线程执行一些工作
-3. 另一个线程将值改为 B，然后改回 A
-4. 第一个线程的 CAS 成功，尽管发生了中间改变
+**ABA 问题**：在读到 `top == A` 和执行 CAS 之间，另一个线程弹出了 A、弹出了 B，又把 A 压了回来（或者把一个*回收复用*的节点放在了 A 的地址上）。CAS 看到"还是 A"于是成功，但此时 `A.next` 指向的节点已经不在栈里了。
 
-例子（栈）：
-```
-Head -> [A] -> [B]
-线程 1 想弹出 A，读取 head = A
-线程 2 弹出 A，然后 push A 回来
-线程 1 的 CAS(head, A, B) 成功
-```
-
-危险：
-- 链表节点可能被重用或释放
-- 计数器可能溢出
-- 数据结构不变量被破坏
-
-解决方案：
-- 版本数：配对值和版本号（Versioned Reference）
-- 垃圾收集语言有较少的 ABA 风险
+- 修法：给指针配一个每次更新都递增的**版本戳**（`AtomicStampedReference`、tagged pointer）—— 过期的版本会让 CAS 失败。
+- 在带 GC 的语言里，经典的节点复用变体较少见（可达的 A 不会被重新分配），但值层面的逻辑 ABA 照样咬人。

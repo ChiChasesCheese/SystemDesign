@@ -12,15 +12,9 @@ It sits in the **control plane**, on small state: leader election, cluster membe
 You keep bulk data off a single consensus group because every write pays a **quorum round-trip and one leader's throughput cap** — it doesn't scale horizontally; you scale by running **many independent Raft groups** (one per shard/partition). Interview phrasing: "consensus for coordination and metadata; replication + partitioning for data, often consensus-per-shard."
 
 ## Q zh
-实际中使用的共识算法有哪些，各有什么权衡？
+共识在实际的生产架构中到底处于什么位置？为什么你不会让主数据路径经过它？
 
 ## A zh
-**Raft**：易于理解，领导者选举清晰。缺点：严格的领导者依赖，log 重放可能慢，单点写吞吐。
+它位于**控制平面**，处理的是很小的状态：领导者选举、集群成员关系、分片→节点映射、分布式锁、配置——通过 etcd/ZooKeeper（Kubernetes、Kafka 的 KRaft），或者按分片划分的 Raft 组来复制 WAL（CockroachDB、TiDB、Kafka 分区）。
 
-**Paxos**：容错性更强，但复杂难以理解。多 leader 变种可能提高吞吐。
-
-**Zookeeper**：ZAB 协议，强一致，但设计用于配置管理和领导者选举（低写频率）。
-
-**Etcd**：基于 Raft，易用，适合配置和服务发现。
-
-权衡点：强一致性 vs 可用性，实现复杂度 vs 性能，log 管理成本。
+之所以让大批量数据远离单一的共识组，是因为每次写入都要付出**一次 quorum 往返以及单个 leader 的吞吐上限**——它无法水平扩展；要扩展就得运行**许多相互独立的 Raft 组**（每个分片/分区一个）。面试表述："共识用于协调和元数据；复制 + 分区用于数据，而且往往是按分片各自共识。"

@@ -20,9 +20,17 @@ Distinguish data skew from access skew. Which remedies apply to each, and which 
 The useless-for-access-skew one to name out loud: **rebalancing/adding nodes**. It redistributes keys, and access skew concentrated on a *single* key is indivisible by any partitioning scheme. Managed systems blur this: DynamoDB's adaptive capacity will isolate a hot partition automatically, but still cannot exceed the per-partition-key ceiling (~3000 RCU / 1000 WCU).
 
 ## Q zh
-数据倾斜和访问倾斜的区别是什么？分别怎样缓解？
+区分数据倾斜和访问倾斜。各自适用哪些缓解手段？哪种手段对其中一种完全没用？
 
 ## A zh
-**数据倾斜**：某些 key 对应的数据量远大于平均值（e.g., 一个用户有 100GB 数据，其他用户只有 1GB）。结果是分片大小不均匀。缓解方式：子分片（micro-sharding）：将热 key 进一步分成多个小分片。按值范围分片（range-based）：细粒度划分范围。
+- **数据倾斜（data skew）**：某个分区持有的*字节数/行数*不成比例地多（比如按 `country` 做范围分区，其中一个国家占了 60% 的用户；或者某个租户的数据量是别人的 100 倍）。症状：磁盘压力大、某个节点的 compaction/repair 变慢、备份耗时不均。
+- **访问倾斜（hot key/hot partition）**：字节数没问题，*流量*集中——一条明星用户的行、一个"当日"桶。
 
-**访问倾斜**：某些 key 被访问频率远高于平均（e.g., 明星用户、热点新闻）。结果是某个分片的请求量超载。缓解方式：多层缓存：在副本层、节点层添加缓存。热 key 专用缓存或本地副本。读取分散：指定副本处理热 key 读取。
+| 手段 | 数据倾斜 | 访问倾斜 |
+|---|---|---|
+| 进一步切分范围 | 有效 | 只有热点分散在很多 key 上时才有效 |
+| 给 key 加盐（salt） | 杀鸡用牛刀 | 有效（写） |
+| 前面加缓存 | 没用 | 有效（读） |
+| 把分区挪到更大的节点上 | 有效 | 没用——就一个 key，还是一个节点在服务它 |
+
+要特别点名的、对访问倾斜完全没用的手段：**再平衡/加节点**。它重新分布 key，而集中在*单一* key 上的访问倾斜，是任何分区方案都切不开的。托管系统把这一点模糊化了：DynamoDB 的自适应容量（adaptive capacity）会自动隔离一个热分区，但仍然不能超过每个分区键的上限（约 3000 RCU / 1000 WCU）。

@@ -15,30 +15,12 @@ Nothing rejects, so nothing pushes back: the queue grows without limit — laten
 Rule: overload must surface at the boundary, not accumulate in memory.
 
 ## Q zh
-线程池如何实现 backpressure？为什么有界队列很关键？
+一个固定线程池，喂给它的是**无界**任务队列，于是它从不拒绝任务。持续过载下真正会失败的是什么，有纪律的配置该是什么样？
 
 ## A zh
-Backpressure = 阻止生产者生产比消费者处理更快的数据。
+没有任何东西被拒绝，也就没有任何东西往回推：队列无限增长 —— 延迟一路攀升（任务排在成千上万个任务后面），进程最终 **OOM**。这种失败在变成灾难之前是*看不见的*。
 
-线程池中的机制：
-1. **有界队列**：容量有限，不是无限的
-2. **拒绝处理程序**：当队列满时的行为
-   - `CallerRunsPolicy`：调用线程自己运行任务（阻塞生产者）
-   - `DiscardPolicy`：丢弃任务
-   - `AbortPolicy`：抛出异常
+- 有纪律的做法：**有界队列 + 明确的拒绝策略**。`CallerRuns` 是经典的背压选择 —— 提交者自己去执行这个任务，自然而然地拖慢了生产者。
+- 池大小：CPU 密集型 ≈ 核数；IO 密集型更大（≈ 核数 × (1 + 等待/计算)）。
 
-例子：
-```java
-// 队列有 100 个任务
-new ThreadPoolExecutor(
-    10,              // 核心线程
-    20,              // 最大线程
-    new LinkedBlockingQueue<>(100),  // 有界！
-    new ThreadPoolExecutor.CallerRunsPolicy()  // 阻塞提交者
-);
-```
-
-为什么有界队列很关键：
-- 无界队列导致内存不足（堆积任务）
-- 生产者不知道消费者何时赶不上
-- 有界队列强制背压，让生产者等待
+规则：过载必须在边界处显现出来，而不是在内存里堆积。
