@@ -176,3 +176,14 @@ def test_a_rewritten_translation_is_flagged_without_breaking_the_english_card(tm
 def test_a_faithful_translation_is_not_flagged(tmp_path):
     from trellis.cards import suspect_translations
     assert suspect_translations(parse_card(write(tmp_path, "c.md", TRANSLATED))) == []
+
+
+def test_a_duplicate_pasted_underneath_is_flagged(tmp_path):
+    """Two writers appending to the same card leave a second copy with no
+    heading of its own, so the repeated-heading check cannot see it — but
+    the translation ends up far longer than its source."""
+    from trellis.cards import suspect_translations
+
+    dup = QA + "\n## Q zh\nX 是什么？\n\n## A zh\nX 是 **Y**。\n\nX 是什么？\nX 是 **Y**。\n" \
+                "X 是什么？\nX 是 **Y**。\nX 是什么？\nX 是 **Y**。\n"
+    assert suspect_translations(parse_card(write(tmp_path, "my-card.md", dup))) == ["zh"]

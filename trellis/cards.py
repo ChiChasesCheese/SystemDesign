@@ -145,11 +145,19 @@ def suspect_translations(card: "Card") -> list[str]:
     block is shipping that language (see `build --lang`).
     """
     out = []
+    english_len = len(card.question) + len(card.answer) if card.type == "qa" else len(card.text)
     for lang, parts in card.tr.items():
         for part, english in (("question", card.question), ("answer", card.answer)):
             if parts.get(part, "").count("```") > english.count("```"):
                 out.append(lang)
                 break
+        else:
+            # A translation far longer than its source is padding or, as
+            # happened here, a second copy of the card pasted underneath by
+            # a concurrent writer — invisible to the repeated-heading check
+            # because the duplicate carries no heading of its own.
+            if english_len and sum(map(len, parts.values())) > english_len * 1.6:
+                out.append(lang)
     return out
 
 
