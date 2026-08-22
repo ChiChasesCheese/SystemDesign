@@ -26,13 +26,3 @@ Pick gRPC/GraphQL when you control the clients; pick REST when you don't.
 - 统一语义（动词、状态码）每个工具 — 网关、监视器、WAF — 已经理解。
 
 当你控制客户端时选择 gRPC/GraphQL；当你不控制时选择 REST。
-
-为什么 REST over JSON 在 2026 年仍然是公共 API 的默认值，尽管有 gRPC 和 GraphQL？
-
-因为公共 API 的客户端是**未知和不受控的**，REST 最大化陌生人免费获得的：
-
-- 适用于任何 HTTP 客户端、浏览器或 `curl` — 无需代码生成或 SDK。
-- **HTTP-native 缓存**（GET + Cache-Control + ETags）通过 CDN 和代理工作。
-- 统一的语义（谓词、状态码），每个工具 — 网关、监视器、WAF — 已经理解。
-
-当你控制客户端时选择 gRPC/GraphQL；当你不控制时选择 REST。

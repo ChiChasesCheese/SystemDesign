@@ -22,11 +22,3 @@ Wrong response (generic 500, no Retry-After): clients treat it as transient fail
 - **`RateLimit-*` 头**（limit / remaining / reset）— 让客户端在打到墙之前自我步调。
 
 错误的响应（通用 500，没有 Retry-After）：客户端将其视为暂时故障并**立即重试**，将丢弃负载变成自我造成的重试风暴。
-
-当速率限制器拒绝请求时，响应应该包含什么 — 为什么错误的响应放大负载？
-
-- **HTTP 429 Too Many Requests**（或用于服务器范围削减的 503）— 一个不同的代码使客户端和仪表板能够区分节流和错误。
-- **`Retry-After`** 头 — 告诉行为良好的客户端何时回来，分散重试波。
-- **`RateLimit-*` 头**（limit / remaining / reset）— 让客户端在撞墙前自我节奏。
-
-错误响应（通用 500、无 Retry-After）：客户端将其视为暂时性故障并**立即重试**，将削减负载变成自造的重试风暴。

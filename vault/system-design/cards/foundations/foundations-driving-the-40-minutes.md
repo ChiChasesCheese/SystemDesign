@@ -25,3 +25,5 @@ Signal comes from proposing the next step yourself, not waiting to be steered.
 - **~10–15 分钟** 端到端高层架构
 - **~10–15 分钟** 1–2 个组件的深入讨论（由面试官的兴趣或最难的瓶颈来选择）
 - **~5 分钟** 总结：瓶颈、故障模式、接下来会做什么
+
+信号来自你自己主动提出下一步，而不是等待被引导。
