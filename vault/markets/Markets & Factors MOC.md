@@ -3,6 +3,7 @@
 
 - [[foundations|Return Foundations]]
     - [[foundations.premia|Risk Premia & Expected Return]]
+    - [[foundations.asset-class-premia|The Asset Class Premia]]
     - [[foundations.efficiency|Efficiency & Limits to Arbitrage]]
     - [[foundations.capm|CAPM, Beta & Risk Vocabulary]]
 - [[equities|Equities & Equity Structure]]

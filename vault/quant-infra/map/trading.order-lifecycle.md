@@ -7,6 +7,9 @@ The order state machine, client order ids, cancel/replace races, ack timeouts, a
 **Requires:** [[trading.oms-ems|OMS vs EMS]]
 
 **Unlocks:** [[controls.pre-trade|Pre-Trade Risk Checks]]
+
+## Readings
+- [[qs-live-trading-engine-scorecard|What an Institutional-Grade Trading Engine Needs: A Requirements Scorecard]]
 %% trellis:end %%
 
 ## Notes

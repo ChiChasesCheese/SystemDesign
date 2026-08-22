@@ -7,6 +7,7 @@ Turning forecasts into positions under a risk model, a constraint set and a cost
 - [[portfolio.risk-models|Factor Risk Models]]
 - [[portfolio.optimization|Optimization]]
 - [[portfolio.combination|Combining Signals]]
+- [[portfolio.pod-allocation|Multi-Manager Capital Allocation]]
 - [[portfolio.sizing|Bet Sizing & Leverage]]
 %% trellis:end %%
 

@@ -1,0 +1,264 @@
+{"codebase": "quant-stroller", "ref": "c0cc39c68d33", "items": [
+  {"artefact": "subject:architecture-and-data-flow", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["platform.pipelines", "data.point-in-time.universe"], "slug": "qs-architecture-data-flow-overview",
+   "title": "Architecture and Data Flow (Concept Overview)", "path": "docs/concepts/architecture-and-data-flow.md",
+   "body": "This is the entry-level map of how data and code fit together in a research platform built around three data stages: an immutable raw archive, a normalized single-instrument bars view, and a survivorship-corrected, point-in-time-masked cross-sectional panel view, with bars and panel computed on read rather than stored twice. It also names four narrow extension interfaces (data source, factor, strategy, broker) as the seams where new markets or vendors plug in, and describes a two-stage gate: a cheap research check followed by an execution-realism check, with a strategy only trusted once both pass. Useful as an orientation diagram before reading any single piece of it in depth."},
+
+  {"artefact": "subject:citadel-multi-pod-platform", "verdict": "gap", "lens": "quant-infra",
+   "proposed_leaf": "portfolio.pod-allocation",
+   "why": "This document walks through a multi-manager platform architecture — many autonomous alpha pods under a two-tier risk system (per-pod drawdown stop-out and a firm-level gross cap) with dynamic Sharpe-weighted capital reallocation and a correlation penalty that down-weights pods duplicating existing book exposure, plus the trap that quiet pod correlations spike to 1 exactly in a crisis. No leaf in portfolio.* names this: portfolio.combination is about blending signals statistically, not about capital-at-risk governance across independently-operated strategy teams with kill switches. This is a real, distinct piece of institutional infrastructure the literature-derived skeleton is missing."},
+
+  {"artefact": "subject:crisis-convexity-vs-short-premium", "verdict": "reading", "lens": "markets",
+   "nodes": ["regimes.volatility", "momentum.trend"], "slug": "qs-crisis-convexity-lead-satellite",
+   "title": "Crisis Convexity vs Short Premium: Who Leads, Who Rides Along", "path": "docs/concepts/crisis-convexity-vs-short-premium.md",
+   "body": "Argues that correlation between strategies is regime-dependent, not a fixed number: strategies that sell insurance (carry, credit, short volatility) look attractively uncorrelated in calm markets, but their hidden short-volatility exposure converges to correlation 1 exactly when a crisis hits, while trend-following and some value trades pay off convexly in the same crisis because their payoff is structurally long optionality. The piece turns this into an allocation rule — put crisis-convex, positively-skewed strategies in the core position and treat short-premium strategies as tightly-capped satellites — and warns that a low correlation measured in a quiet sample is not evidence it will hold up in a crisis."},
+
+  {"artefact": "subject:domain-model", "verdict": "gap", "lens": "quant-infra",
+   "proposed_leaf": "platform.strategy-claim-types",
+   "why": "The document's central lesson is that a research platform must classify what kind of claim a strategy is making — alpha (I can predict direction), overlay (I reshape an existing book's risk), or book (I combine multiple sources) — because each claim type needs a different null hypothesis and validation gate (alpha vs zero-Sharpe DSR; overlay vs the un-overlaid benchmark's net gain, not vs zero; book vs its best single sleeve). Conflating these caused a real incident: several rows that looked like six distinct passing alphas turned out to be the same risk overlay renamed. No leaf across backtest.validation.* or portfolio.* names this distinction about what a backtest verdict is allowed to mean."},
+
+  {"artefact": "subject:long-short-and-neutral", "verdict": "reading", "lens": "markets",
+   "nodes": ["factors.models", "foundations.capm"], "slug": "qs-long-short-neutral-self-financing",
+   "title": "Long/Short, Neutral, Self-Financing: Explained Through FX Value", "path": "docs/concepts/long-short-and-neutral.md",
+   "body": "Uses a real long-short FX-value strategy to teach the vocabulary of relative-value investing from scratch: what going long/short means, why matching long and short dollar amounts creates near-zero market beta, and why a long-short book is roughly self-financing (short-sale proceeds fund the long leg, so uninvested capital keeps earning the risk-free rate). It then explains why this makes Sharpe ratio, not raw return, the right yardstick for such strategies — leverage rescales return and drawdown together but leaves Sharpe unchanged — and why an unglamorous 6.6%-a-year market-neutral strategy can be more valuable in a portfolio than a flashier long-only one."},
+
+  {"artefact": "subject:macro-regime-and-sizing", "verdict": "reading", "lens": "markets",
+   "nodes": ["regimes.volatility", "volatility.vrp"], "slug": "qs-macro-regime-sizing",
+   "title": "Macro Regime and Position Sizing", "path": "docs/concepts/macro-regime-and-sizing.md",
+   "body": "Reports a cross-market empirical finding: a macro risk-off state (built from the yield curve, VIX, and credit spreads) reliably predicts higher forward volatility in equities, EM stocks, and FX, but does not reliably predict the direction of forward returns — in fact stocks and FX often bounce after risk-off readings. The conclusion is a sizing rule, not a timing rule: use macro state to scale position size down ahead of volatility spikes (forward-looking vol targeting), never as a binary sell-the-market signal, since that misfires badly in V-shaped selloffs like COVID. A variance-risk-premium overlay is separately noted as one of the few de-risking signals that actually held up."},
+
+  {"artefact": "subject:market-sentiment-factors", "verdict": "reading", "lens": "markets",
+   "nodes": ["alt-data.positioning", "alt-data.text"], "slug": "qs-market-sentiment-factor-framework",
+   "title": "A Factor Framework for Market Sentiment", "path": "docs/concepts/market-sentiment-factors.md",
+   "body": "A survey of how investor sentiment gets collected (surveys/positioning, options-implied measures, market breadth, fund flows and leverage, and text/NLP), aggregated into composite indices (equal-weighted like CNN Fear & Greed, PCA like Baker-Wurgler, or PLS-optimized like Huang-Jiang-Tu-Zhou), and turned into a tradeable signal. The central lesson is that sentiment's predictive power lives almost entirely in its extremes and in forecasting volatility, not in forecasting the direction of returns in the middle of the range — so the right use is extreme-value mean-reversion or a de-risking overlay, never a smooth bull/bear timing dial, and time-series sentiment bets are exceptionally prone to overfitting given how few independent sentiment cycles exist in history."},
+
+  {"artefact": "subject:multiple-testing", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["backtest.overfitting.multiple-testing", "backtest.overfitting.deflated-sharpe", "backtest.overfitting.pbo"], "slug": "qs-multiple-testing-backtest-overfitting",
+   "title": "Why 'It Worked on the Test Set' Isn't Enough: Multiple Testing and Backtest Overfitting", "path": "docs/concepts/multiple-testing.md",
+   "body": "The foundational argument for why a single backtest Sharpe ratio is uninterpretable without knowing how many strategies were tried: under pure noise, the expected maximum Sharpe across N trials rises with N, so an out-of-sample test that gets looked at and re-queried repeatedly becomes a second training set (the reusable-holdout problem). It walks through Deflated Sharpe, Harvey-Liu Bonferroni haircuts, combinatorial purged cross-validation, and the probability of backtest overfitting as the standard toolkit for correcting this, and makes the case, with citations to the founding papers, that a high rejection rate in a research pipeline is a sign of a working filter, not a failure."},
+
+  {"artefact": "subject:quant-dev-multifactor-and-infra", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["foundations.pipeline", "data.security-master", "portfolio.risk-models.structure"], "slug": "qs-quant-dev-multifactor-infra",
+   "title": "A Quant Developer's Field Notes: Multi-Factor Models and the Infrastructure Behind Them", "path": "docs/concepts/quant-dev-multifactor-and-infra.md",
+   "body": "A structured walkthrough of what a multi-factor equity platform actually looks like end to end at a real prop shop: alpha as the search for mispricing the market hasn't already found, decomposing returns into common-factor and stock-specific pieces (and why that decomposition, not raw covariance, is what makes portfolio risk computable at scale), the data-engineering grunt work of vendor reconciliation and security matching under point-in-time discipline, and the production stack (Spark/Delta Lake for research, a fast time-series database for live trading) that makes daily re-runs possible. Good orientation for anyone who has read the theory but never seen the plumbing a real desk needs around it."},
+
+  {"artefact": "subject:risk-parity-and-all-weather", "verdict": "reading", "lens": "markets",
+   "nodes": ["macro.growth-inflation"], "slug": "qs-risk-parity-all-weather",
+   "title": "Risk Parity and All Weather: Allocating by Risk, Not by Dollars", "path": "docs/concepts/risk-parity-and-all-weather.md",
+   "body": "Explains Bridgewater's All Weather approach as a genuinely different paradigm from picking winning bets: instead of predicting which economic environment is coming, it allocates risk, not dollars, equally across four growth/inflation quadrants so that some part of the portfolio is positioned correctly whichever quadrant actually arrives — a philosophy the piece calls beta engineering as opposed to the alpha-factory style of a multi-manager platform. It is honest about the approach's known failure mode (2022, when equities and leveraged long-duration bonds fell together) and about the fact that risk parity is a real, separately learnable portfolio-construction technique, not just a slogan."},
+
+  {"artefact": "subject:trading-101", "verdict": "reading", "lens": "markets",
+   "nodes": ["foundations.capm"], "slug": "qs-trading-101-primer",
+   "title": "Trading 101: A Zero-Knowledge Primer", "path": "docs/concepts/trading-101.md",
+   "body": "A zero-background primer that establishes the small vocabulary every later document assumes: a strategy as a mechanical, backtestable rule; a signal as the number driving it; Sharpe ratio as return-per-unit-of-risk rather than raw return; max drawdown as the worst peak-to-trough loss; and beating the market as beating a buy-and-hold benchmark on a risk-adjusted basis, which is genuinely hard because the market already prices in the work of everyone else trying to do the same thing. It closes with a first taste of survivorship bias as an example of how a backtest can lie to you convincingly."},
+
+  {"artefact": "subject:video-scout-pipeline", "verdict": "skip",
+   "why": "Documents this repo's own automated literature/video-scouting-to-backlog pipeline (transcript harvesting, six-tier insight triage, idempotent ticket filing). It describes an internal research-ops tool, not subject matter about quant markets or research-platform engineering that a leaf teaches."},
+
+  {"artefact": "subject:why-backtests-lie", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["data.point-in-time.universe", "features.leakage", "data.quality"], "slug": "qs-why-backtests-lie",
+   "title": "Why Backtests Lie", "path": "docs/concepts/why-backtests-lie.md",
+   "body": "Walks through four concrete self-deception traps in backtesting: survivorship bias (backtesting on today's index membership silently deletes the losers that mattered), lookahead bias (a signal that quietly uses information not yet available at decision time, caught by re-computing it on truncated data and checking it doesn't change), multiple testing (trying many parameter combinations and reporting only the best one), and corrupted or unadjusted price data (a single bad split-adjustment can manufacture a fake alpha). Each trap is illustrated with a real incident and the automated check built to catch it going forward — a compact, well-chosen orientation to backtest self-deception generally."},
+
+  {"artefact": "subject:costs-and-prices", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["backtest.mechanics.costs", "execution.impact", "execution.spread"], "slug": "qs-transaction-costs-and-prices",
+   "title": "The Truth About Trading Costs and Prices", "path": "docs/deep/costs-and-prices.md",
+   "body": "Covers transaction costs from first principles: why OHLCV holds more information than the close alone (an overnight-vs-intraday return split, with a documented overnight-return premium); the bid-ask spread as the first cost and the Corwin-Schultz high-low estimator for it when tick data isn't available, including a worked example of why that estimator badly overstates spreads for liquid large caps; the square-root market-impact law as the second cost; and why total cost scales with turnover, which is why short-horizon signals are especially vulnerable to being gross-positive and net-negative. Ends with a signal that looked like the strongest in a whole research program until realistic costs were applied."},
+
+  {"artefact": "subject:data-governance", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["data.quality", "data.point-in-time.as-of"], "slug": "qs-data-governance-contracts",
+   "title": "Data Governance: Contracts, Catalog, and Health", "path": "docs/deep/data-governance.md",
+   "body": "Describes a data-contract discipline: every dataset gets a declarative file stating its schema, coverage window, update cadence, point-in-time correctness, and what counts as valid, which is then automatically checked against reality — freshness SLAs, schema drift, row-count minimums — rather than trusted by convention. The motivating idea is that a strategy's apparent alpha is very often a data artifact — an ex-dividend gap read as a crash, a stale delisted-ticker file — and that a machine-checkable contract catches the mismatch between what a dataset claims to be and what it actually is before it reaches a backtest, rather than after."},
+
+  {"artefact": "subject:data-layer-and-automation", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["data.security-master", "platform.pipelines"], "slug": "qs-data-layer-automation-pipeline",
+   "title": "Data Layering and the Alpha Automation Pipeline", "path": "docs/deep/data-layer-and-automation.md",
+   "body": "Opens with a real incident — an unadjusted stock spinoff that silently forged a large fake single-day crash in the price history, which two independent cleaning passes both missed — and uses it to motivate keeping a permanent, unedited raw archive plus an independent second vendor for cross-source reconciliation, since two sources built from the same feed can't catch each other's shared bugs. The second half covers designing an unattended, idempotent factor-mining pipeline (archive, stage, mine, sweep, report) that can be safely re-run mid-flight without double-counting trials or corrupting partially-landed data, and that charges every candidate factor against the honest trial count."},
+
+  {"artefact": "subject:data-pipeline", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["platform.pipelines"], "slug": "qs-data-pipeline-raw-bars-panel",
+   "title": "The Data Pipeline: Raw, Bars, Panel", "path": "docs/deep/data-pipeline.md",
+   "body": "Describes a three-stage contract for market data: an immutable, append-only raw archive exactly as received from each vendor; a normalized, adjusted, per-instrument bars view derived from it on read; and a point-in-time-masked, survivorship-corrected cross-sectional panel view derived from bars, also on read rather than materialized twice. The key design idea is that raw is the only thing physically stored — correctness fixes and adjustment-convention changes propagate instantly to all downstream consumers without leaving two versions of history to drift apart — and that research code is structurally barred from touching raw files directly, only ever reading bars or panels."},
+
+  {"artefact": "subject:data-warehouse", "verdict": "skip",
+   "why": "An auto-generated warehouse status snapshot (a table of data contracts, freshness lag, and cross-source reconciliation results) regenerated by a CLI command each run. It is operational output, not authored subject-matter prose — nothing to orient a cold reader toward beyond 'here is today's inventory.'"},
+
+  {"artefact": "subject:factor-catalog", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["features.store", "backtest.overfitting.multiple-testing"], "slug": "qs-unified-factor-catalog",
+   "title": "The Unified Factor Catalog: Raw Material vs Vetted Research", "path": "docs/deep/factor-catalog.md",
+   "body": "Distinguishes two very different things that both get called a factor: the research plane (curated, vetted, ledger-confirmed signals worth reading about) and the raw-material plane (a battery of thousands of mechanically generated candidate formulas, template windows, and public-library expressions that have not been tested yet). Describes a unified catalog schema that normalizes candidates from nine different sources into one comparable record with provenance and license, while insisting raw candidate counts are never conflated with vetted discoveries, and that every candidate in a batch is charged as a trial against the batch's shared statistical budget — selection and synthesis priced differently."},
+
+  {"artefact": "subject:factor-risk-and-idiosyncratic-alpha", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["portfolio.risk-models.structure", "portfolio.risk-models.attribution", "portfolio.combination"], "slug": "qs-factor-risk-idiosyncratic-alpha",
+   "title": "Factor Risk and the Discipline of Only Betting on What's Idiosyncratic", "path": "docs/deep/factor-risk-and-idiosyncratic-alpha.md",
+   "body": "Explains the return = factor exposure + residual decomposition that separates a return stream into common-factor exposure and stock-specific residual, and argues a fund's real edge is only the residual — factor exposure is risk you're carrying, not skill, and you could buy it cheaply as an ETF instead. Covers neutralizing a book against known factors, attributing realized P&L to factor bets versus stock-picking, optimizing a portfolio under a neutrality constraint, and combining many weak signals by their return-stream covariance rather than equally, with a worked example showing a 'working' momentum strategy on liquid large caps is almost entirely a factor bet in disguise."},
+
+  {"artefact": "subject:forex-model-audit", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["data.quality", "backtest.overfitting.multiple-testing"], "slug": "qs-forex-model-audit-case-study",
+   "title": "Case Study: Auditing an FX Deep-Learning Model's Synthetic-Pair Mirage", "path": "docs/deep/forex-model-audit.md",
+   "body": "A forensic audit of an external FX deep-learning model that self-reported an implausible Sharpe of 2.7 and near-record cumulative returns, run through an honesty pipeline without retraining it. The diagnosis: nearly all the apparent edge lived in synthetic currency pairs that are computed, not traded, whose fabricated price bounces come from stale two-leg quoting; splitting tradable from untradeable instruments collapsed the hit rate to a coin flip. A genuinely useful confident-subset signal survived on two real pairs but reduced to roughly two independent bets across two years of data — real but far too thin to deploy. A reusable checklist for auditing any 'too good' backtest closes the piece."},
+
+  {"artefact": "subject:high-dim-factor-timing", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["portfolio.risk-models.covariance", "portfolio.combination"], "slug": "qs-high-dim-factor-timing",
+   "title": "High-Dimensional Factor Timing: Shrinkage Discipline and the Dimension × Sample-Length Law", "path": "docs/deep/high-dim-factor-timing.md",
+   "body": "Replicates and extends a 2025 academic result that factor timing, dynamically overweighting factors expected to do well, works only under two joint conditions: enough factors to time (dimension) and enough history to identify the timing weights without overfitting (sample length). A three-layer shrinkage scheme, toward a scaled identity, toward the static portfolio, and a gross-exposure rescale, is what keeps naive timing from collapsing in high dimensions, and a controlled dimension-ladder experiment shows the timing premium can flip from strongly positive to strongly negative when the same dimension increase happens on a short sample — a caution against timing new markets before they have 15-20 years of history."},
+
+  {"artefact": "subject:index", "verdict": "skip",
+   "why": "A reading-order table of contents for the 'deep' folder with one-line teasers for each linked article. It is a navigation page; its content is fully subsumed by the individual articles it links to, each triaged separately."},
+
+  {"artefact": "subject:openbb-integration", "verdict": "skip",
+   "why": "A vendor-integration engineering guide (facade-not-warehouse architecture, API key provisioning checklist, ticket status for a closed epic) specific to wiring one third-party data aggregator into this codebase. It teaches how this repo plumbed a library, not a transferable data-correctness or infrastructure concept a leaf covers."},
+
+  {"artefact": "subject:parameters-and-hyperopt", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["backtest.overfitting.multiple-testing", "backtest.overfitting.deflated-sharpe"], "slug": "qs-parameters-hyperopt-overfitting",
+   "title": "Parameters, Hyperparameter Optimization, and the Edge of Overfitting", "path": "docs/deep/parameters-and-hyperopt.md",
+   "body": "Uses freqtrade's hyperopt, a well-built Bayesian parameter search over trading-rule spaces, as a concrete example of what a good overfitting machine looks like, then explains why searching for the parameter combination that maximizes a backtest metric systematically selects for the combination where luck happened to be largest — the expected maximum Sharpe across N trials rises with N even under pure noise. The discipline that follows is to use one economically-motivated default parameter set rather than sweeping to a peak, and when a sweep is unavoidable, to record the true number of trials searched so a deflated-Sharpe gate can discount the reported result by exactly how hard it was searched for."},
+
+  {"artefact": "subject:qlib-alpha-lab", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["foundations.fundamental-law", "portfolio.combination"], "slug": "qs-qlib-alpha-lab-honest-results",
+   "title": "The Factor-Mining Lab: A Full Honest Accounting", "path": "docs/deep/qlib-alpha-lab.md",
+   "body": "A full honest accounting of a large automated factor-mining program across four markets and roughly 400 experiments: a volatility-family signal survives multiple US universes but still fails the deflated-Sharpe gate because the universe is too narrow for the effect size to be distinguishable from luck — a worked illustration of the IC times root-breadth ceiling on single-factor Sharpe. Broader sweeps across price-volume mechanisms produce zero surviving leads even at thousands of names, while a genuinely new data axis, analyst-guidance surprise, comes closest to passing. The piece also shows, with numbers, that stop-losses don't rescue a failing factor and that naively combining correlated diversifiers can make a portfolio's Sharpe worse, not better."},
+
+  {"artefact": "subject:signal-engineering", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["features.construction", "portfolio.combination"], "slug": "qs-signal-engineering-idea-to-signal",
+   "title": "From Idea to Signal: Cross-Sectional, Time-Series, and Signal Engineering", "path": "docs/deep/signal-engineering.md",
+   "body": "A practical, five-step pipeline for turning a vague idea into a tradeable, testable signal: choosing between a cross-sectional design (rank names against each other) and a time-series design (judge each asset against its own history), two fundamentally different sources of return; enforcing causality; standardizing across the cross-section by rank rather than raw z-score to survive fat-tailed data; neutralizing away unwanted exposures by regression; and choosing a weighting scheme. A worked example shows combining six modestly-performing signals equally can underperform the single best one, because equal weighting has no defense against a sign-flipped or genuinely weak component — a concrete lesson in why naive signal combination is not free diversification."},
+
+  {"artefact": "subject:slow-fast-layering", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["portfolio.combination"], "slug": "qs-slow-fast-layering-timescales",
+   "title": "Slow Sets the Direction, Fast Trades Intraday: Layering Strategies Across Timescales", "path": "docs/deep/slow-fast-layering.md",
+   "body": "Distinguishes three genuinely different meanings of 'slow strategy sets direction, fast strategy trades intraday': fast-as-pure-execution (minimizing cost of a decision already made), fast-and-slow-as-fully-independent-alphas with no hierarchy, and fast-constrained-within-a-direction-fence set by the slow layer, where the slow layer gives a direction and a risk budget and the fast layer trades its own intraday signal only inside that budget. Argues, with literature support, that which of the three is correct for a given desk is a matter of capital size, not taste — a fast signal's edge often can't clear round-trip costs for a large book, forcing it down into pure execution, while a small book can let the same signal run as genuine alpha."},
+
+  {"artefact": "subject:strategy-styles", "verdict": "reading", "lens": "markets",
+   "nodes": ["factors.rationale", "carry.concept", "value.reversal"], "slug": "qs-strategy-styles-spectrum",
+   "title": "The Spectrum of Strategy Styles: What Each One Is Actually Betting On", "path": "docs/deep/strategy-styles.md",
+   "body": "Dissects eight major strategy styles, momentum, short and long reversal, value, quality, carry, statistical arbitrage, event-driven, and microstructure, through one consistent lens for each: what it's actually betting on, who is losing money on the other side and why they keep doing it, what time horizon and regime it likes, how crowded it is, and what shape its return distribution takes. The recurring meta-lesson is that a strategy without an answer to 'who is losing and why do they keep paying' is very likely a backtest illusion rather than a real edge, and that crowding and true signal strength are almost inversely related across the styles surveyed."},
+
+  {"artefact": "subject:where-alpha-comes-from", "verdict": "reading", "lens": "markets",
+   "nodes": ["factors.rationale", "factors.zoo", "factors.cycles"], "slug": "qs-where-alpha-comes-from",
+   "title": "Where Alpha Comes From, and Why It Disappears", "path": "docs/deep/where-alpha-comes-from.md",
+   "body": "Argues every persistent source of return traces to exactly one of three origins: risk premia (you're paid to bear a risk others don't want and eventually get hurt by it), behavioral errors (someone predictably keeps making the same mistake until the trade gets published and arbitraged away), or structural forces (someone is forced to trade suboptimally by rules or liquidity and can't stop). Works through five decay mechanisms, arbitrage, crowding, capacity, the McLean-Pontiff publication effect (average roughly 58% decay after a factor is published), and cost erosion, and concludes edge now survives mainly in harder-to-process data, less-covered names, harder-to-trade horizons, and more complex combinations, not liquid large-cap daily data."},
+
+  {"artefact": "subject:advanced", "verdict": "skip",
+   "why": "A 'deepening candidates' design memo proposing specific refactors (a BacktestEngine seam, a Feature module, a CostModel protocol, registry wiring) for this repo's own module boundaries, with most candidates already marked landed. Internal architecture bookkeeping, not subject matter."},
+
+  {"artefact": "subject:borrowing-from-freqtrade", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["backtest.mechanics.fills", "backtest.mechanics.timing"], "slug": "qs-borrowing-freqtrade-backtest-design",
+   "title": "Borrowing freqtrade's Backtest Design: Event-Driven Trade Lists vs Vectorized Weights", "path": "docs/architecture/borrowing-from-freqtrade.md",
+   "body": "Contrasts two backtest paradigms: freqtrade's event-driven, per-trade simulation, which naturally yields win rate, profit factor, and expectancy because it tracks an explicit trade object, against a vectorized, cross-sectional weights-times-returns-minus-turnover-cost simulation, which is fast and naturally handles many instruments held simultaneously but has no notion of 'one trade' unless one is derived after the fact. Also documents freqtrade's explicit, written-down fill assumptions — orders fill within the candle's high/low range with no slippage, signal exits happen at the next candle's open, stop-losses fill optimistically at the stop price even through a gap — as a model of the assumption-transparency any backtest engine should aim for."},
+
+  {"artefact": "subject:citadel-framework-prd", "verdict": "skip",
+   "why": "A living product-requirements tracker (epics, ticket IDs, delivered-vs-roadmap tables) for this repo's own Citadel-inspired framework build-out. Pure project-management housekeeping."},
+
+  {"artefact": "subject:citadel-pod-book", "verdict": "skip",
+   "why": "An API reference (dataclass fields, function signatures) for this repo's own pod-allocation module. The transferable institutional pattern it documents — two-tier pod risk limits, dynamic Sharpe-weighted capital, decorrelation penalty — is captured once as a gap under concepts:citadel-multi-pod-platform; repeating it here as a second reading would dilute rather than add."},
+
+  {"artefact": "subject:citadel-research-and-sizing", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["portfolio.sizing", "execution.impact"], "slug": "qs-citadel-research-sizing-chain",
+   "title": "From Signal to Trade: Kelly Sizing, Risk Parity, and Cost-Aware Execution", "path": "docs/architecture/citadel-research-and-sizing.md",
+   "body": "Lays out the chain from a validated signal to an executable, appropriately-sized trade: the Grinold-Kahn fundamental law (information ratio roughly equals skill times root breadth) as the master equation for why many independent small edges beat one big one; the Kelly criterion for growth-optimal position sizing and why practitioners run a fraction of full Kelly; hierarchical risk parity for building a diversified portfolio without inverting a poorly-conditioned covariance matrix; and the Almgren-Chriss and Gârleanu-Pedersen frameworks for trading a target position into an actual book at minimum cost given how fast the signal itself decays. A concise map connecting 'the edge is real' to 'here is how much of it to trade, and how.'"},
+
+  {"artefact": "subject:data-flow", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["data.market-data.time"], "slug": "qs-data-plane-symbols-timestamps",
+   "title": "The Data Plane: Symbols, Timestamps, and Two Backtest Worlds", "path": "docs/architecture/data-flow.md",
+   "body": "Explains the universal-identifier pattern of tagging every instrument with a market-prefixed symbol so each layer of a system can dispatch on that one prefix, and works through a genuinely tricky correctness detail: storing daily bars at a UTC-midnight timestamp is a storage convention, not the real close time, so a naive same-day join across two markets in different timezones can accidentally let one market's signal see information from later in the trading day than it should. A useful worked example of how timezone and session-calendar handling can silently introduce lookahead bias across markets that trade on different clocks."},
+
+  {"artefact": "subject:freqtrade-full-comparison", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["controls.limits", "trading.accounting"], "slug": "qs-freqtrade-full-architecture-tour",
+   "title": "freqtrade's Full Architecture, Subsystem by Subsystem", "path": "docs/architecture/freqtrade-full-comparison.md",
+   "body": "A subsystem-by-subsystem tour of what a mature single-asset live trading bot needs beyond the backtest engine itself: a protections state machine that locks trading after triggering conditions (stop-loss guard, max-drawdown, cooldown-after-exit) rather than only checking pre-trade; a wallets/persistence layer that tracks available capital and survives a restart without re-submitting orders; and a remote-control layer for an unattended bot. Useful as a checklist of what production-grade live infrastructure is generally expected to include — order-state tracking, capital bookkeeping, and post-trigger lockouts — independent of which specific bot framework is being read about."},
+
+  {"artefact": "subject:hf-ai-gap-plan", "verdict": "skip",
+   "why": "An active architecture-gap project plan: a numbered epic with dozens of ticket IDs, severity tags, and a target ordering of engineering work. Entirely repo roadmap bookkeeping."},
+
+  {"artefact": "subject:index", "verdict": "skip",
+   "why": "A design-vocabulary primer (module, seam, adapter, deletion-test) and seam-health table specific to this codebase's own module boundaries, functioning as the table of contents for the rest of the architecture folder. Not subject matter about the quant field."},
+
+  {"artefact": "subject:live-and-event-driven", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["trading.order-lifecycle", "controls.pre-trade", "trading.connectivity"], "slug": "qs-live-trading-engine-scorecard",
+   "title": "What an Institutional-Grade Trading Engine Needs: A Requirements Scorecard", "path": "docs/architecture/live-and-event-driven.md",
+   "body": "A detailed, item-by-item scorecard of what a trading engine needs to be considered correct rather than merely fast: an explicit order state machine with a client-order-id distinct from the venue's id (the join key for reconciliation), idempotent fill processing so a reconnect never double-books a trade, boot-time reconciliation against the venue before the first order of the day, pre-trade risk checks that deny an order before it reaches the venue (fat-finger caps, price collars, kill-switches), and crash-only recovery where startup and disaster-recovery are the same code path. A good checklist of the non-negotiable correctness properties of a live order and risk pipeline, independent of any specific vendor."},
+
+  {"artefact": "subject:module-graph", "verdict": "skip",
+   "why": "An auto-generated (AST-scanned) module import graph and one-line responsibility table for this codebase's own package layout. Pure repo structure documentation."},
+
+  {"artefact": "subject:module-map", "verdict": "skip",
+   "why": "An auto-generated inventory of roughly 415 modules in this codebase (lines of code, import-role classification, callers) used to prevent accidental deletion of zero-importer utility modules. Pure repo structure documentation."},
+
+  {"artefact": "subject:risk-layer", "verdict": "skip",
+   "why": "Explains how this repo's factor-risk layer attaches to its existing signal/construct seams without a new engine. The underlying factor-risk-model subject matter (exposures, neutralization, attribution, transient factors) is already captured as a reading under deep:factor-risk-and-idiosyncratic-alpha; this page is the repo-wiring account of the same material."},
+
+  {"artefact": "subject:seams", "verdict": "skip",
+   "why": "A deep/shallow/adapter audit of this codebase's own extension points (data source, bar store, factor, strategy, cost model, registry, broker). Pure internal architecture inventory, no transferable subject matter."},
+
+  {"artefact": "subject:vectorbt-nautilus-and-our-engines", "verdict": "skip",
+   "why": "A narrative of which backtest engine (vectorbt, Nautilus, an internal live engine) plays which role in this codebase and why one was dropped, laced with this project's ticket IDs. Its one transferable point, that unconstrained fast parameter scanning invites overfitting, is already captured under deep:parameters-and-hyperopt."},
+
+  {"artefact": "subject:vs-mainstream", "verdict": "skip",
+   "why": "A competitive-positioning page plotting this repo against zipline/backtrader/vectorbt/qlib/LEAN on a two-axis quadrant chart, mostly repeating points made more fully elsewhere in this doc set (the DSR chokepoint, PIT fundamentals, ledger memory). A landscape survey of this project's positioning, not a leaf's subject matter in its own right."},
+
+  {"artefact": "subject:01-momentum-trend", "verdict": "reading", "lens": "markets",
+   "nodes": ["momentum.cross-sectional", "momentum.trend"], "slug": "qs-catalog-momentum-trend",
+   "title": "Family 1: Momentum & Trend", "path": "docs/catalog/01-momentum-trend.md",
+   "body": "Introduces momentum as a behavioral-origin edge: investors under-react to new information, so prices drift toward fair value instead of jumping there, and disposition-effect sellers who take profits too early hand momentum traders the other side of the trade. Distinguishes cross-sectional momentum (rank a basket, buy the strongest, sell the weakest) from time-series/trend-following (each asset judged against its own history, giving it directional market exposure and making it the family that profits in crashes). Also covers dual momentum, residual momentum, 52-week-high anchoring, breakout entries, and cross-asset trend breadth, each with a note on why it works and who is on the losing side."},
+
+  {"artefact": "subject:02-value-reversion", "verdict": "reading", "lens": "markets",
+   "nodes": ["value.equity", "value.cross-asset", "value.reversal"], "slug": "qs-catalog-value-reversion",
+   "title": "Family 2: Value & Mean Reversion", "path": "docs/catalog/02-value-reversion.md",
+   "body": "Frames value as the slow-motion cousin of mean reversion: buying assets cheap relative to fundamentals or history and waiting years for the market to agree, versus fast reversal, days, where a price snap-back is compensation for providing liquidity to someone who had to sell in a hurry. Covers equity value ratios, FX value (currencies reverting to a purchasing-power-parity-like fair value), short-horizon reversal, and pairs/statistical arbitrage built on cointegrated price spreads, with a warning about the value trap, cheap because a business is genuinely dying rather than mispriced, and about pegged exchange rates faking mean-reversion until the peg breaks."},
+
+  {"artefact": "subject:03-carry", "verdict": "reading", "lens": "markets",
+   "nodes": ["carry.concept", "carry.rates-fx", "carry.commodities"], "slug": "qs-catalog-carry",
+   "title": "Family 3: Carry", "path": "docs/catalog/03-carry.md",
+   "body": "Defines carry as the return collected just from holding a position while nothing happens, borrowing a low-interest currency to fund a high-interest one, or holding a bond and earning its roll-down, and frames it as compensation for bearing tail risk: carry strategies collect small, steady premiums for long stretches and then give several years of profit back in one crisis, because the spread persists precisely because it doesn't get arbitraged away by the risk it represents. Surveys FX carry, bond term-premium carry, commodity roll yield, volatility carry, credit carry, and cross-asset unification, stressing that carry needs a tail hedge or trend overlay almost by definition."},
+
+  {"artefact": "subject:04-lowrisk-quality", "verdict": "reading", "lens": "markets",
+   "nodes": ["defensive.low-risk", "defensive.quality"], "slug": "qs-catalog-lowrisk-quality",
+   "title": "Family 4: Low-Risk & Quality", "path": "docs/catalog/04-lowrisk-quality.md",
+   "body": "Explains the low-volatility and quality anomalies as a textbook structural-constraint edge: investors who can't use leverage can only reach for higher expected return by buying high-volatility lottery stocks, bidding them up and leaving boring low-volatility names cheap on a risk-adjusted basis. Covers low-volatility investing, betting-against-beta, profitability and quality metrics, and warns specifically that raw ROE is a poor quality proxy because it can be inflated by leverage, a highly leveraged, fragile company can show high ROE, which is exactly the trap this codebase's own small-cap tests fell into before switching to gross profitability."},
+
+  {"artefact": "subject:05-size-liquidity", "verdict": "reading", "lens": "markets",
+   "nodes": ["defensive.size-liquidity"], "slug": "qs-catalog-size-liquidity",
+   "title": "Family 5: Size & Liquidity", "path": "docs/catalog/05-size-liquidity.md",
+   "body": "Covers the size premium (small stocks have historically outperformed, though unreliably) and the liquidity premium (assets hard to buy and sell trade cheap because someone must be compensated for being unable to exit easily) as related but distinct structural edges: large institutions are mechanically excluded from small or illiquid names because their trades would move the price too much, leaving that segment under-arbitraged. Warns both are capacity-constrained almost by definition, that microcap alpha is a frequent backtest illusion from unrealistic execution assumptions, and that survivorship bias is especially dangerous in this corner of the market."},
+
+  {"artefact": "subject:06-volatility-options", "verdict": "reading", "lens": "markets",
+   "nodes": ["volatility.vrp", "volatility.correlation", "volatility.tail"], "slug": "qs-catalog-volatility-options",
+   "title": "Family 6: Volatility & Options", "path": "docs/catalog/06-volatility-options.md",
+   "body": "Frames selling volatility as literally running an insurance business: implied volatility persistently exceeds subsequently realized volatility (the variance risk premium), because people overpay for protection against outcomes they fear most, and the seller collects that overpayment as a steady premium until a crash arrives and gives several years of it back at once. Surveys short-VRP strategies, VRP-based regime timing, dispersion trading, skew and volatility term-structure trades, tail hedging, and using implied volatility as a stock-selection input, repeatedly warning that a suspiciously smooth, high-Sharpe volatility-selling backtest is hiding its risk, not eliminating it."},
+
+  {"artefact": "subject:07-event-fundamental", "verdict": "reading", "lens": "markets",
+   "nodes": ["momentum.fundamental", "events.merger-arb", "events.corporate"], "slug": "qs-catalog-event-fundamental",
+   "title": "Family 7: Event-Driven & Fundamental", "path": "docs/catalog/07-event-fundamental.md",
+   "body": "Groups strategies around the idea that markets absorb new information gradually rather than instantly: post-earnings-announcement drift (a stock that beats expectations keeps drifting up for weeks), merger arbitrage (buying a takeover target below the deal price collects a spread that is really compensation for deal-collapse risk), forced index-rebalancing flows, buybacks and share issuance, insider-trading signals, and accruals. Notes this family has some of the clearest 'who is on the other side and why' stories of any family, but the cleanest versions require expensive analyst-expectations data, and several depend on a short leg that doesn't exist in short-sale-restricted markets."},
+
+  {"artefact": "subject:08-microstructure-intraday", "verdict": "reading", "lens": "markets",
+   "nodes": ["microstructure.order-book", "microstructure.liquidity", "microstructure.market-making"], "slug": "qs-catalog-microstructure-intraday",
+   "title": "Family 8: Microstructure & Intraday", "path": "docs/catalog/08-microstructure-intraday.md",
+   "body": "Zooms into the minute-to-second scale where price moves are literally the outcome of individual order flow: order-flow imbalance, intraday reversal and momentum, the overnight-versus-intraday return split (most of a stock's return historically accrues overnight, not during the session), market-making with inventory and adverse-selection risk, and realized-volatility forecasting from high-frequency data. The recurring, hard-won lesson is that this is where the strongest genuinely-real gross signals in the whole catalogue live, and also where they die fastest to transaction costs and to a scarcity of truly independent, as opposed to merely frequent, observations."},
+
+  {"artefact": "subject:09-macro-crossasset", "verdict": "reading", "lens": "markets",
+   "nodes": ["macro.growth-inflation", "macro.policy", "macro.cross-asset"], "slug": "qs-catalog-macro-crossasset",
+   "title": "Family 9: Macro & Cross-Asset", "path": "docs/catalog/09-macro-crossasset.md",
+   "body": "Covers top-down, cross-asset strategies keyed to yield-curve slope, credit-spread regime, and a growth/inflation quadrant framework for allocating across asset classes, alongside risk-on/risk-off timing and dollar-cycle effects. The headline, repeatedly-tested finding is a caution: macro state is a much better predictor of forward volatility than of forward return direction, so using it to time bull/bear exposure tends to misfire, it's late and often wrong-signed at V-shaped reversals, while using the same state purely to scale position size down ahead of expected volatility spikes is the version that has actually held up under honest testing."},
+
+  {"artefact": "subject:10-altdata-ml", "verdict": "reading", "lens": "markets",
+   "nodes": ["alt-data.families", "alt-data.text", "alt-data.ml"], "slug": "qs-catalog-altdata-ml",
+   "title": "Family 10: Alternative Data & Machine Learning", "path": "docs/catalog/10-altdata-ml.md",
+   "body": "Surveys alternative data (news/social sentiment NLP, earnings-call language, satellite and geospatial proxies, supply-chain network effects, search/web-traffic demand signals) and machine learning's proper role in combining many weak factors nonlinearly, alongside a pointed warning: this is the family with the most traps, since alternative datasets are typically short-history and expensive, making the statistical bar nearly impossible to clear, and decay fast once proven useful. States a clear house rule: use ML to combine already-validated factors or optimize execution, never to discover patterns directly from raw price via deep learning."},
+
+  {"artefact": "subject:11-portfolio-risk", "verdict": "reading", "lens": "quant-infra",
+   "nodes": ["portfolio.optimization.mvo", "portfolio.sizing", "portfolio.combination"], "slug": "qs-catalog-portfolio-risk",
+   "title": "Family 11: Portfolio Construction & Risk Management", "path": "docs/catalog/11-portfolio-risk.md",
+   "body": "Argues, with backing from this project's own experience, that the highest-leverage work in quantitative research is not finding a new factor but combining several weak, individually-marginal ones into a well-constructed book, a program that turned an everything-fails single-factor research phase into a portfolio with an out-of-sample Sharpe near 1.0. Walks through risk parity (equalize risk contribution, not dollar allocation), volatility targeting, IC-weighted combination, mean-variance and Black-Litterman optimization, Kelly sizing, and computing portfolio weights only from information available at the time, plus honest treatment of skew and tail-shaping as a portfolio-level, not factor-level, problem."},
+
+  {"artefact": "subject:12-crypto-defi", "verdict": "reading", "lens": "markets",
+   "nodes": ["crypto.instruments", "crypto.structure", "crypto.premia"], "slug": "qs-catalog-crypto-defi",
+   "title": "Family 12: Crypto & DeFi", "path": "docs/catalog/12-crypto-defi.md",
+   "body": "Treats crypto as the youngest, most retail-dominated, least arbitraged major market, where classical behavioral anomalies run stronger and fresh, and market-specific structural mechanisms (perpetual funding rates, cross-exchange and DEX-CEX price gaps) create genuinely new edge, but insists it should be used only for cross-validation, not as an anchor, because its short history makes the deflated-Sharpe bar hard to clear and any long-only strategy through 2021-2025 looks profitable purely from riding the bull-market beta. Covers cross-sectional crypto momentum, funding-rate carry, basis trades, cross-venue arbitrage, on-chain signals, liquidity provision and impermanent loss, staking, and MEV."},
+
+  {"artefact": "subject:index", "verdict": "reading", "lens": "markets",
+   "nodes": ["factors.rationale"], "slug": "qs-catalog-index-100-directions",
+   "title": "100 Quant Strategy Directions: A Study Catalogue", "path": "docs/catalog/index.md",
+   "body": "The organizing document for a 100-direction strategy catalogue, opening with the field's first-principles claim: any strategy that makes money must be able to name who is losing money on the other side and why they keep accepting the loss, and every real profit source reduces to one of three types — behavioral error, risk premium, or structural constraint. Also states the validation discipline governing the whole catalogue (strict causality, purged out-of-sample testing, the classic backtest traps, deflated-Sharpe multiple-testing correction, and the cost wall) and the central empirical finding that almost no single factor survives these tests alone — the money is in combining several weakly-correlated survivors into a portfolio."}
+]}

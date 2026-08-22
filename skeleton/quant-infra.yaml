@@ -186,6 +186,10 @@ nodes:
         title: Combining Signals
         summary: Blending correlated alphas across horizons — orthogonalization, IC-weighted and covariance-aware combination, and matching forecast horizon to holding period.
         requires: [foundations.fundamental-law]
+      - id: portfolio.pod-allocation
+        title: Multi-Manager Capital Allocation
+        summary: Governing capital across autonomous pods — per-pod drawdown stop-outs under a firm-level gross cap, Sharpe-weighted reallocation, a correlation penalty against duplicated book exposure, and the crisis in which quiet pod correlations all go to one.
+        requires: [portfolio.risk-models.attribution]
       - id: portfolio.sizing
         title: Bet Sizing & Leverage
         summary: Kelly and why practitioners run a fraction of it, volatility targeting, mapping signal strength to size, and gross and net leverage limits.
@@ -244,6 +248,10 @@ nodes:
         title: Testing a Quant Codebase
         summary: Golden-file P&L regressions, property tests on accounting invariants, synthetic data with known answers, deterministic replay, and an explicit float tolerance policy.
         requires: [backtest.engines]
+      - id: platform.strategy-claim-types
+        title: What a Strategy Claims
+        summary: Classifying a result as alpha, overlay or book — each answering to a different null (alpha against zero-Sharpe DSR, overlay against the un-overlaid benchmark's net gain, book against its best single sleeve), because conflating them lets one renamed overlay pass as several distinct edges.
+        requires: [backtest.overfitting.deflated-sharpe]
       - id: platform.promotion
         title: Promoting a Strategy
         summary: Paper and shadow trading, canary sizing, written promotion criteria and rollback triggers — a release process rather than a launch decision.
