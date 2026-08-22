@@ -24,52 +24,21 @@ The subclass broke because it depended on an *unspecified internal detail* of th
 Fix here: compose — wrap a `Set` and forward.
 
 ## Q zh
-为什么从同一个类中调用可覆盖的方法是陷阱，如何避免？
+```java
+class CountingSet<E> extends HashSet<E> {
+  int added = 0;
+  public boolean add(E e) { added++; return super.add(e); }
+  public boolean addAll(Collection<? extends E> c) { added += c.size(); return super.addAll(c); }
+}
+```
+`addAll` 加 3 个元素，报出来是 6。为什么？这件事关于继承说明了什么？
 
 ## A zh
-**陷阱**：
-```java
-class Parent {
-    void work() {
-        log("开始");
-        doWork();
-        log("结束");
-    }
-    
-    void doWork() { /* 父类实现 */ }
-    void log(String msg) { System.out.println(msg); }
-}
+`HashSet.addAll` 的实现方式是在循环里调用 `this.add()` —— 这叫 **self-use（自用）**。被覆盖的 `add` 会执行并再数一遍，于是每个元素都被计了两次。
 
-class Child extends Parent {
-    @Override
-    void log(String msg) { 
-        System.out.println("[CHILD] " + msg);  // 自定义日志
-    }
-}
+子类之所以坏掉，是因为它依赖了基类*未被规定的内部细节*。两个后果：
 
-child.work();  // 哦天啊，"开始" 没有 [CHILD] 前缀，因为 Parent.work() 调用 this.log()...
-               // 等等，它应该调用子类的 log()！
-```
+- 一个基类只有在**把自己的 self-use 写进文档**时才可以被安全继承（Java 的 "@implSpec / this implementation calls…"），而这份文档从此就把基类的内部实现永久冻住了。
+- 构造函数里有同样的陷阱：基类构造函数调用可被覆盖的方法，那个覆盖会在子类字段初始化**之前**执行。
 
-实际上在 Java 中，这**确实**调用 `Child.log()`（因为多态），但代码有点混乱。
-
-**真正的陷阱**：初始化顺序。
-```java
-class Parent {
-    Parent() { init(); }
-    void init() { /* ... */ }
-}
-
-class Child extends Parent {
-    List<String> items;  // 字段
-    Child() { items = new ArrayList<>(); }
-    
-    @Override
-    void init() { items.add("foo"); }  // 空指针！items 尚未初始化
-}
-```
-
-**避免**：
-- **不要**从构造函数调用可覆盖的方法。
-- 使用 `final` 方法用于内部自调用。
-- 分离初始化逻辑（模板方法的 hook 应该简单且安全）。
+这里的修法：改用组合 —— 包一个 `Set` 并转发。

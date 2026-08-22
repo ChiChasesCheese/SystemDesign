@@ -13,28 +13,10 @@ type: qa
 Regardless of type, delete must also remove the object from every **secondary index / back-pointer** you built (`spotById`, `ticketsByPlate`). In-memory designs don't have foreign keys, so a missed index entry becomes a stale object that stays reachable and reads as "deleted but still bookable."
 
 ## Q zh
-什么时候应该在对象模型中（而不是数据库中）实现 cascade delete？
+调用了 `removeFloor(floor)`。关系类型如何决定这层楼所引用的对象会怎么样，以及无论哪种类型你都必须清理什么？
 
 ## A zh
-**应该在对象模型中**：
-- 当删除是**语言级别语义**的一部分时。例：删除 `Document` 必须删除它的 `Page` 对象（不是可选的）。
-- 生命周期**紧密耦合**（子无法独立存在）。
-- **删除逻辑本身很复杂**（不仅仅是 delete 语句；有触发器、验证）。
+- **Composition（被拥有的部件）** —— `Spot` 只存在于这层楼里 → **级联删除**：跟着楼一起删，不允许别处还持有引用。
+- **Aggregation（共享的部件）** —— 停在那里的 `Vehicle` 比这层楼活得久 → **绝不级联**：要么解除关联（`spot.release()`），要么在还有活引用时**拒绝这次删除** —— 对有车占用的楼层，后者通常才是对的答案。
 
-**应该在数据库中**（或两者）：
-- 外键约束为**数据完整性**担保。
-- 多个应用程序访问数据库（ORM 无法控制所有删除）。
-
-**最佳实践**：
-```java
-class Document {
-    List<Page> pages;
-    void delete() {
-        pages.forEach(Page::delete);  // 对象级别 cascade
-        // ... 清理，然后
-        repo.delete(this);
-    }
-}
-```
-
-在数据库中也定义外键 `ON DELETE CASCADE`。两个防线。
+无论哪种类型，删除还必须把对象从你建的每一个**二级索引 / 反向指针**里移除（`spotById`、`ticketsByPlate`）。内存态设计没有外键，所以漏掉一条索引项就会留下一个可达的陈旧对象，表现为"已删除但仍然能被预订"。

@@ -13,20 +13,10 @@ type: qa
 Signal: keep it a dependency while only one operation needs it; promote to an association when most methods do. Weakest workable relationship wins — it minimizes what a change can break.
 
 ## Q zh
-UML 中的 association vs dependency——区别是什么，何时选择哪一个声明？
+一种设计里 `NotificationService` 是 `OrderService` 构造注入的字段，另一种里它是 `checkout(cart, notifier)` 的参数。分别说出这两种关系是什么，以及这个选择传达了什么信号。
 
 ## A zh
-- **Association**（实线）：对象有**持久的、结构性的**关系。一个对象**持有**另一个的引用，通常作为字段。例：`Order` 有许多 `LineItem`。
-- **Dependency**（虚线）：一个类**临时依赖**另一个，通常为了调用方法。通常**局部**（参数、返回值）或**临时**。例：`OrderProcessor.process(Order)` 取决于 `PaymentService`。
+- **字段** → association（关联）：结构性的、长期存在的 —— "OrderService *拥有* 一个 notifier"。
+- **参数/局部变量** → dependency（依赖）：一次性的 uses-a，UML 里最弱的耦合。
 
-**何时声明**：
-- 如果关系**长期存在**且对象标识很重要→ Association。
-- 如果关系是**临时的、仅用于**一次交互→ Dependency。
-
-在代码中：
-```java
-class Order {
-    LineItem[] items;  // 关联——字段
-    void process(PaymentService p) { ... }  // 依赖——参数
-}
-```
+信号：只要还只有一个操作需要它，就让它停留在 dependency；等到大多数方法都要用，再升级成 association。**能用的最弱关系胜出** —— 它把一次改动可能波及的范围压到最小。

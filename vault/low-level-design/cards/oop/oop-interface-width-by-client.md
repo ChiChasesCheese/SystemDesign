@@ -15,39 +15,12 @@ Split by **client**, not by method count. If every caller of a 4-method interfac
 The purpose is shrinking what a client can depend on, not shrinking the interface.
 
 ## Q zh
-「interface 宽度应由客户端决定」是什么意思，你如何设计它？
+在 90 分钟的设计里，你依据什么决定在哪里拆接口——又是什么让一次拆分**过细**？
 
 ## A zh
-**意思**：不要创建一个拥有一切的大接口。设计小的、任务特定的接口，客户端**组合多个**来表达他们需要什么。
+按**调用方**拆，不按方法数量拆。如果一个 4 方法接口的每个调用方都用满这 4 个，它就是内聚的，拆开只是徒增文件。当某个调用方只用到严格子集时才拆，比如定价引擎永远只 `read` 目录、而管理流程要 `write` → 拆成 `CatalogReader` + `CatalogWriter`，由同一个类实现两者。
 
-**不好**（宽接口）：
-```java
-interface PaymentGateway {
-    void charge(Money);
-    void refund(Money);
-    void validateCard(String);
-    void updateBillingAddress(Address);
-    // ...20 多个方法
-}
-```
+- **过细**：为*同一个角色*的每个调用方都建单方法接口，于是一个实现被写成 `implements A, B, C, D`，每个装配点都要写出四个类型名。
+- 拆对了的信号：某个调用方的构造函数**变窄了**，它的测试 fake 也变短了。
 
-调用者需要 charge 和 refund；他们不应该被迫依赖 `validateCard` 或 `updateBillingAddress`。
-
-**好**（瘦接口）：
-```java
-interface Charger { void charge(Money); }
-interface Refundable { void refund(Money); }
-interface Validator { void validate(String); }
-
-class PayPal implements Charger, Refundable, Validator { }
-```
-
-调用者可以依赖**只**他们需要的：
-```java
-void processOrder(Order o, Charger c) { c.charge(o.total()); }
-```
-
-**好处**：
-- 更少的耦合；更容易模拟测试。
-- 更清晰的合同；每个接口有一个职责。
-- 灵活的实现；对象可以选择性地实现角色。
+目的是缩小一个调用方所能依赖的东西，而不是缩小接口本身。

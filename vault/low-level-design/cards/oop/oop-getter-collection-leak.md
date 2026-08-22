@@ -22,36 +22,19 @@ The field is `private final`. Explain how encapsulation is still broken, and giv
 Getters returning mutable internals (collections, `Date`, arrays) are the most common encapsulation leak in review.
 
 ## Q zh
-从 getter 返回一个集合有什么危险，你如何防止？
+```java
+class Floor {
+  private final List<Spot> spots;
+  public List<Spot> getSpots() { return spots; }
+}
+```
+字段是 `private final`。解释封装为什么仍然被破坏了，并按优先级给出三种修法。
 
 ## A zh
-**危险**：调用者可以修改内部集合，破坏对象的不变量。
+`final` 保护的是**引用**，不是内容 —— 调用方拿到的是那个活着的 list，可以 `add`/`clear`，绕开 `Floor` 强制的每一条规则。**入口方向**也有同样的泄漏：构造函数直接存下调用方传进来的 list，调用方之后照样能继续改它。
 
-```java
-class Document {
-    List<Page> pages;
-    List<Page> getPages() { return pages; }  // 危险！
-}
+1. **根本不要暴露** —— 改成暴露操作：`floor.findFreeSpot(size)`。
+2. 返回**不可变视图**（`List.copyOf` / `Collections.unmodifiableList`），并在构造函数里做防御性拷贝。
+3. 只有当调用方确实需要任意遍历时，才暴露 stream/iterator。
 
-Document doc = new Document();
-doc.getPages().clear();  // 调用者刚刚删除了所有页面。文档现在不一致。
-```
-
-**防止**：
-
-1. **返回不可修改的视图**：
-   ```java
-   List<Page> getPages() { return Collections.unmodifiableList(pages); }
-   ```
-
-2. **返回副本**：
-   ```java
-   List<Page> getPages() { return new ArrayList<>(pages); }
-   ```
-
-3. **返回迭代器**（没有 `remove()`）：
-   ```java
-   Iterator<Page> getPages() { return pages.iterator(); }
-   ```
-
-**权衡**：防守（不可修改）vs 便利（副本有内存成本）。不可修改通常是首选；如果调用者想要写访问，他们应该要求 add/remove 方法。
+getter 返回可变的内部结构（集合、`Date`、数组）是 code review 中最常见的封装泄漏。

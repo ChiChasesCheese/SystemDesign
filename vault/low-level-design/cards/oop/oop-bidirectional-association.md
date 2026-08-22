@@ -15,21 +15,12 @@ Nothing keeps the two ends consistent: `order.setCustomer(c)` without `c.getOrde
 Default to B in a machine-coding round: a navigable link you can derive is cheaper than one you must maintain.
 
 ## Q zh
-Bidirectional association（两个对象相互引用）是什么陷阱？
+`Order` 持有 `Customer`，`Customer` 又持有 `List<Order>`。这种双向关联会出什么问题，有哪两种有纪律的做法？
 
 ## A zh
-**陷阱**：
+没有任何机制保证两端一致：`order.setCustomer(c)` 而没有 `c.getOrders().add(order)`，就留下一条半截链接，而且此后每一条修改路径都必须记得同时改两边。它还制造了一个**引用环**，会让朴素的 `equals`/`hashCode`/`toString` 无限递归。
 
-1. **一致性地狱**：`order.addItem(item)` 必须也做 `item.setOrder(order)`。忘记一半导致**ghost 引用**和 bug。
+- **做法 A —— 只留一个拥有方**：只存在 `Customer.addOrder(order)`，由它自己设置反向指针，并且是*唯一*的修改入口。`Order.setCustomer` 降为包级私有或直接删掉。
+- **做法 B —— 干脆去掉反向指针**：只保留 `Order → Customer` 这一个引用，"某个客户的所有订单"由仓储里的索引来回答。
 
-2. **内存泄漏**：如果一个引用是强的且是循环的，垃圾收集无法清理。例：`Order` → `LineItem` → `Order`。
-
-3. **序列化复杂性**：循环导致无限递归。需要 transient 字段或自定义序列化。
-
-4. **测试和隔离**：模拟一个对象意味着也模拟另一个。测试变得耦合。
-
-**何时不可避免**：父-子关系（`Form` ↔ `Field`），其中子需要返回到父。
-
-**缓解**：
-- 一个方向强（如 Order → LineItem）；另一个是弱引用或懒惰计算。
-- 使用事件或观察者而不是反向引用。
+机考里默认选 B：一条能推导出来的可导航链接，比一条必须靠人维护的便宜。

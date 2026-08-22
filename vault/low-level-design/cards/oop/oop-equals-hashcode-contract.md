@@ -16,35 +16,13 @@ Two practical consequences:
 - Only fields that never change may participate — otherwise a mutation strands the object in the wrong bucket.
 
 ## Q zh
-`equals()` 和 `hashCode()` 之间的合同是什么，打破它会发生什么？
+你给 `Money` 重写了 `equals` 但没重写 `hashCode`。`set.add(new Money(5, USD))` 之后 `set.contains(new Money(5, USD))` 返回 **false**。解释原因，并说出被破坏的是哪条契约。
 
 ## A zh
-**合同**：
-- 如果 `a.equals(b)` 为 true，则 `a.hashCode() == b.hashCode()` 必须为真。
-- （反向**不**成立：`a.hashCode() == b.hashCode()` 不保证 `equals`。）
+`HashSet` 先按 `hashCode` 选桶。两个相等的对象如果 identity hash code 不同，就落到不同的桶里，于是 `equals` 根本没被调用过。
 
-**为什么**：HashMaps 和 HashSets 使用 `hashCode()` 找到桶，然后使用 `equals()` 以找到确切的元素。
+契约：**相等 ⇒ hash code 相等**（反向不要求 —— 碰撞是合法的，只是更慢）。另外还要求：自反、对称、传递、一致，以及 `x.equals(null) == false`。
 
-**打破它会发生什么**：
-```java
-class User {
-    String name;
-    // 只覆盖 equals，忘记 hashCode
-    boolean equals(Object o) { return ((User)o).name.equals(name); }
-}
-
-Set<User> s = new HashSet<>();
-s.add(new User("Alice"));
-s.contains(new User("Alice"))  // false ——相同的值，不同的 hashCode，所以不同的桶
-```
-
-**修复**：
-```java
-public int hashCode() { return name.hashCode(); }
-public boolean equals(Object o) { 
-    if (!(o instanceof User)) return false;
-    return name.equals(((User)o).name);
-}
-```
-
-**记住**：`equals()` → 也实现 `hashCode()`。IDEs 会警告。
+两个实际后果：
+- **子类下的对称性**：父类 `equals` 里用 `instanceof`，会让 `sub.equals(super)` 和 `super.equals(sub)` 结果不一致；改用 `getClass() !=` 能避免，但也就彻底禁止了子类之间相等。
+- 只有永不改变的字段才能参与比较 —— 否则一次修改就会把对象留在错误的桶里。

@@ -11,30 +11,8 @@ When does an enum with behavior (per-constant fields/methods) beat a class hiera
 - **Outgrown** when variants need their own mutable state, substantially distinct logic, or open extension (new variants without editing the enum) → promote to interface + one class per variant (strategy).
 
 ## Q zh
-Java enum 可以有方法。何时使用 enum with behavior，何时不应该？
+什么时候带行为的 enum（每个常量各自的字段和方法）比类层次更适合表达变体——又有哪些信号说明你已经用不下 enum 了？
 
 ## A zh
-**Enum with behavior**：每个枚举常数可以有自己的实现。
-
-```java
-enum PaymentMethod {
-    CREDIT {
-        void charge(double amount) { /* 信用卡逻辑 */ }
-    },
-    BANK_TRANSFER {
-        void charge(double amount) { /* 银行转账逻辑 */ }
-    };
-    abstract void charge(double amount);
-}
-```
-
-**何时使用**：
-- **小的、变体特定的行为**。例：每种支付方法的费用计算。
-- **替代 switch/if 链**。清晰、类型安全。
-
-**何时不应该**：
-- **复杂逻辑**。Enum 不是为了包含方法的完整实现。
-- **需要状态**。Enum 常数是共享的、不可变的；它们不能持有实例数据。
-- **许多方法**。Enum 变得难以阅读。改用 Strategy pattern。
-
-**经验法则**：≤2 个小方法 → enum behavior。更多 → strategy/polymorphism。
+- **Enum 胜出**：变体集合小而封闭，且行为是变体的纯函数：`VehicleType.SUV.spotSize()` —— 常量和逻辑放在一起，switch 还能拿到编译器的穷尽性检查。
+- **用不下了**的信号：变体需要各自的可变状态、逻辑差异很大、或者需要开放扩展（不改 enum 就能加新变体）→ 升级成 interface + 每个变体一个类（strategy）。

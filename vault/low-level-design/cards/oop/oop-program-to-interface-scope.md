@@ -13,33 +13,10 @@ type: qa
 Extract the interface when the second implementation or the test seam actually arrives; requirements hinting at variants ("support multiple pricing schemes") count as arrival.
 
 ## Q zh
-「Program to interfaces, not implementations」——这何时应用，什么是陷阱？
+"面向接口编程" —— 在机考里它在哪些地方真的划算，又在哪里会变成 interface 膨胀？
 
 ## A zh
-**意思**：将变量、参数、返回类型声明为接口而不是具体类。
+- **划算**的地方是变化点和边界：定价/分配策略、通知渠道、存储 —— 这样扩展性追问可以靠新增来回答，测试也能注入 fake。
+- **膨胀**：每个类都配一个接口，却只有一个实现、也不需要任何接缝 —— 纯粹的仪式感（speculative generality）。
 
-```java
-// 不好
-ArrayList<User> users = new ArrayList<>();
-HashMap<String, User> cache = new HashMap<>();
-
-// 好
-List<User> users = new ArrayList<>();
-Map<String, User> cache = new HashMap<>();
-```
-
-**好处**：
-- 解耦；你可以交换实现（LinkedList、TreeMap）而不改变调用代码。
-- 易于测试；模拟接口。
-
-**陷阱**：
-- **过度应用**。对于内部变量或不可能被交换的东西，具体类很好。
-- **接口无法表达所有需求**。例：`List` 接口，但你需要 `LinkedList.getFirst()` 的 O(1) 性能。你无法在接口中表达这个。
-- **接口膨胀**。为每个具体类创建一个接口是过度工程。
-
-**平衡**：
-- 公共 API / 交换点 → 接口。
-- 内部实现 → 具体类可以。
-- 一个实现 → 接口可能是多余的。
-
-**现代实践**：Java 8+ 接口可以有默认方法，使它们更像轻量级基类。
+等第二个实现或者测试接缝**真的出现**时再抽接口；需求里透出的变体暗示（"要支持多种定价方案"）也算出现。

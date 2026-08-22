@@ -13,16 +13,10 @@ Interface or abstract class — what's the decision rule? One example of each fr
 Rule of thumb: no shared fields → interface; shared fields/protected helpers → abstract class. When torn, start with the interface — it's the weaker, easier-to-revise commitment.
 
 ## Q zh
-什么时候使用接口 vs abstract class？
+接口还是抽象类 —— 判定规则是什么？各举一个机考题里的例子。
 
 ## A zh
-- **Interface**：契约、行为列表。实现者承诺支持操作。多个接口。通常**无实现**（Java 8+ 默认方法是例外）。
-- **Abstract class**：部分实现、共享基础设施。通常**有**字段和一些已实现方法。一个父类。
+- **接口**：跨越彼此无关的类型的一份能力契约；一个类可以同时持有多个 —— `FareStrategy`、`Notifiable`。
+- **抽象类**：共享**状态和部分实现**的一个家族 —— 国际象棋的 `Piece` 持有位置，并留下抽象的 `possibleMoves()`。
 
-**何时选择**：
-- **行为签名只**（许多无关的实现者做相同的事情）→ Interface。例：`Serializable`、`Runnable`。
-- **共享实现或状态**→ Abstract class。例：`Repository` 的常见 CRUD 逻辑。
-- **多个来源**→ Interface。例：`class Dog implements Animal, Comparable`。
-- **一个语义的实现族**→ Abstract class。例：`Shape` 及其子类。
-
-**现代倾向**：默认接口；只在需要状态或实现时升级到 abstract class。
+经验法则：没有共享字段 → 接口；有共享字段或 protected 辅助方法 → 抽象类。拿不准时先从接口开始 —— 它是更弱、更容易改口的承诺。

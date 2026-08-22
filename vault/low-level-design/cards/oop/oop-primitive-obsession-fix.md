@@ -17,50 +17,14 @@ Fix: small value types — `record Plate(String value)`, `Money`, `Instant` — 
 Not worth it for a scalar used in one local computation, or a loop index. Trigger: the primitive **crosses a boundary** or carries a rule.
 
 ## Q zh
-Primitive obsession 是什么代码气味，你如何修复它？
+```java
+Ticket issue(String plate, String spotId, double amount, long enteredAt)
+```
+说出坏味道、它会引发什么故障、修法是什么——以及什么时候这个修法不值得做。
 
 ## A zh
-**代码气味**：过度使用基本类型（int、String、double）表示域概念。
+**Primitive obsession（基本类型偏执）。** 两个同类型的参数意味着 `issue(spotId, plate, ...)` 能编译通过，然后在运行时静默出错；用 `double` 表示金钱会招来舍入漂移；校验（"车牌是 7 个字符"）要么在每个调用点重复一遍，要么根本没有。
 
-```java
-class User {
-    String email;  // 仅仅是一个 String？
-    int age;       // 仅仅是一个 int？
-    double salary; // 仅仅是一个 double？
-}
+修法：小的值类型 —— `record Plate(String value)`、`Money`、`Instant`，在构造函数里做校验。这样编译器会拒绝调换的参数，规则只存在于一处，类型名本身就说明了单位（是 `Money`，而不是"金额，单位大概是分吧"）。
 
-// 到处都是验证：
-if (email.contains("@")) { ... }
-if (age > 18 && age < 65) { ... }
-```
-
-**修复**：将基本类型包装在值对象中：
-```java
-class Email {
-    String value;
-    Email(String v) {
-        if (!v.contains("@")) throw new InvalidEmail();
-        this.value = v;
-    }
-}
-class Age {
-    int value;
-    Age(int a) { 
-        if (a < 0 || a > 150) throw new InvalidAge();
-        this.value = a;
-    }
-}
-
-class User {
-    Email email;
-    Age age;
-    // 验证已发生；不变量得到保证
-}
-```
-
-**好处**：
-- **自我验证对象**；无法创建无效的 Email。
-- **清晰的意图**：`Email` 比 `String` 更清晰。
-- **可重用的验证**。
-
-**成本**：更多的类。但对大型域模型来说是值得的。
+对只在一处局部计算里用到的标量、或者循环下标，不值得。触发条件：这个基本类型**跨越了边界**，或者它身上带着一条规则。

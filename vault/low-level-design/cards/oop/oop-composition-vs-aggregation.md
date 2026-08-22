@@ -15,16 +15,12 @@ Question: **does the part's lifetime end with the whole, under exclusive ownersh
 Both are has-a; ownership + lifetime is the discriminator, and composition is the one your destructor/cascade-delete logic must respect.
 
 ## Q zh
-Composition vs aggregation——两者都是「有关系」。区别是什么？
+`ParkingLot`–`Floor` 与 `Course`–`Student`：哪个是 composition，哪个是 aggregation —— 靠哪一个问题就能判定？
 
 ## A zh
-- **Composition**（强）：部分**由整体拥有和管理**；部分**无法独立存在**。整体被销毁，部分也被销毁。例：`Car` 和 `Engine`；没有 car 就没有 engine。
-- **Aggregation**（弱）：整体只**持有对**部分的引用；部分**可以独立存在**。删除整体，部分仍然存在。例：`Team` 和 `Player`；player 可以加入另一个 team。
+那个问题是：**部件的生命周期是否随整体结束，并且被独占拥有？**
 
-在 UML 中：
-- Composition = 填充的菱形。
-- Aggregation = 空的菱形。
+- `Floor` 只存在于唯一一个停车场里，并随它消亡 → **composition**（实心菱形）。
+- `Student` 比课程活得久，而且同时属于多门课 → **aggregation**（空心菱形）。
 
-在 Java 代码中，区别**语义上**（只能通过设计意图看出）；语言中没有执行。
-
-**实际区别**：lifecycle 和所有权。
+两者都是 has-a；判别式是所有权 + 生命周期，而 composition 正是你的析构/级联删除逻辑必须尊重的那一种。

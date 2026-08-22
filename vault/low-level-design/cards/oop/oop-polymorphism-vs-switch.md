@@ -13,38 +13,10 @@ When do you replace a switch-on-type with polymorphism — and when is keeping t
 Count the switch sites and the expected variants before reaching for the hierarchy.
 
 ## Q zh
-为什么 polymorphism 优于 switch/if 链来处理变体，成本是什么？
+什么时候该把 switch-on-type 换成多态——什么时候保留 switch 反而是更好的设计？
 
 ## A zh
-**Polymorphism**：
-```java
-interface Shape { double area(); }
-class Circle implements Shape { 
-    public double area() { return Math.PI * r * r; }
-}
-class Square implements Shape { 
-    public double area() { return side * side; }
-}
+- **该换**：同一个类型 switch 在多处重复出现，而且新变体还在不断加进来 —— 每个变体一个类，能把每次新增都收敛到一个文件里（这就是 OCP 的实际形态）。
+- **该留**：只有一处、针对封闭 enum 的穷尽 switch —— 编译器会替你标出漏掉的分支，这种情况下每个变体建一个类属于 speculative generality。
 
-Shape s = getShape();  // 不知道什么类型
-return s.area();       // 调用正确的实现
-```
-
-**Switch/if**：
-```java
-if (type == CIRCLE) return Math.PI * r * r;
-else if (type == SQUARE) return side * side;
-// 添加新变体？添加新 case。
-```
-
-**为什么 polymorphism 优于**：
-- **开放-闭合**：添加新类型而不改变现有代码。
-- **分散逻辑**：每个类知道自己如何计算；没有大的 switch。
-- **类型安全**：编译器强制实现；switch 容易遗漏 case。
-
-**成本**：
-- **多个文件/类**。简单的 switch 在一个地方。
-- **虚拟方法调用开销**（最小；JIT 优化）。
-- **学习曲线**：初级程序员可能发现 switch 更直接。
-
-**经验法则**：一个 switch → OK。更多 → 重构为多态。
+伸手去建层次结构之前，先数两个数：switch 出现了几处，预期会有多少变体。
