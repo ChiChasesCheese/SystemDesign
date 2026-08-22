@@ -13,11 +13,10 @@ Circular, star, and all-to-all multi-leader topologies — what does each risk, 
 All topologies need a **replication path tag** on each write (list of node ids it has passed through) so a leader drops writes it has already applied and the write stops circulating. All-to-all additionally needs **causal ordering** — version vectors, not wall clocks — which is exactly the bug most hand-rolled multi-master setups ship with.
 
 ## Q zh
-多主复制的三种拓扑是什么？每种的优缺点？
+环形、星形和全连接三种多主拓扑——各自的风险是什么？每一种都需要额外携带什么元数据？
 
 ## A zh
-- **星形** — 一个主充当枢纽，中转其他主的更新。简单但枢纽是单点故障。
-- **环形** — 每个主转发给下一个；转发失败可能阻断链。
-- **全连接** — 每个主向所有其他主发送更新。最灵活但消息数 O(n²)；需要版本向量或时间戳来检测重复。
+- **环形 / 星形**：每次写沿固定路径转发。一个节点宕机就会**打断链条**，直到重新配置，而且每次写都要付出多跳的代价。MySQL 经典的环形复制就是这种。
+- **全连接**：每个 leader 向所有其他 leader 发送。没有单点瓶颈，但消息可能**互相超车**——一个 `UPDATE` 可能在它依赖的 `INSERT` 之前到达某个 leader，朴素的时间戳无法给它们排序。
 
-实际上：大多数系统默认全连接（更简单）或星形（降低复杂性）。
+所有拓扑都需要在每次写上带一个**复制路径标签**（它经过的节点 id 列表），这样一个 leader 才能丢弃自己已经应用过的写、让写停止循环传播。全连接还额外需要**因果排序**——用版本向量，而不是墙钟——这正是大多数手搓的多主方案会踩的坑。

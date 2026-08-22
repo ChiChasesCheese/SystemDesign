@@ -14,14 +14,11 @@ What does Raft actually guarantee about leaders and logs, and what mechanism enf
 Consequence worth stating: entries flow only leader → follower; a new leader never overwrites committed entries, only uncommitted divergence.
 
 ## Q zh
-Raft 保证什么？为什么它在实践中有效？
+Raft 对 leader 和日志到底保证了什么？每一条保证又是靠什么机制强制执行的？
 
 ## A zh
-**Raft 保证**：
-1. 选举安全 — 任何任期最多一个领导者。
-2. 领导者追加-只 — 领导者只追加日志，从不覆盖/删除。
-3. 日志匹配 — 如果两个日志在相同索引和任期有条目，它们在该点之前相同。
-4. 领导者完整性 — 新领导者拥有所有已提交的条目。
-5. 状态机安全 — 如果日志条目被应用到一个服务器，没有其他服务器会在相同索引应用不同条目。
+- **选举安全（election safety）**：每个任期最多 1 个 leader——每个节点每个任期只投一次票，候选人需要**多数票**；任何两个多数派必然相交。
+- **leader 完整性（leader completeness）**：选出的 leader 已经拥有所有已提交的条目——投票者会**拒绝日志不如自己新的候选人**（先比较最后一条的任期，再比较长度），所以任何一个获胜多数派中，至少有一个投票者持有每一条已被多数提交的条目。
+- **日志匹配 / 状态机安全（log matching / state machine safety）**：如果两个日志在某个索引+任期上一致，那么它们在这条之前的所有内容也一致（靠 AppendEntries 的一致性检查保证），所以所有节点按相同顺序应用相同的命令。
 
-这使得 Raft 对于可靠地复制有限状态机很有效。
+值得一提的推论：条目只沿 leader → follower 方向流动；一个新 leader 永远不会覆盖已提交的条目，只会覆盖未提交的分歧部分。

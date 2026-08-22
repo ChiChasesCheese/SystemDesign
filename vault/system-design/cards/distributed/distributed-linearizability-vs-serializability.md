@@ -13,13 +13,10 @@ Linearizability vs serializability — what does each guarantee, over what unit,
 Together (transactions serialized in an order consistent with real time) = **strict serializability** — what Spanner provides. Classic trap: "serializable" alone does not imply "you read the latest committed data".
 
 ## Q zh
-线性一致性和可序列化的区别是什么？
+线性一致性和可序列化——各自保证什么？作用的单位是什么？它们俩结合在一起叫什么？
 
 ## A zh
-**线性一致性（Linearizability）**：单对象一致性，保证操作的实时顺序（wall-clock order）。但事务跨对象可能违反因果关系。
+- **线性一致性（Linearizability）**：一个*单对象、实时*的保证——每次读/写看起来都在其开始和结束之间的某个时刻原子地生效，所以一次写完成之后的读必须能看到它。这是一个新鲜度/顺序上的承诺；没有多对象事务的概念。
+- **可序列化（Serializability）**：一个*多对象事务隔离*的保证——结果等价于事务的**某种**串行顺序。这个顺序可能和实时不一致：一个可序列化的系统合法地可以执行"昨天快照"式的读。
 
-**可序列化（Serializability）**：事务一致性，保证并发事务的结果等价于某个串行执行。可以违反实时顺序，但保证逻辑一致性。
-
-**例子**：转账 A→B 100，B→A 50。线性一致但不可序列化：A 先减 100，B 加 100（中间读可能看到转账中状态）。可序列化但不线性一致：根据事务逻辑顺序（可能与实时不同）确定结果。
-
-权衡：线性一致性严格但成本高，可序列化灵活但复杂。
+两者结合（事务按一个与实时一致的顺序串行化）= **严格可序列化（strict serializability）**——这正是 Spanner 提供的保证。经典的陷阱："serializable" 本身并不意味着"你读到的是最新提交的数据"。

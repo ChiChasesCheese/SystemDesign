@@ -17,11 +17,14 @@ Forced decisions:
 What stays impossible: **global invariants** (uniqueness, non-negative balance) cannot be checked offline, so those operations must be *provisional locally and confirmed by the server*, with a visible rollback path in the UI.
 
 ## Q zh
-离线客户端如何处理写入而无需等待网络往返？后来的冲突如何解决？
+为什么一个支持离线的手机/桌面应用本质上是一个多主系统？这又强制你做出哪两个 schema 决策？
 
 ## A zh
-客户端在本地乐观应用写入（日历事件、笔记）到其本地副本。当在线时，与服务器同步：
-- 如果没有冲突（版本向量或时间戳显示两个写都在同一条链），合并自动。
-- 如果冲突（并发写），使用 CRDT、LWW 或应用逻辑（undo/redo、显示差异让用户选择）。
+每台设备都持有一份完整的本地副本，能在**断网时接受写入**，之后再同步——这正是多主复制，只是有一个特别之处：**复制延迟没有上界**（如果手机被扔在抽屉里，可能是几天），而"leader 的数量"就等于用户的设备数量。
 
-关键：客户端是**主数据源**对于本地更改，直到同步；服务器必须接受客户端版本或表达冲突。
+被迫做出的决策：
+
+- **客户端生成 id**（UUID/ULID，或 `(device_id, local_seq)`）——服务器的自增 id 没法在离线时分配，两台设备也会分配出同一个 id。
+- **把变更记录为意图，而不是绝对状态**——存 "给 quantity 加 2" 或一个 CRDT/OT 操作，而不是 `quantity = 5`，这样两台设备各自的离线编辑才能在合并后都保留下来。
+
+始终做不到的：**全局不变量**（唯一性、余额非负）没法离线校验，所以这类操作必须*在本地是临时性的，由服务器确认*，并且在 UI 上要有可见的回滚路径。

@@ -17,11 +17,14 @@ It never gets home when:
 Hence the guarantee downgrade: a sloppy write is a **durability/availability boost, not a quorum** — the R read replicas need not intersect the nodes that actually took the write, so `W + R > N` no longer implies you read it back.
 
 ## Q zh
-什么是 sloppy quorum？它如何在节点故障下保持可用性？
+追踪一次在 sloppy quorum 加 hinted handoff 下的写入：它落在哪里？什么时候能回到家？又有哪两种方式让它永远回不去？
 
 ## A zh
-传统 quorum：写必须达到 N 个副本中的 W 个，这些是**首选的**副本。如果 W 个首选副本不可用，写失败。
+一个 key 的 N 个归属副本由环决定。如果其中一些不可达，协调者就转而写入**前 N 个可达的节点**，而某个替补节点会把这个值存进一份单独的**hint**里——一条标记着"这属于节点 7"的持久记录。当节点 7 重新被看到存活（通过 gossip）时，替补节点会把 **hint 重放给它**，然后删除这些 hint。
 
-**Sloppy quorum**（提示移交）：如果首选副本不可用，写入**任何** W 个可用节点，包括临时节点。临时节点标记写入为"为节点 X"。当节点 X 恢复时，临时节点将数据移交回去。
+它永远回不去的两种情况：
 
-好处：在节点失败中写可用性。缺点：持久性降低（临时节点本身可能失败，数据丢失）。权衡：可用性 vs 持久性。
+- **hint 窗口过期**——hint 只保留一段有限的时间（Cassandra 的 `max_hint_window`，默认几个小时）；过了这个时间就会被丢弃，只有反熵修复才能修好那个副本了。
+- **替补节点在重放之前就挂了**，把 hint 的唯一副本一起带走了。
+
+因此这个保证是被降级的：一次 sloppy 写只是**持久性/可用性上的加成，不是一次 quorum**——R 个读副本不需要和真正接受了这次写的节点相交，所以 `W + R > N` 不再意味着你能读回这次写入。

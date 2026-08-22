@@ -13,13 +13,10 @@ Local (document-partitioned) vs global (term-partitioned) secondary indexes on a
 Rule: write-heavy with occasional filtered reads → local; read-heavy queries on the secondary key → global, and accept the lag.
 
 ## Q zh
-二级索引如何在分布式系统中分区？权衡是什么？
+在一个分片存储上，本地（按文档分区）二级索引和全局（按词条分区）二级索引——付出代价的是写入方还是读取方？
 
 ## A zh
-给定表在主键上分片，如何在辅助属性（如用户名）上进行查询？
+- **本地索引**：每个分区只为自己的行建索引。写入只碰一个分区（便宜，且和该行在同一个事务里），但对被索引字段的查询必须**跨每个分区做 scatter-gather**——尾部延迟等于所有分片里最慢的那个。
+- **全局索引**：索引本身按被索引的值（词条）来分区，所以一次查询只打到一个索引分区。但一次行更新可能要碰到**好几个索引分区**，所以更新通常是**异步**的——索引会落后于 base data（DynamoDB 的 GSI 正是这样工作的，有自己独立的预置吞吐量，也是最终一致的）。
 
-**全局二级索引** — 索引本身也按索引键分片。查询快速（直接去索引分片）。但更新分布式且缓慢（主分片 → 索引分片）。
-
-**本地二级索引** — 每个分片维护其自己的数据的索引。写入本地且快速。但查询需要 scatter-gather 所有分片。
-
-权衡：write-local-read-global（全局索引）vs read-local-write-global（本地索引）。选择取决于工作负载。
+规则：写多、偶尔按二级属性过滤读 → 用本地索引；读多、频繁按二级 key 查询 → 用全局索引，并接受这个延迟。

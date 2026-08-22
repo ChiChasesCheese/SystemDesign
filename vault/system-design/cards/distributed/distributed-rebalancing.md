@@ -12,14 +12,9 @@ Live migration recipe: (1) start copying the moving range to the new shard while
 Classic mistake: `mod N` routing baked into clients, or too few fixed partitions. Standard designs: **many fixed logical partitions** mapped to fewer nodes (move whole partitions, never rehash), or **dynamic range splitting** (HBase/CockroachDB) that splits when a range grows hot or large.
 
 ## Q zh
-什么是分布式系统中的重新平衡？何时触发？
+怎样在不停机的情况下对一个分片存储做重新切分/再平衡？选择分区数量时的经典错误是什么？
 
 ## A zh
-**重新平衡**：在节点加入/离开时重新分配分片副本（和数据）。
+在线迁移的做法：(1) 开始把要搬迁的 range 拷贝到新分片，同时 (2) **双写或流式同步变更**（CDC）来保持同步，(3) 追上之后，原子地切换路由元数据（路由器/配置服务），(4) 排空并删除旧的那份拷贝。读按 range 逐个切换；对同一个 range，写永远不能同时在两个地方被接受。
 
-触发：
-- 新节点加入 — 将分片副本分配给它以利用容量。
-- 节点离开/失败 — 将其副本移动到健康节点以保持复制因子。
-- 不平衡 — 某些节点拥有太多分片/数据；重新分配以平衡。
-
-挑战：重新平衡 I/O 和网络密集；它与 foreground 查询竞争资源。缓解：限流、背压监测、优先考虑重要分片。
+经典错误：把 `mod N` 路由硬编码进客户端，或者固定分区数定得太少。标准做法：**大量固定的逻辑分区**映射到较少的节点上（搬迁整个分区，永远不重新哈希），或者**动态范围分裂**（HBase/CockroachDB），在一个 range 变热或变大时才分裂。

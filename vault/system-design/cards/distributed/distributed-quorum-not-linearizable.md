@@ -12,11 +12,9 @@ A write lands on replicas **one at a time**, and reads can interleave with the p
 To fix it, a reader must **synchronously read-repair** the new value to a write quorum before returning, and writers must read the latest state before writing — expensive, and LWW conflict resolution breaks it anyway. That's why quorum overlap gives you "reads see *acknowledged* writes", not linearizability ([[distributed-quorum-math]]).
 
 ## Q zh
-为什么 quorum 读写不保证线性一致性？
+Dynamo 风格的存储，N=3、W=2、R=2——严格 quorum，没有 sloppy。为什么读仍然不是线性一致的？
 
 ## A zh
-Quorum 保证 read-your-writes 和单调读，但不保证全局同步。问题：
-- 两个并发写可以在不同的 quorum 中完成（都达到 W + R > N 但在不同时间）。
-- 一个慢的读可能先返回旧值。
+一次写是**一个一个地**落到各个副本上的，而读可以和这个未完成的写过程交错：读者 1 的 quorum 包含了一个已更新的副本，返回了新值；而*之后*的读者 2 的 quorum 恰好命中了两个还没更新的副本，返回了**旧**值——先新后旧违反了线性一致性，即便这两次 quorum 都是有效的。
 
-例如：W + R > N，但读 quorum 遗漏最新写的所有副本直到稍后才同步。写入被承认但读看不到。对于线性一致性，需要同步确认最新或使用 Raft/Paxos。
+要修复这个问题，读者必须在返回之前**同步地把新值 read-repair 到一个写 quorum**，写者也必须在写之前先读到最新状态——代价很高，而且 LWW 冲突解决方式无论如何都会破坏它。这就是为什么 quorum 重叠给你的只是"读能看到*已确认*的写"，而不是线性一致性（[[distributed-quorum-math]]）。

@@ -15,11 +15,12 @@ The **ELC part**: *Else* (no partition, i.e. almost always), you still trade **L
 Interview use: PACELC explains why "strongly consistent" systems are slower *every day*, not just during rare partitions.
 
 ## Q zh
-PACELC 定理说什么？它与 CAP 有什么关系？
+PACELC 比 CAP 多说了什么？DynamoDB 和 Spanner 在这个框架下分别怎么分类？
 
 ## A zh
-**PACELC**：如果有**分割**，选择可用性 (A) 或一致性 (C)；否则（在正常运行下）权衡延迟 (L) vs 一致性 (C)。
+多出来的是 **ELC 部分**：*Else*（没有分区的时候，也就是绝大多数时候），你仍然要在**延迟（Latency）和一致性（Consistency）**之间权衡——强一致性需要在每次操作上都进行协调（quorum/leader 往返），即使网络健康也要付出延迟。
 
-CAP 说分割时不能同时有一致性和可用性。PACELC 说即使没有分割，你也在权衡：强一致性要求等待副本确认（高延迟），弱一致性更快（低延迟但可能过时数据）。
+- **DynamoDB（默认）、Cassandra：PA/EL** —— 分区时选可用性；平时选低延迟（最终一致）。
+- **Spanner、CockroachDB、ZooKeeper：PC/EC** —— 分区时拒绝少数派一侧的操作；平时为强一致性付出协调延迟。
 
-现实系统：Dynamo/Cassandra 选 AP（分割时可用），低延迟；许多 SQL 数据库选 CP，更强保证。
+面试用法：PACELC 解释了为什么"强一致"的系统*每天*都更慢，而不只是在罕见的分区期间。

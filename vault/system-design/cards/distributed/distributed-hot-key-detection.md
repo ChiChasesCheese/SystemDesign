@@ -18,14 +18,15 @@ Complements:
 The output must feed something automatic (promote to cache, enable salting for that key) — a dashboard a human reads is too slow for a key that goes hot in seconds.
 
 ## Q zh
-怎样检测和定位热 key（访问倾斜）？
+你怀疑存在一个热 key，但没法给每个 key 都打点（有几十亿个）。你实际上怎么找到它？在哪一层找？
 
 ## A zh
-**检测方法**：
-1. **计数器**：在代理或客户端维护最近 N 秒的访问计数，超过阈值的 key 为热 key。
-2. **采样**：定期采样请求，统计 top-k 频繁的 key。
-3. **指标监控**：监听分片级别的 QPS，QPS 不均匀表示有热 key。
+用一个**heavy-hitters 概要结构**，而不是逐 key 打点：**count-min sketch** 或者 **space-saving / top-K** 结构能用固定大小的内存（几 KB）、带有界误差地保留按频率排序的前 N 个 key，每隔几秒刷新一次。把它放在能在**分区路由之前**看到原始 key 的那一层——客户端库、代理/路由层，或缓存层——这样即使分片已经饱和，你也能知道是哪个 key。
 
-**定位**：代理层或客户端直接记录。存储层上报热 key 清单给代理。
+补充手段：
 
-**处理**：多层缓存（本地缓存、中央缓存）。热 key 专用副本或热 key 缓存集群。请求合并（多个客户端请求同一热 key，只回源一次）。
+- **采样请求日志**（1:1000 抽样）离线聚合——能找到昨天的热 key，找不到这一秒的。
+- **按分片的指标**用来报警，**按 key 的 sketch** 用来诊断：分片级别的 p99 或限流计数告诉你*是哪个分片*，sketch 告诉你*是哪个 key*。
+- 托管系统的等价物：DynamoDB 的 **CloudWatch Contributor Insights** 会直接报告访问最多的分区键。
+
+这个输出必须接到某个自动化动作上（提升到缓存、为该 key 启用 salting）——一个靠人去看的仪表盘，对一个几秒钟内就变热的 key 来说太慢了。

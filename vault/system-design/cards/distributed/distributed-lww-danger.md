@@ -12,17 +12,9 @@ Wall clocks on different nodes disagree: NTP sync leaves ms–100s of ms of skew
 Acceptable only when losing one of two concurrent updates is fine (e.g. idempotent "current status" values). Otherwise: version vectors to *detect* concurrency and merge, CRDTs, or route conflicting writes through a single leader. Hybrid: TrueTime-style bounded clocks (Spanner) make timestamp ordering safe by waiting out the uncertainty.
 
 ## Q zh
-Last-Write-Wins（LWW）冲突解决有什么危险？
+为什么按墙钟时间戳的 last-write-wins 是一种数据丢失机制，而不是冲突解决策略？
 
 ## A zh
-**LWW**：并发写冲突时，取时间戳最新的写作为最终值，丢弃其他写。
+不同节点上的墙钟并不一致：NTP 同步会留下几毫秒到上百毫秒的偏差，时钟在校正时会**向后跳变**，虚拟机还会暂停。所以"最后"是由哪个节点的时钟走得快来决定的——一次真正更晚的写入可能带着一个*更早*的时间戳，然后被**悄无声息地丢弃**。Cassandra 风格的 LWW 丢弃并发写入时既不报错也不留痕迹。
 
-**危险**：
-1. **无声数据丢失**：旧的写被无声丢弃，应用未必察觉。
-2. **时钟不可信**：如果时钟不同步或被恶意修改，可能选错值。
-3. **违反业务逻辑**：e.g., 转账后撤销（撤销的时间可能比转账新），不应该选撤销。
-4. **不可恢复**：丢失的数据无法恢复。
-
-**何时安全**：只在幂等操作或值可以合并的场景（如 CRDT 计数器的递增）。
-
-推荐：应用层检测冲突并手动合并，而不是盲目 LWW。
+只有在丢失两个并发更新中的一个也无所谓的时候（例如幂等的"当前状态"值）才可以接受。否则就要用版本向量来*检测*并发再合并、用 CRDT，或者把冲突的写都路由经过单一 leader。折中方案：TrueTime 风格的有界时钟（Spanner）通过等出不确定区间，让时间戳排序变得安全。

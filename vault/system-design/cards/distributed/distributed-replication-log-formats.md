@@ -14,12 +14,11 @@ Statement-based vs WAL shipping vs logical (row-based) replication — what brea
 Default answer: logical/row-based for flexibility; WAL shipping inside a single homogeneous cluster.
 
 ## Q zh
-分布式系统中复制日志的常见格式是什么？
+基于语句、WAL 传输、逻辑（行级）复制——各自在哪会出问题或被什么绑死？现代系统默认用哪种？
 
 ## A zh
-- **语句日志** — 记录原始 SQL（INSERT ...）。小但不确定（NOW()、RAND() 在副本上不同）。
-- **行日志** — 记录行级变化（旧值和新值）。更大但确定性。
-- **WAL（预写日志）** — 底层存储格式的物理日志（字节位置的更改）。最小但不可读。
-- **基于操作的** — 高级操作（increment counter）。小且表达力强但设计复杂。
+- **基于语句**（传输 SQL 本身）：在非确定性面前会出问题——`NOW()`、`RAND()`、自增列、触发器、并发执行顺序。需要把语句改写成确定性的；基本已经被弃用为默认方案。
+- **WAL 传输**（传输物理块级别的变更）：精确，但会**把副本和存储引擎的版本、布局死死绑在一起**——leader 和 follower 必须运行兼容的版本，这会阻碍跨版本的零停机滚动升级。
+- **逻辑（行级）复制**（传输行的 insert/update/delete 记录）：和引擎内部实现解耦——使跨版本复制成为可能，也是对外部系统做 **CDC** 的基础（Debezium 读取 Postgres 的逻辑解码 / MySQL 的 binlog `ROW` 格式）。
 
-权衡：大小 vs 确定性 vs 可读性。大多数现代系统使用行日志或 WAL。
+默认答案：出于灵活性用逻辑/行级复制；在单一同构集群内部用 WAL 传输。

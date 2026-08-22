@@ -14,15 +14,11 @@ Crash-stop vs crash-recovery vs Byzantine fault models — what does each assume
 Timing: **partial synchrony** — the network usually behaves, but delays are occasionally unbounded — which is why timeouts can trigger recovery but must never be the sole proof of death ([[distributed-failure-detection]]).
 
 ## Q zh
-分布式系统中的主要网络和时间模型是什么？
+Crash-stop、crash-recovery、拜占庭这三种故障模型——各自假设什么？主流数据中心系统按哪一种（再加哪种时序模型）来设计？
 
 ## A zh
-- **同步** — 消息在已知时间内递送，处理在已知时间内完成。不现实但容易分析。
-- **部分同步** — 有界延迟，但边界未知；周期性达到同步。现实中很多系统。
-- **异步** — 消息可能任意延迟，无关时序假设。最坏情况但最具防卫性。对于安全（不违反正确性）必要。
+- **Crash-stop**：出故障的节点停下来就再也不回来了——干净但不现实。
+- **Crash-recovery**：节点可能崩溃后又恢复，在故障期间**稳定存储**得以保留，但内存丢失——这才是 Raft、Kafka 和数据库真正的假设。
+- **拜占庭**：节点可能撒谎或任意行动（bug、被攻破）。容忍 f 个说谎者需要 **3f+1** 个节点，外加签名消息——这个代价正是数据中心系统跳过它、转而用校验和、TLS、输入校验来处理*弱*损坏的原因。BFT 用在参与者互相不信任的场景（区块链、部分航天系统）。
 
-**故障模型**：
-- **崩溃故障** — 节点停止但不发送垃圾。
-- **拜占庭** — 节点可能撒谎/任意表现。需要 PBFT。
-
-大多数设计假设异步 + 崩溃故障。
+时序：**部分同步（partial synchrony）**——网络通常表现正常，但延迟偶尔会无界——这就是为什么超时可以触发恢复流程，但绝不能作为死亡的唯一证据（[[distributed-failure-detection]]）。

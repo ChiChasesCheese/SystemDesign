@@ -13,14 +13,10 @@ Name the two classic read anomalies replication lag causes besides missing your 
 Both are session/ordering guarantees — far cheaper than making all reads linearizable, which is the sledgehammer answer.
 
 ## Q zh
-读取从库延迟（read-after-write inconsistency）会导致什么异常？
+除了看不到自己刚写的数据之外，说出复制延迟导致的两种经典读异常，以及各自对应的能修复它的保证。
 
 ## A zh
-**场景**：客户端写入主库，立即读从库。从库可能还未复制该写入。客户端读到旧值→"我刚写的数据呢？"。
+- **时间倒流**：连续的读命中了延迟程度不同的副本，于是你已经看到过的数据又消失了。修复：**单调读（monotonic reads）**——把一个会话固定到一个副本上（或者跟踪一个提供服务的副本必须满足的最小版本号）。
+- **先看到结果后看到原因**：一个答案复制得比它所引用的问题还快。修复：**一致前缀 / 因果读（consistent prefix / causal reads）**——只按保持因果关系的顺序暴露写入（按分区排序、因果 token）。
 
-**异常类型**：
-1. **Read-After-Write 不一致**：写入的数据在后续读取中消失。
-2. **单调读不一致**：客户端先读从库 A（版本 v1），后读从库 B（版本 v0），看起来时间反向。
-3. **因果一致性破裂**：写 A 依赖写 B，客户端读时看到 A 但没看到 B。
-
-**缓解**：sticky session（同一客户端总是读同一从库，该从库复制快）。read from primary（重要读只读主库）。版本检查（客户端记录写入的版本，读时等待从库赶上）。
+这两者都是会话/排序层面的保证——比让所有读都线性一致（那种大力出奇迹的做法）要便宜得多。
