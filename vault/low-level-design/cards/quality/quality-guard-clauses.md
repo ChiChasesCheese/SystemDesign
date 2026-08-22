@@ -23,42 +23,20 @@ Rule: guards handle the **abnormal** cases and exit immediately; the main flow r
 Symptom check: if the "guards" are checking the object's *lifecycle phase* (`if (status == PLACED) ... else if (status == SHIPPED)`), the real fix is the **state pattern**, not prettier conditionals.
 
 ## Q zh
-什么是卫语句（Guard Clauses），如何改进嵌套代码？
+把嵌套条件换成 guard clause —— 展示这个变换，并说出"箭头形代码其实是另一个问题的症状"这条规则。
 
 ## A zh
-卫语句是提前返回以处理边界情况。
-
-**嵌套版本（不好）**：
 ```java
-if (isValid(input)) {
-    if (hasPermission(user)) {
-        if (isAvailable(resource)) {
-            return process(resource);
-        }
-    }
-}
-return null;
+// 之前：happy path 被埋在三层里
+if (user != null) { if (user.isActive()) { if (order.isPaid()) { ship(order); } } }
+
+// 之后：尽早拒绝，happy path 平铺在最后
+if (user == null)      return;            // 或者抛异常
+if (!user.isActive())  throw new InactiveUserException(user.id());
+if (!order.isPaid())   throw new UnpaidOrderException(order.id());
+ship(order);
 ```
 
-**卫语句版本（好）**：
-```java
-if (!isValid(input)) return null;
-if (!hasPermission(user)) return null;
-if (!isAvailable(resource)) return null;
-return process(resource);
-```
+规则：guard 处理**异常**情况并立刻退出；主流程不带缩进、自上而下地读下来。多个 return 没问题 —— 单一出口那条规矩比垃圾回收还早。
 
-优势：
-- 扁平、易读的流程
-- 快速失败
-- 减少认知负荷
-- 边界情况集中在顶部
-
-应用：
-```java
-// 嵌套 if-else 替换为
-if (condition1) return result1;
-if (condition2) return result2;
-// ... 正常情况
-return normalResult;
-```
+症状自检：如果这些"guard"检查的是对象的*生命周期阶段*（`if (status == PLACED) ... else if (status == SHIPPED)`），真正的修法是 **state pattern**，而不是把条件写得更好看。

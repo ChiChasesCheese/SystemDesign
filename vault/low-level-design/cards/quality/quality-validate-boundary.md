@@ -20,40 +20,17 @@ record Email(String value) {
 Interview payoff: "invalid states are unrepresentable" — invariants live in constructors, not in every method that touches the data.
 
 ## Q zh
-为什么在方法边界处验证输入很重要？
+"在边界处校验" —— 它在结构上意味着什么，值对象又是怎样让重复校验变得不必要的？
 
 ## A zh
-边界验证是防御编程的首道防线。
+结构上：所有输入都穿过**同一个检查站**（API handler、命令的构造函数），在那里被检查并**转换成无法承载非法数据的类型**。在这个边界之内，代码信任自己的输入 —— 不需要在每一层里散落防御性的重复检查。
 
-**为什么在边界处**：
+机制是 **"parse, don't validate"**：不要传一个 `String` 外加"某人曾经检查过它"这份心照不宣，而是构造 `Email.of(raw)` —— 它**在输入非法时抛异常，因而不可能以非法状态存在**。此后类型系统就把这份证明带到这个值所到的每一个地方。
+
 ```java
-public void setAge(int age) {
-    if (age < 0) throw new IllegalArgumentException();
-    this.age = age;  // 现在我们知道 age >= 0
+record Email(String value) {
+    Email { if (!value.matches(".+@.+")) throw new InvalidEmailException(value); }
 }
 ```
 
-优势：
-- **快速失败**：在进入之前发现错误
-- **清晰的契约**：方法声明它期望什么
-- **防止后续的 null 检查**：内部代码不需要防御
-- **不变量维护**：确保对象始终处于有效状态
-
-何时验证：
-- **公共方法**：总是（调用者是陌生人）
-- **私有方法**：较少（内部调用者受信任）
-- **参数**：始终
-- **返回值**（如果可能）：验证结果有效
-
-验证什么：
-```java
-public void setName(String name) {
-    if (name == null) throw new NullPointerException("name required");
-    if (name.trim().isEmpty()) throw new IllegalArgumentException("name empty");
-    this.name = name;
-}
-```
-
-不验证是什么时候：
-- 对性能敏感且已验证
-- 内部代码路径已被充分测试
+面试收益：一句"非法状态不可表示" —— 不变量住在构造函数里，而不是住在每一个碰这份数据的方法里。

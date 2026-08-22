@@ -14,51 +14,11 @@ Your repository's `findById` can miss. Rank the return-type options for "not fou
 Absence should **throw** when it violates an invariant — the caller holds an id the system itself issued (`getById` on a just-created order), so "missing" means corruption, not a normal outcome. Pattern: offer `findById → Optional` and `getById → throws NotFoundException`, and let callers state their expectation.
 
 ## Q zh
-为什么返回 null 有问题，更好的替代品是什么？
+你的仓储 `findById` 可能找不到。给"未找到"的各种返回类型排序，并说明什么时候"不存在"反而应该抛异常。
 
 ## A zh
-返回 null 的问题：
+- **最好：`Optional<Order>`** —— 不存在这件事写在签名里，编译器逼着每个调用方做决定（`orElseThrow`、`map`、默认值）。对集合，返回**空集合**，永远不要返回 null。
+- **可接受：null object**（`GuestUser.ANONYMOUS`）—— 仅当确实存在一个合理的"什么都不做/默认"行为时；一个默默吞掉真实工作的 null object 会把 bug 藏起来。
+- **最差：返回 `null`** —— 把检查推给每一个调用方，而且 NPE 会在离病因很远的地方爆炸。
 
-**1. NullPointerException**：
-```java
-User user = findUser(id);
-user.getName();  // 如果 user 是 null，崩溃
-```
-
-**2. 意图不清楚**：
-- 方法返回什么时 null 意味着什么？
-- 调用者必须检查；容易忘记
-
-**3. 级联检查**：
-```java
-if (user != null) {
-    if (user.getAddress() != null) {
-        if (user.getAddress().getCity() != null) {
-            // ... 金字塔末日
-        }
-    }
-}
-```
-
-替代品：
-
-**1. Optional<T>**（Java）：
-```java
-Optional<User> user = findUser(id);
-user.ifPresent(u -> System.out.println(u.getName()));
-```
-
-**2. 异常**（对真正的错误）：
-```java
-User user = findUserOrThrow(id);  // 不存在时抛出
-```
-
-**3. 默认值**：
-```java
-User user = findUser(id).orElse(new GuestUser());
-```
-
-**4. 空对象模式**：
-```java
-return new NullUser();  // 有空实现的用户对象
-```
+当"不存在"违反了一条不变量时，就该**抛异常** —— 调用方手里的 id 是系统自己发出去的（对刚创建的订单调 `getById`），那么"找不到"意味着数据损坏，而不是一个正常结果。惯用做法：同时提供 `findById → Optional` 和 `getById → throws NotFoundException`，让调用方自己表明预期。

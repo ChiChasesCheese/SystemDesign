@@ -12,11 +12,9 @@ Cost: each pair of replicas builds a **Merkle tree over its ranges** (full read 
 Skip it too long and you get **deleted data resurrecting**: deletes are tombstones with a grace period (`gc_grace_seconds`, 10 days by default). If a replica missed the tombstone and the tombstone is garbage-collected elsewhere before repair runs, that replica re-propagates the **old live value** and the row comes back. Rule: repair every range within the grace period, or raise the grace period.
 
 ## Q zh
-反熵修复的成本是什么？
+反熵修复被当作"只是个后台任务"——它实际的代价是什么？如果拖太久不做会出什么问题？
 
 ## A zh
-**I/O 和网络成本**：需要扫描所有副本的所有数据，比较哈希或完整值，然后修复差异。对于大数据集，这是 O(n)。
+代价：每一对副本会为各自的范围**构建一棵 Merkle 树**（对磁盘上的数据做一次完整读取——CPU 和 IO 开销相当于一次全表扫描），自顶向下交换哈希值，然后只流式传输存在差异的叶子范围。所以*比较*本身在带宽上很便宜，但**构建树需要对每个副本做一次全量扫描**，这就是为什么完整修复要安排在非高峰期并做限流，也是大型 Cassandra 集群运维成本的主要来源。
 
-**background repair**：通常在后台定期运行（周级或月级），不阻塞前台请求。但如果数据量大，修复周期会很长，故障发生时可能已经有旧数据。
-
-权衡：定期反熵确保最终一致，但成本高；替代方案是依赖 read repair（只修复被读到的不一致）。
+拖得太久会导致**已删除的数据复活**：删除操作是带有宽限期的墓碑（tombstone，默认 `gc_grace_seconds` 为 10 天）。如果某个副本错过了这个墓碑，而墓碑在修复运行之前就在别处被垃圾回收了，那个副本就会把**旧的存活值**重新传播出去，这一行就复活了。规则：在宽限期内修复完每个范围，否则就调高宽限期。

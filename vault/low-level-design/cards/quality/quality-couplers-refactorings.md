@@ -13,32 +13,10 @@ Diagnose and fix each coupler: feature envy, message chains, inappropriate intim
 - **Middle man** — a class that only forwards calls. Fix: **remove middle man**, talk to the target directly. (Note: it's the *over-applied* cure for message chains — the two smells pull in opposite directions, so aim between.)
 
 ## Q zh
-什么是耦合者（couplers），如何识别和重构它们？
+诊断并修复这四种 coupler：feature envy、message chains、inappropriate intimacy、middle man。
 
 ## A zh
-耦合者是过度连接事物的代码异味。
-
-**功能嫉妒**：
-- 一个方法使用来自其他类的更多方法而不是自己的
-```java
-customer.setAge(ageCalculator.calculate(customer.getBirthDate()));
-```
-- 重构：将 setAge 逻辑移到 Customer 中
-
-**不适当的亲密**：
-- 一个类依赖于其他类的内部
-```java
-person.data[0] = 123;  // 直接访问私有数据
-```
-- 重构：提供公共 API，隐藏实现
-
-**消息链**：
-- `a.getB().getC().getD().doIt()`
-- 重构：引入委托方法
-
-**中间人**：
-- 一个类只是转发所有调用到另一个类
-```java
-public String getName() { return delegate.getName(); }
-```
-- 重构：直接使用委托对象或删除中间人
+- **Feature envy** —— 一个方法用别人的数据比用自己的还多（`order.getCustomer().getAddress().format()` 这段逻辑却住在 `InvoicePrinter` 里）。修法：**move method**，搬到数据所在的地方；行为属于状态。
+- **Message chains** —— `a.getB().getC().doIt()` 把调用方耦合到整条导航路径上（违反 Law of Demeter）。修法：**hide delegate** —— 让第一个对象自己去做（`a.doIt()`）。
+- **Inappropriate intimacy** —— 两个类互相掏对方的内部。修法：move method/field 把这段交互集中到一个类里，或者把共享部分抽出来。
+- **Middle man** —— 一个只做转发的类。修法：**remove middle man**，直接和目标对话。（注意：它正是 message chains 那副药*用过头*的产物 —— 这两个坏味道方向相反，所以要瞄准中间地带。）

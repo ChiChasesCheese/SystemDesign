@@ -20,44 +20,17 @@ Keep the switch when:
 - New **operations** are more frequent than new **types** — polymorphism optimizes for adding types; a switch (or visitor) optimizes for adding operations. That's the expression problem: pick the axis that actually varies.
 
 ## Q zh
-如何用多态性替换大的 switch 语句？
+"用多态替换条件" —— 触发条件是什么，什么时候 switch 反而是更好的设计？
 
 ## A zh
-模式：
+触发条件：**同一个**基于类型的 `switch`/`if` 出现在**多个地方** —— 每加一个类型都要在所有这些地方做散弹式修改。把每个分支的主体搬进子类/策略的覆盖方法里，用分派取代这些条件判断。
 
-**使用 switch 的代码**：
 ```java
-switch (shapeType) {
-    case CIRCLE:
-        return Math.PI * r * r;
-    case SQUARE:
-        return s * s;
-    case TRIANGLE:
-        return b * h / 2;
-}
+switch (emp.type) { ENGINEER -> base*1.1; MANAGER -> base+bonus; }  // pay() 里有、inBonus() 里有、inReport() 里还有…
+// 变成：emp.pay() —— 每个类型一个类，自己拥有自己的全部分支
 ```
 
-**使用多态性**：
-```java
-interface Shape {
-    double area();
-}
-class Circle implements Shape {
-    public double area() { return Math.PI * r * r; }
-}
-class Square implements Shape {
-    public double area() { return s * s; }
-}
-// 使用
-shape.area();  // 多态调用
-```
+该保留 switch 的情况：
 
-优势：
-- 添加新形状不需要修改现有代码
-- 每个类都知道自己如何计算（高内聚）
-- 遵循开-闭原则
-
-何时应用：
-- switch 语句按类型分派
-- 不同类型有不同的行为
-- 经常添加新类型
+- 它只出现**一次** —— 多态是拿一段可读的代码块，换来散落在多个文件里的类。
+- 新增**操作**比新增**类型**更频繁 —— 多态为"加类型"优化，switch（或 visitor）为"加操作"优化。这就是 expression problem：选那个真正在变的轴。

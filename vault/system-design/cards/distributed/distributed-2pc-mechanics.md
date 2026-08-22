@@ -15,9 +15,12 @@ A yes-voter can't unilaterally abort because it doesn't know whether the coordin
 Worth adding: 3PC removes the block only under a synchronous network with reliable failure detection — assumptions real networks don't provide, which is why nobody ships it.
 
 ## Q zh
-两阶段提交的两个阶段分别是什么？
+走一遍 2PC 的两个阶段，指出确切的提交点在哪里。为什么一个已经投票 "yes" 的参与者不能简单地超时就中止？
 
 ## A zh
-**Phase 1（投票）**：协调者要求所有参与者执行本地事务的准备工作，每个参与者原子性地锁定资源、验证业务逻辑，然后投票 "可以提交" 或 "无法提交"。
+1. **Prepare（准备）**：协调者带着全局 txid 发送 `prepare`。每个参与者做除提交之外的一切事——把变更和锁持久化写入自己的日志——然后回答 **yes**（承诺无论之后发生什么崩溃都能提交）或 **no**。
+2. **Commit（提交）**：一旦所有人都投了 yes，协调者就**把提交决定写入自己的持久日志**——*这次写入就是提交点，且不可撤销*。然后它发送 `commit`，并不断重试直到每个参与者都确认。
 
-**Phase 2（提交/中止）**：根据所有投票结果，协调者要么命令所有参与者提交（所有投票都是 "可以"），要么命令全部中止（有任何一票是 "否"）。参与者执行该决议并释放锁。
+一个投了 yes 的参与者不能单方面中止，因为它不知道协调者是否已经到达提交点：`commit` 消息可能只是丢失或延迟了。如果它中止了，而实际决定是提交，那**原子性就被打破**了——一些参与者提交了，这个没有。所以它保持**悬而未决（in doubt）**的状态，持有锁，阻塞该数据上所有冲突的事务，直到协调者（或其恢复的日志）告诉它答案。
+
+值得补充：3PC 只有在同步网络、且故障检测可靠的前提下才能消除这种阻塞——而这些假设在真实网络中都不成立，这就是为什么没有人真正部署它。

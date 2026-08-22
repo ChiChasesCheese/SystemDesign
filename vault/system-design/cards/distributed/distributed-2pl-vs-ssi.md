@@ -13,9 +13,10 @@ Two-phase locking vs serializable snapshot isolation — how does each achieve s
 Choose 2PL-style pessimism when conflicts are frequent (hot rows — retrying is wasted work); SSI when the workload is mostly reads or conflicts are rare. Postgres `SERIALIZABLE` is SSI; classic SQL Server serializable is 2PL.
 
 ## Q zh
-2PL 和 SSI 在锁和冲突检测上有什么区别？
+两阶段锁（2PL）和可串行化快照隔离（SSI）——各自如何实现可串行化？各自的代价是什么？各自什么时候胜出？
 
 ## A zh
-**2PL**（Two-Phase Locking）：事务在读或写数据时立即获取锁，持有到事务结束，防止并发冲突。写阻塞读，读阻塞写——高锁竞争。
+- **2PL（悲观）**：读取时获取共享锁，写入时获取排他锁，**所有**锁一直持有到提交。读阻塞写，写也阻塞读；代价 = 死锁（检测到后中止）以及排在长事务后面时糟糕的延迟方差。
+- **SSI（乐观）**：所有操作都在 MVCC 快照上运行、不加锁；跟踪并发事务之间的**读写依赖**，在提交时一旦出现危险结构（潜在的环）就中止其中一个。代价 = 中止重试的开销，在高争用下会爆炸式增长。
 
-**SSI**（Serializable Snapshot Isolation）：事务在快照上乐观执行，无锁获取，完成后检测是否有其他事务的冲突（reads/writes 依赖关系）。只有冲突时才中止并重试。高并发下低延迟，但需要重试开销。
+冲突频繁时（热点行——重试是浪费的工作）选择 2PL 式的悲观策略；工作负载以读为主或冲突罕见时选择 SSI。Postgres 的 `SERIALIZABLE` 是 SSI；经典的 SQL Server 可串行化是 2PL。

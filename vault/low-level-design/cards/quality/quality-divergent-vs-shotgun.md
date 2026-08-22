@@ -15,26 +15,12 @@ They're mirror images, defined by the mapping between *reasons to change* and *c
 Memory hook: divergent = too much *converges into* one class; shotgun = one change *sprays across* many.
 
 ## Q zh
-Divergent Change 和 Shotgun Surgery 之间有什么区别？
+Divergent change 与 shotgun surgery —— 两者都属于 change preventer。区分它们，并给出各自的修法。
 
 ## A zh
-**Divergent Change（发散式变化）**：
-- 一个类因多个不相关的原因而改变
-- 例子：支付处理器处理信用卡、PayPal 和加密货币
-```
-新的支付方式 ➜ 修改支付处理器
-税法改变 ➜ 修改支付处理器
-```
-- 类有多个理由改变（违反 SRP）
+它们是互为镜像的，判据是*变更原因*和*被改动的类*之间的映射关系：
 
-**Shotgun Surgery（猎枪式修改）**：
-- 一个改变需要修改许多类
-- 例子：添加新的日志级别需要修改 10 个类
-```
-新的日志级别 ➜ 修改 Logger、ConsoleWriter、FileWriter、...
-```
-- 变化分散在许多地方，难以找到所有地方
+- **Divergent change**：**一个类，多个原因** —— 每条新定价规则、每种新报表格式、每次数据库调整，改的都是同一个类。修法：**extract class** —— 按职责拆开，让每个类只有一个变更原因（SRP）。
+- **Shotgun surgery**：**一个原因，多个类** —— 加一种货币要在 12 个文件里各做一点小改动。修法：**move method/field**，把散落的行为收拢进一个类（或者引入那个缺失的、本该拥有它的抽象）。
 
-解决方案：
-- Divergent：拆分类（提取不同的原因到不同的类）
-- Shotgun：将分散的代码聚集在一个地方（移动方法、提取类）
+记忆钩子：divergent 是太多东西*汇入*一个类；shotgun 是一次改动*喷向*许多类。

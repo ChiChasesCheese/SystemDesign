@@ -15,14 +15,12 @@ Each key carries a **version vector** (one counter per leader/replica). A client
 Siblings are then resolved by application semantics — merge (union a shopping cart, take the max), let the user pick, or apply a type whose merge is defined (CRDT). Riak/Dynamo expose siblings explicitly; the *failure* is a store that silently collapses incomparable versions with a timestamp, because that discards a write the system knew was concurrent.
 
 ## Q zh
-Dynamo 风格的系统中如何检测和处理冲突兄弟值？
+从机制上讲，副本是如何判定对同一个 key 的两次写入是*冲突*的，而不是一个覆盖另一个的？它又是如何处理这一对写入的？
 
 ## A zh
-**检测**：当读到一个 key 有多个版本（不同的 vector clock），表示有并发写冲突→产生 "siblings"。
+每个 key 都带有一个**版本向量**（每个 leader/副本一个计数器）。客户端读取时得到值和它的版本（一个不透明的"因果上下文"），并在下一次写入时带回这个版本。写入到达时，副本比较：
 
-**处理策略**：
-- **Last-Write-Wins（LWW）**：按时间戳选最新的，简单但丢失数据。
-- **应用层合并**：应用理解业务逻辑，手动合并兄弟值（e.g., 将购物车的两个版本合并成并集）。
-- **向量时钟辅助**：用向量时钟判断是否真的并发（有偏序则不冲突）。
+- 传入的版本**支配**（dominate）已存储的版本（在每个槽位上都 ≥）→ 写入者看到了已存储的值；**覆盖**。
+- 两个版本**无法比较** → 确实是并发的；**两者都作为兄弟（siblings）保留**。
 
-通常推荐应用层合并，因为 LWW 无法恢复丢失的数据。
+兄弟之后由应用语义来解决——合并（购物车取并集，取最大值）、让用户选择，或者应用一个定义了合并规则的类型（CRDT）。Riak/Dynamo 会显式暴露兄弟；*错误*的做法是存储悄悄用时间戳把无法比较的版本折叠成一个，因为这样会丢弃一个系统明明知道是并发的写入。
