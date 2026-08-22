@@ -15,22 +15,12 @@ Singleton couples two decisions that should be separate: *one instance exists* a
 Modern alternative: keep the class ordinary, create **one instance at the composition root** and inject it (DI container or hand-wired `main`). Reserve true singletons for stateless, cross-cutting facts (e.g. a process-wide logger), and if forced, use an `enum` singleton / static holder for safe lazy init.
 
 ## Q zh
-Singleton 的隐藏成本是什么，什么时候会backfire？
+为什么 Singleton 是 GoF 里被批评最多的模式，当你确实只需要一个实例时，现代的替代方案是什么？
 
 ## A zh
-**表面**优点：全局访问、一个实例、初始化一次。
+Singleton 把两个本该分开的决定耦合在了一起：*只存在一个实例*，以及*所有人都通过全局入口访问它*。
 
-**隐藏成本**：
+- 那个全局访问点让依赖**变得不可见**（签名里没有任何东西表明这个类用了它），也让测试之间共享**隐藏的可变状态**，既换不掉也重置不了。
+- 它把具体类写死了 —— 没法替换成测试替身。
 
-1. **线程安全**：初始化序列变得脆弱（双重检查锁定 bug、初始化顺序）。
-2. **测试**：无法轻易模拟。Singleton 持有真实状态；每个测试污染下一个。需要 reset 方法（哈克）或 thread-local 版本（复杂）。
-3. **隐藏耦合**：调用者通过 `Singleton.getInstance()` 获得全局依赖，难以跟踪。
-4. **并发**：即使线程安全，多个线程访问同一实例可能导致竞态条件。
-5. **延迟初始化陷阱**：首次访问 Singleton 时初始化可能失败，而调用代码没有准备好处理。
-
-**何时 backfire**：
-- 多线程中的状态共享。
-- 数据库连接池（应该有多个实例进行负载均衡）。
-- 需要测试隔离时。
-
-**替代**：依赖注入，让容器管理实例生命周期。
+现代替代方案：让这个类保持普通，在 **composition root 创建唯一的那个实例**并注入下去（DI 容器，或者手写装配的 `main`）。真正的单例留给无状态的、横切的事实（比如进程级 logger）；如果确实被迫要写，就用 `enum` 单例 / static holder 来获得安全的延迟初始化。

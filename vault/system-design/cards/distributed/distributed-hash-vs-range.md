@@ -13,11 +13,10 @@ Hash partitioning vs range partitioning: what does each optimize, and what workl
 Standard hybrid: **hash a prefix, range the rest** — e.g. partition by `hash(user_id)`, sort by `timestamp` within the partition (DynamoDB's PK/SK, Cassandra's partition + clustering keys): even spread across users, cheap time-range scans per user.
 
 ## Q zh
-哈希分片和范围分片各有什么优缺点？
+哈希分片和范围分片：各自优化的是什么？各自的工作负载杀手是什么？
 
 ## A zh
-**哈希分片**（hash(key) % n）：优点：分布均匀（热 key 分散）。缺点：范围查询无法批量定位（"age > 20" 要扫所有分片），range scan 变成 scatter-gather。
+- **哈希（Hash）**：key 均匀分布 → 负载均衡，不需要规划。杀手是**范围查询**——"过去一小时的事件"会散落到每一个分片上（scatter-gather）。
+- **范围（Range）**：相邻的 key 放在一起 → 范围扫描高效，而且分片可以在数据实际所在的地方切分。杀手是**单调递增的 key**（时间戳、自增 ID）——所有插入都砸向最后一个分片（热尾，hot tail）。
 
-**范围分片**（key 范围如 A-M 在分片 1，N-Z 在分片 2）：优点：范围查询只需访问几个分片，顺序扫描高效。缺点：容易出现热 key（某个范围有大量写入）。
-
-权衡：有大量范围查询选范围分片（付出热 key 代价），有热 key 写入选哈希分片（付出 scatter-gather 代价）。也可以混合或二级索引。
+标准的混合方案：**前缀用哈希，其余用范围**——比如按 `hash(user_id)` 分区，分区内部按 `timestamp` 排序（DynamoDB 的 PK/SK、Cassandra 的 partition key + clustering key）：跨用户均匀分布，同时每个用户的时间范围扫描又很便宜。

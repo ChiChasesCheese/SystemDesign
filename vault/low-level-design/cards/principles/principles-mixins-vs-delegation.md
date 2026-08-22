@@ -17,15 +17,14 @@ They are **inheritance with a wider slot** — the fragility mostly stays:
 Rule: use a trait/mixin for a **stateless capability** with no per-user variation (`Comparable`, `Serializable`-style). Anything with state or a lifecycle → delegate to a collaborator.
 
 ## Q zh
-什么时候使用 mixin 而不是委托？它们的权衡是什么？
+Mixin/trait（Java default method、Scala/Rust trait、Python mixin、Go embedding）承诺不写转发代码就能复用。它们实际的代价是什么？
 
 ## A zh
-Mixin（通过继承或组合混入行为）：
-- 优势：不需要显式委托调用；方法自动可用
-- 劣势：创建隐含的依赖；多个 mixin 可能会冲突；难以测试隔离
+它们是**槽位更宽的继承** —— 脆弱性基本还在：
 
-委托（显式转发）：
-- 优势：清晰明了哪些调用被转发；易于单独测试；灵活替换
-- 劣势：需要显式转发方法（样板代码）
+- **Java default method**：没有实例状态，而且同签名的菱形会强制你显式覆盖并写 `X.super.m()`。
+- **Python mixin**：复用是和 **MRO** 绑在一起的 —— 到底跑哪个兄弟类的方法，取决于这个类的线性化顺序，所以改一下基类就可能悄无声息地改变行为走向。
+- **Go embedding**：转发是自动的，但不存在回到外层类型的虚分派 —— 完整的 SELF 问题。
+- 以上全部都会把 mixin 的成员暴露成你公开接口的一部分。
 
-经验法则：如果你是在组织行为（多个概念），使用委托。如果你只是混入一个通用的、独立的功能，可以考虑 mixin。
+规则：只把 trait/mixin 用于**无状态的能力**，且各使用方之间没有差异（`Comparable`、`Serializable` 那一类）。凡是带状态或带生命周期的 → 委托给一个协作者。
