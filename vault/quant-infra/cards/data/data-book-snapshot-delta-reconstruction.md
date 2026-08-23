@@ -1,0 +1,20 @@
+---
+id: data-book-snapshot-delta-reconstruction
+node: data.market-data.book
+type: qa
+---
+## Q
+A venue's L2/L3 feed does not send the full order book on every message — that would be enormous bandwidth. Instead it publishes a periodic full snapshot plus a continuous stream of incremental add/modify/delete messages. Explain how a consumer reconstructs current book state from this, and name the one operational rule that makes it work.
+
+## A
+**The book is reconstructed by loading the most recent full snapshot as a baseline, then replaying every incremental message that arrived after that snapshot, strictly in sequence order.** A snapshot is a complete image of every resting order (L3) or every price level (L2) as of a specific sequence number; each subsequent delta message says "add this order/size at this price," "modify this order/level's size," or "delete this order/level" and is meaningless on its own — it only makes sense applied on top of the correct prior state. This is why book data is fundamentally stateful in a way trade data is not: a single trade print is self-contained and can be read in isolation, but a single delta message cannot be interpreted without everything that came before it since the last snapshot.
+
+The one rule that makes this tractable: **every message on the feed carries a monotonically increasing sequence number, and the consumer must apply deltas in exact sequence order with no gaps.** A consumer that applies message N+2 before N+1 (out of order) or silently skips a missing sequence number produces a book state that is wrong in a way that compounds — every subsequent delta is now being applied on top of an incorrect base, and the corruption does not announce itself; the book still looks plausible, just wrong, until it diverges enough from reality to be caught (or never is). This is exactly why sequence-gap detection and recovery is treated as a hard correctness requirement rather than a nice-to-have — see the companion card on that.
+
+## Q zh
+某交易场所的 L2/L3 行情并不会在每条报文里都发送完整的订单簿——那样带宽开销会大到不可接受。取而代之的是周期性发布一份完整快照，加上持续不断的增量 add/modify/delete 报文流。请解释消费方如何据此重建当前的盘口状态，并说出让这一切能够成立的那条运维铁律。
+
+## A zh
+**盘口是这样重建的：以最近一份完整快照作为基线加载，然后严格按序列顺序，逐条重放该快照之后到达的每一条增量报文。** 快照是截至某个序列号时，每一笔挂单（L3）或每一个价位（L2）的完整镜像；此后的每一条增量报文表示"在某价位新增这笔委托/数量"、"修改某笔委托/某价位的数量"，或"删除某笔委托/某价位"，单独拿出来毫无意义——它只有叠加在正确的先前状态之上才有意义。这就是为什么盘口数据在本质上是有状态的、和成交数据不同：一笔成交报文是自包含的，可以单独读取；但一条增量报文如果脱离了自上一份快照以来的全部前序报文，就无法被正确解读。
+
+让这一切可行的那条铁律是：**行情流上的每一条报文都携带一个单调递增的序列号，消费方必须严格按序列顺序、不能有缺口地应用增量。** 一个把第 N+2 条报文排在第 N+1 条之前应用（乱序）、或悄悄跳过一个缺失序列号的消费方，会产出一个错得会不断累积的盘口状态——此后的每一条增量都叠加在一个已经错误的基础之上，而且这种损坏不会主动暴露出来；盘口看上去依然合理，只是错了，直到偏离真实情况足够远才会被发现（甚至永远不会被发现）。这正是为什么序列缺口检测与恢复被视为一项硬性的正确性要求，而不是锦上添花——参见配套的那张关于此的卡片。

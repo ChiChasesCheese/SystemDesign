@@ -1,0 +1,9 @@
+---
+id: data-bars-construction-types-cloze
+node: data.market-data.bars
+type: cloze
+---
+Clock-time bars (e.g. "one bar per 5 minutes") sample information **unevenly**: they emit the same number of observations during a dead lunch lull as during a news-driven burst, oversampling quiet periods and undersampling active ones — the opposite of what a statistical model wants, since useful information arrives roughly proportional to activity, not to the clock. The alternative sampled by activity is an **information-driven / activity-driven bar**: a **volume bar** closes every time cumulative traded {{c1::volume}} (shares) since the last bar crosses a fixed threshold; a **dollar bar** closes every time cumulative {{c2::price × volume (traded dollar value)}} crosses a fixed threshold, which is more robust than a volume bar to a stock's own price appreciating or splitting over a long history; an **imbalance bar** closes once the running signed sum of {{c3::buy-initiated minus sell-initiated volume/dollars}} exceeds an adaptively-set threshold, so it samples more often exactly when order flow is one-sided. Empirically, dollar and volume bars produce returns that are closer to {{c4::IID and normally distributed}} than clock-time bars of comparable average duration, which is the practical reason to prefer them as the base unit for a downstream statistical or ML pipeline.
+
+## zh
+按时钟切分的 bar（例如"每 5 分钟一根"）对信息的采样是**不均匀的**：无论是死气沉沉的午休时段，还是消息驱动的爆发行情，它都会产出同样多的观测——在安静时段过采样、在活跃时段欠采样，这与统计模型真正想要的恰好相反，因为有用信息的到达速率大致正比于活动强度，而不是正比于时钟走过的时间。按活动强度采样的替代方案是**信息驱动/活动驱动的 bar**：**成交量 bar（volume bar）**在自上一根 bar 以来累计成交{{c1::量（股数）}}越过一个固定阈值时收盘；**美元 bar（dollar bar）**在累计{{c2::价格 × 成交量（成交金额）}}越过一个固定阈值时收盘，相比成交量 bar，它对该股票在长历史中自身价格上涨或拆分的情况更稳健；**失衡 bar（imbalance bar）**在{{c3::买方发起减去卖方发起的成交量/金额}}的累计有符号和超过一个自适应设定的阈值时收盘，因此恰好在订单流严重偏向一方时采样得更频繁。经验上，美元 bar 和成交量 bar 产出的收益率比同等平均时长的时钟 bar 更接近{{c4::独立同分布（IID）且服从正态分布}}，这正是把它们作为下游统计或机器学习流水线基本采样单元的实际理由。

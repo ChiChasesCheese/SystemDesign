@@ -1,0 +1,20 @@
+---
+id: foundations-asset-class-premia-bond-term-premium
+node: foundations.asset-class-premia
+type: qa
+---
+## Q
+A 10-year Treasury bond yields more, on average, than repeatedly rolling over 3-month T-bills for ten years. Is that extra yield fully explained by the market expecting short rates to rise over the decade? What is the term premium, and roughly how large has it been historically?
+
+## A
+**No — a long bond's yield decomposes into the market's expectation of the average future short rate over its life, plus a term premium, and only the second piece is genuinely extra compensation for risk.** Under the "pure expectations hypothesis," the term premium would be exactly zero and the entire extra yield would reflect expected future rate rises; empirically that hypothesis fails, and the term premium is a real, separately estimable quantity (via models such as Adrian-Crump-Moench).
+
+The term premium compensates a bondholder for the risk that inflation or real rates move against them while they are locked into a fixed long-dated cash flow they cannot costlessly exit — a longer bond has more duration, so a given yield surprise moves its price by more. Historically the US 10-year term premium has averaged roughly **1-2 percentage points**, but it is not constant: it has gone negative for extended periods, such as during the 2010s under quantitative easing and strong flight-to-quality demand, when investors were willing to pay *extra* for the safety and liquidity of long government bonds rather than demand extra compensation for holding them.
+
+## Q zh
+10 年期美国国债的平均收益率高于连续十年滚动持有 3 个月期国库券的收益率。这份额外的收益率，是否完全能用"市场预期未来十年短端利率会上升"来解释？期限溢价（term premium）是什么？历史上大约有多大？
+
+## A zh
+**不能——长期债券的收益率可以拆成两部分：市场对其存续期内未来短期利率均值的预期，加上一个期限溢价（term premium），只有第二部分才是对风险的真正额外补偿。** 按照"纯预期假说（pure expectations hypothesis）"，期限溢价理应恰好为零，全部的额外收益率都只反映对未来加息的预期；但实证上这个假说站不住脚，期限溢价是一个真实存在、可以单独估计的量（比如用 Adrian-Crump-Moench 等模型估计）。
+
+期限溢价补偿的是债券持有人所承担的风险：在被锁定于一笔固定的长期未来现金流、又无法无成本退出的情况下，通胀或实际利率朝不利方向变动的风险——债券期限越长，久期越大，同样大小的收益率意外变动，对其价格的冲击就越大。历史上美国 10 年期期限溢价平均大约在 **1-2 个百分点**，但它并不是一个常数：在某些较长的时期里它甚至会变成负值，比如 2010 年代量化宽松（QE）叠加强烈的避险需求（flight-to-quality）期间，投资者愿意为持有长期国债的安全性和流动性额外付费，而不是要求额外的补偿。

@@ -1,0 +1,9 @@
+---
+id: foundations-asset-class-premia-credit-spread-decomposition
+node: foundations.asset-class-premia
+type: cloze
+---
+A corporate bond's credit spread — its yield minus a maturity-matched Treasury's — decomposes into three pieces: {{c1::expected default loss}} (the probability of default times the loss given default, i.e. what a risk-neutral investor would need just to break even); a {{c2::risk premium for default risk}} (defaults cluster in recessions and cannot be diversified away within a portfolio of corporate credit, so bearing that clustering is priced like a systematic risk, not just an actuarial one); and an {{c3::illiquidity premium}} (corporate bonds trade in far thinner, more fragmented markets than Treasuries, with wider bid-ask spreads and higher price-impact costs). Empirically, expected default loss explains only a modest share of investment-grade spreads — most of the observed spread is risk premium and illiquidity, which is why credit spreads run far wider than historical default experience alone would justify (the "credit spread puzzle," e.g. Huang-Huang 2012).
+
+## zh
+一只公司债的信用利差（credit spread）——即其收益率减去同期限国债收益率——可以拆成三部分：{{c1::预期违约损失（expected default loss）}}（违约概率乘以违约损失率，也就是一个风险中性投资者仅仅为了保本所需要的补偿）；一份 {{c2::针对违约风险的风险溢价（risk premium for default risk）}}（违约往往集中在经济衰退期，无法通过持有一篮子公司债来分散掉，所以承担这种集中性要按系统性风险定价，而不只是按精算概率定价）；以及一份 {{c3::非流动性溢价（illiquidity premium）}}（公司债的交易市场远比国债市场稀薄、分散，买卖价差更宽，冲击成本更高）。实证上，预期违约损失只能解释投资级信用利差里很小一部分——观测到的利差大部分是风险溢价和非流动性溢价，这也是为什么信用利差远比历史违约经验本身所能证成的更宽（即"信用利差之谜 credit spread puzzle"，参见 Huang-Huang 2012 等研究）。

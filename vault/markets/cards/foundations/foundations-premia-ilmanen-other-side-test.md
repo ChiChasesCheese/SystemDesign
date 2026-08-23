@@ -1,0 +1,20 @@
+---
+id: foundations-premia-ilmanen-other-side-test
+node: foundations.premia
+type: qa
+---
+## Q
+A backtest shows a trading rule with a Sharpe ratio of 1.5 over 15 years of daily data, no obvious data problems, and a plausible-sounding story about market inefficiency. Ilmanen proposes a single question to sanity-check a result like this before trusting it as a real, persistent premium. What is the question, and what does a failed answer imply?
+
+## A
+**"Who is on the other side of this trade, and why do they keep accepting the losing side of it?"** A real, sustainable premium requires a plausible counterparty who rationally and repeatedly takes the opposite position — because they are compensated for a risk they don't want to hold (an insurer buying protection), because they are structurally forced to trade regardless of price (an index fund rebalancing on a schedule, a levered investor forced to de-risk), or because they are making a genuine, durable mistake.
+
+If you cannot name that counterparty and their reason for persistently losing, the strategy's edge is probably not a real premium at all — it is more likely an artifact of data mining (one lucky pattern found among thousands tested), a fitted parameter that happened to match the sample, or a return stream nobody has actually traded against because the story doesn't hold up. The test doesn't prove a premium is real, but failing it is a strong reason to distrust the backtest regardless of how clean the statistics look.
+
+## Q zh
+某个回测显示一条交易规则在 15 年的日频数据上夏普比率（Sharpe ratio）达到 1.5，没有明显的数据问题，还配有一个听起来说得通的"市场无效"故事。Ilmanen 提出一个问题，用来在相信它是一个真实、可持续的溢价之前先做一次基本核查。这个问题是什么？答不上来又说明什么？
+
+## A zh
+**"这笔交易的对手盘是谁？他为什么会一直心甘情愿地站在亏钱的那一边？"** 一个真实、可持续的溢价，必须存在一个合理的对手方，他会理性地、反复地站在相反的方向上——要么是因为他为规避自己不想承担的风险而付费（比如买保险的保险买方），要么是因为他被制度或规则逼着交易、不管价格如何都得交易（比如按固定时间表再平衡的指数基金、被迫去杠杆的杠杆投资者），要么是因为他确实在持续、稳定地犯一个错误。
+
+如果你说不出这个对手盘是谁、他为什么会持续亏钱，那么这个策略的"edge"很可能根本不是真实的溢价——更可能是数据挖掘的产物（在成千上万次尝试里撞见的一次幸运模式）、恰好拟合了样本的参数，或者是一段其实从没被人真正交易过的收益序列，因为背后的故事根本站不住脚。这个检验并不能证明溢价是真的，但答不上来，就足以让你不管统计数字看起来多干净，都要对这个回测保持怀疑。
