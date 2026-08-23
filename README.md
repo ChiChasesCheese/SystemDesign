@@ -132,13 +132,23 @@ the four steps in the order that makes them safe, against desktop Anki with the
 [AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on:
 
 ```bash
-trellis build --lang zh                       # -> dist/system-design.zh.apkg
 trellis --domain system-design anki-push --lang zh
+#   built 391 notes in 71 decks
 #   pulled from AnkiWeb        <- the phone's reviews land first
 #   imported system-design.zh.apkg
 #   moved 12 card(s), removed 2 stale deck(s)
 #   pushed to AnkiWeb          <- the phone gets the new cards
 ```
+
+It builds the package itself rather than trusting whatever sits in `dist/`,
+because **Anki updates a note only when the incoming one is newer**. Re-importing
+a package built before the collection last changed leaves those notes silently
+stale — which is exactly what happens when you switch languages and push the old
+file again. Building inside the command removes the trap.
+
+Switching language is a push, not a migration: card ids and therefore note GUIDs
+do not depend on language, so `anki-push --lang zh` rewrites the text of the
+cards already in the collection and every review history survives.
 
 Syncing **before** the import is the point: it puts the package on top of
 current scheduling rather than a stale collection, so nothing reviewed on the
