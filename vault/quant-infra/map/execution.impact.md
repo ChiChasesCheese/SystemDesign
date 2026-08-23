@@ -11,6 +11,13 @@ Temporary versus permanent impact, the square-root law in participation rate, Al
 ## Readings
 - [[qs-citadel-research-sizing-chain|From Signal to Trade: Kelly Sizing, Risk Parity, and Cost-Aware Execution]]
 - [[qs-transaction-costs-and-prices|The Truth About Trading Costs and Prices]]
+
+## Cards (5)
+- [[execution-impact-capacity-ceiling]]
+- [[execution-impact-cost-profile-decomposition-cloze]]
+- [[execution-impact-nonlinear-in-urgency]]
+- [[execution-impact-square-root-law]]
+- [[execution-impact-temporary-vs-permanent]]
 %% trellis:end %%
 
 ## Notes

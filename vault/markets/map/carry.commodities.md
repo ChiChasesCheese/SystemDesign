@@ -8,6 +8,13 @@ The theory of storage and convenience yield, Keynesian hedging pressure and norm
 
 ## Readings
 - [[qs-catalog-carry|Family 3: Carry]]
+
+## Cards (5)
+- [[carry-commodities-backwardation-contango-roll-yield]]
+- [[carry-commodities-convenience-yield-inventory]]
+- [[carry-commodities-hedger-side-curve-shape]]
+- [[carry-commodities-hedging-pressure-normal-backwardation]]
+- [[carry-commodities-theory-of-storage]]
 %% trellis:end %%
 
 ## Notes

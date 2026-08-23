@@ -11,6 +11,13 @@ Adjusting Sharpe for skew, kurtosis, track length and trial count, and using min
 ## Readings
 - [[qs-multiple-testing-backtest-overfitting|Why 'It Worked on the Test Set' Isn't Enough: Multiple Testing and Backtest Overfitting]]
 - [[qs-parameters-hyperopt-overfitting|Parameters, Hyperparameter Optimization, and the Edge of Overfitting]]
+
+## Cards (5)
+- [[backtest-dsr-low-pass-rate]]
+- [[backtest-dsr-mintrl]]
+- [[backtest-dsr-not-executability]]
+- [[backtest-dsr-psr-skew-kurtosis]]
+- [[backtest-dsr-vs-psr-trial-adjustment]]
 %% trellis:end %%
 
 ## Notes

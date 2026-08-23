@@ -6,6 +6,13 @@
 
 ## Readings
 - [[qs-catalog-momentum-trend|Family 1: Momentum & Trend]]
+
+## Cards (5)
+- [[momentum-cross-sectional-12-1-skip-month]]
+- [[momentum-cross-sectional-crash-rebound-skew]]
+- [[momentum-cross-sectional-industry-vs-residual]]
+- [[momentum-cross-sectional-other-side-disposition]]
+- [[momentum-cross-sectional-vol-scaling-crowding]]
 %% trellis:end %%
 
 ## Notes

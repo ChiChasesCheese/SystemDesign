@@ -7,6 +7,13 @@ Carry defined as expected return under an unchanged price, its split from roll-d
 ## Readings
 - [[qs-catalog-carry|Family 3: Carry]]
 - [[qs-strategy-styles-spectrum|The Spectrum of Strategy Styles: What Each One Is Actually Betting On]]
+
+## Cards (5)
+- [[carry-concept-cross-asset-unification]]
+- [[carry-concept-decomposition-yield-roll]]
+- [[carry-concept-definition-unchanged-price]]
+- [[carry-concept-earning-vs-holding-risk]]
+- [[carry-concept-short-vol-negative-skew]]
 %% trellis:end %%
 
 ## Notes

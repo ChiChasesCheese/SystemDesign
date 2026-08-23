@@ -11,6 +11,13 @@ Counting trials honestly, family-wise error versus false discovery control, and 
 - [[qs-multiple-testing-backtest-overfitting|Why 'It Worked on the Test Set' Isn't Enough: Multiple Testing and Backtest Overfitting]]
 - [[qs-parameters-hyperopt-overfitting|Parameters, Hyperparameter Optimization, and the Edge of Overfitting]]
 - [[qs-unified-factor-catalog|The Unified Factor Catalog: Raw Material vs Vetted Research]]
+
+## Cards (5)
+- [[backtest-mt-expected-max-sharpe-null]]
+- [[backtest-mt-fwer-vs-fdr]]
+- [[backtest-mt-not-lookahead]]
+- [[backtest-mt-reusable-holdout-selection]]
+- [[backtest-mt-trials-discipline]]
 %% trellis:end %%
 
 ## Notes
