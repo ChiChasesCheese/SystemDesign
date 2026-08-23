@@ -125,6 +125,26 @@ anywhere.
   branches carry an explicit `order:` in the skeleton, so their deck numbers
   never shift when new branches are inserted.
 
+### Publishing to the phone
+
+`build` produces a file; `anki-push` is that file reaching the phone. It runs
+the four steps in the order that makes them safe, against desktop Anki with the
+[AnkiConnect](https://ankiweb.net/shared/info/2055492159) add-on:
+
+```bash
+trellis build --lang zh                       # -> dist/system-design.zh.apkg
+trellis --domain system-design anki-push --lang zh
+#   pulled from AnkiWeb        <- the phone's reviews land first
+#   imported system-design.zh.apkg
+#   moved 12 card(s), removed 2 stale deck(s)
+#   pushed to AnkiWeb          <- the phone gets the new cards
+```
+
+Syncing **before** the import is the point: it puts the package on top of
+current scheduling rather than a stale collection, so nothing reviewed on the
+phone is lost. Aligning between import and the final sync means decks renamed or
+split since the last push are reconciled in the same trip.
+
 ### Granularity policy
 
 A leaf is **one interview probe** — a topic narrow enough that "I'm weak here"

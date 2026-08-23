@@ -297,6 +297,28 @@ def cmd_clip(args, project: Project) -> int:
     return 0
 
 
+def cmd_anki_push(args, project: Project) -> int:
+    """Build is a file; push is that file reaching the phone."""
+    from .anki import AnkiConnectError, push
+
+    apkg = args.apkg or (args.root / "dist" /
+                         (f"{project.skeleton.domain}"
+                          f"{'.' + args.lang if args.lang else ''}.apkg"))
+    if not Path(apkg).exists():
+        _fail(f"{apkg} does not exist — run `trellis build"
+              f"{' --lang ' + args.lang if args.lang else ''}` first")
+    try:
+        result = push(project.skeleton, Path(apkg), url=args.anki_url)
+    except AnkiConnectError as exc:
+        _fail(str(exc))
+    for step in result["steps"]:
+        print(f"  {step}")
+    for name in result["deleted"]:
+        print(f"  deleted stale deck: {name}")
+    print(f"{project.skeleton.domain}: published")
+    return 0
+
+
 def cmd_anki_align(args, project: Project) -> int:
     from .anki import AnkiConnectError, align
     try:
@@ -375,6 +397,7 @@ CROSS_DOMAIN = {"triage": cmd_triage, "accept": cmd_accept}
 
 HANDLERS = {
     "clip": cmd_clip,
+    "anki-push": cmd_anki_push,
     "anki-align": cmd_anki_align,
     "validate": cmd_validate,
     "sync": cmd_sync,
@@ -445,6 +468,14 @@ def main(argv: list[str] | None = None) -> int:
     p_accept.add_argument("file", type=Path)
     p_import = sub.add_parser("import", help="import LLM-generated JSON as cards")
     p_import.add_argument("file", type=Path)
+    p_push = sub.add_parser(
+        "anki-push",
+        help="publish a built deck into the running Anki and out to "
+             "AnkiWeb: sync, import, align to the skeleton, sync again",
+    )
+    p_push.add_argument("--lang", default="", help="publish this language's build")
+    p_push.add_argument("--apkg", type=Path, help="override the package path")
+    p_push.add_argument("--anki-url", default="http://127.0.0.1:8765")
     p_align = sub.add_parser(
         "anki-align",
         help="move cards in a live Anki collection to the decks the current "
