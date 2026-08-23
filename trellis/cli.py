@@ -301,12 +301,26 @@ def cmd_anki_push(args, project: Project) -> int:
     """Build is a file; push is that file reaching the phone."""
     from .anki import AnkiConnectError, push
 
-    apkg = args.apkg or (args.root / "dist" /
-                         (f"{project.skeleton.domain}"
-                          f"{'.' + args.lang if args.lang else ''}.apkg"))
-    if not Path(apkg).exists():
-        _fail(f"{apkg} does not exist — run `trellis build"
-              f"{' --lang ' + args.lang if args.lang else ''}` first")
+    if args.apkg:
+        apkg = args.apkg
+        if not Path(apkg).exists():
+            _fail(f"{apkg} does not exist")
+    else:
+        # Build here rather than trusting dist/. Anki updates a note only
+        # when the incoming one is newer, so re-importing a package built
+        # before the collection last changed silently leaves those notes
+        # stale — which is exactly what happens when you switch languages
+        # and push again.
+        _checked(project, "publishing")
+        apkg = args.root / "dist" / (
+            f"{project.skeleton.domain}"
+            f"{'.' + args.lang if args.lang else ''}.apkg")
+        result = build_package(
+            project.skeleton, project.cards, apkg, project.readings,
+            vault=vault_name(args.root / "vault"),
+            clippings=project.clippings, cases=project.cases, lang=args.lang,
+        )
+        print(f"  built {result['notes']} notes in {result['decks']} decks")
     try:
         result = push(project.skeleton, Path(apkg), url=args.anki_url)
     except AnkiConnectError as exc:

@@ -108,3 +108,30 @@ def test_push_syncs_before_importing_and_after_aligning(tmp_path):
     assert ordered[-1] == "sync"
     assert result["moved"] == 1
     assert any("imported demo.apkg" in s for s in result["steps"])
+
+
+def test_push_builds_the_package_instead_of_trusting_dist(tmp_path, monkeypatch):
+    """Anki updates a note only when the incoming one is newer, so pushing
+    a package built before the collection last changed silently leaves
+    those notes stale. Building inside push removes that footgun."""
+    from trellis import cli
+
+    (tmp_path / "skeleton").mkdir()
+    (tmp_path / "skeleton" / "demo.yaml").write_text(SKELETON, encoding="utf-8")
+    cards = tmp_path / "vault" / "demo" / "cards"
+    cards.mkdir(parents=True)
+    (cards / "alpha-c.md").write_text(
+        "---\nid: alpha-c\nnode: alpha.one\ntype: qa\n---\n## Q\nq?\n\n## A\na.\n",
+        encoding="utf-8")
+
+    order = []
+    monkeypatch.setattr(cli, "build_package", lambda *a, **k: (
+        order.append("build"), {"notes": 1, "decks": 1, "path": str(a[2])})[1])
+    monkeypatch.setattr(cli, "push", lambda *a, **k: (
+        order.append("push"), {"steps": [], "moved": 0, "deleted": []})[1], raising=False)
+    import trellis.anki
+    monkeypatch.setattr(trellis.anki, "push", lambda *a, **k: (
+        order.append("push"), {"steps": [], "moved": 0, "deleted": []})[1])
+
+    assert cli.main(["--root", str(tmp_path), "anki-push"]) == 0
+    assert order == ["build", "push"]
