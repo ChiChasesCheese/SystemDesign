@@ -7,6 +7,13 @@ Rebuilding the tradable universe as of each date — delistings, bankruptcies, p
 ## Readings
 - [[qs-architecture-data-flow-overview|Architecture and Data Flow (Concept Overview)]]
 - [[qs-why-backtests-lie|Why Backtests Lie]]
+
+## Cards (5)
+- [[data-universe-delisting-return]]
+- [[data-universe-ipo-halt-entry]]
+- [[data-universe-pit-index-membership-2010]]
+- [[data-universe-reconstitution-turnover-cloze]]
+- [[data-universe-survivorship-bias-magnitude]]
 %% trellis:end %%
 
 ## Notes

@@ -9,6 +9,13 @@ CAPM and the security market line with beta as the first factor, plus the volati
 ## Readings
 - [[qs-long-short-neutral-self-financing|Long/Short, Neutral, Self-Financing: Explained Through FX Value]]
 - [[qs-trading-101-primer|Trading 101: A Zero-Knowledge Primer]]
+
+## Cards (5)
+- [[foundations-capm-beta-first-factor]]
+- [[foundations-capm-flat-empirical-sml-bab]]
+- [[foundations-capm-pricing-model-vs-risk-control]]
+- [[foundations-capm-security-market-line]]
+- [[foundations-capm-sml-numeric-discrimination]]
 %% trellis:end %%
 
 ## Notes

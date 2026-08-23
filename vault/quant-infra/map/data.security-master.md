@@ -9,6 +9,13 @@ Identifier mapping across ticker reuse, mergers and CUSIP/ISIN/FIGI churn, plus 
 ## Readings
 - [[qs-data-layer-automation-pipeline|Data Layering and the Alpha Automation Pipeline]]
 - [[qs-quant-dev-multifactor-infra|A Quant Developer's Field Notes: Multi-Factor Models and the Infrastructure Behind Them]]
+
+## Cards (5)
+- [[data-secmaster-adjusted-price-breaks-volume-limits]]
+- [[data-secmaster-adjustment-factor]]
+- [[data-secmaster-identifier-mapping]]
+- [[data-secmaster-ticker-reuse]]
+- [[data-secmaster-total-vs-price-return]]
 %% trellis:end %%
 
 ## Notes
