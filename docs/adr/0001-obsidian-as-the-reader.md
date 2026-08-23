@@ -17,6 +17,8 @@ reading's name.
 **Consequences.** The vault must be named `vault` on every device, since that
 name travels inside thousands of card fields. Reading notes are committed, so
 the link always lands somewhere useful even when the clipped article is
-missing. Clippings themselves stay out of git — they are other people's
-writing and this repo is public — so they reach a phone only through Obsidian
-Sync/iCloud, or by making the repo private and dropping the ignore rule.
+missing. Clippings are committed, which is what lets a git clone carry the archive to a
+phone — a decision that rests on this repository being private. They remain
+other people's writing, so making it public again means removing them first
+(`git rm -r --cached vault/*/clippings`) and restoring the ignore rule that is
+kept, commented out, in `.gitignore`.
