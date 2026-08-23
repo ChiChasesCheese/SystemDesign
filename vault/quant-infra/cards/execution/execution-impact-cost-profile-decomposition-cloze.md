@@ -1,0 +1,9 @@
+---
+id: execution-impact-cost-profile-decomposition-cloze
+node: execution.impact
+type: cloze
+---
+A trading cost model that reports a single blended number like "5 bps" hides which lever is actually killing a strategy. A disciplined cost model instead keeps {{c1::fees, spread, and impact}} as three separately-sourced numbers, because each has a different ground truth: fees come from a {{c2::published rate schedule}} (deterministic), spread must be {{c3::measured from real market data}} (and changes with market conditions), and impact depends on {{c4::your own order size relative to ADV}} (so it can't be looked up — it's a function of how you trade, not just what market you're in). A model that collapses these into one flat number can't tell you *which* component is responsible when a strategy dies — e.g. whether an intraday-momentum signal is being killed by the spread it pays crossing the book every rebalance, versus the fee schedule. On top of the three-way split, a robust cost model keeps {{c5::three scenario tiers — aggressive, central, and conservative}} rather than one point estimate, because using an optimistic cost assumption to gate whether a strategy is real risks letting a strategy through that only looks profitable under best-case liquidity; the convention is to gate strategy survival (e.g. a deflated-Sharpe check) against the {{c6::conservative}} tier and reserve the central tier for ordinary P&L expectations.
+
+## zh
+一个只报一个混合数字（比如"5 个基点"）的交易成本模型，会掩盖到底是哪个杠杆在拖垮一个策略。一个严谨的成本模型会把{{c1::手续费、价差、冲击}}作为三个来源各不相同的独立数字分开保留，因为三者的真值来源不同：手续费来自{{c2::公开的费率表}}（确定性的），价差必须{{c3::从真实市场数据中实测}}（且随行情变化），而冲击取决于{{c4::你自己的订单规模相对于 ADV 的比例}}（所以它没法查表得到——它是你怎么交易的函数，而不只是你在哪个市场交易的函数）。一个把这三者揉成一个平摊数字的模型，在策略死掉的时候没法告诉你*到底是哪个*分量在负责——比如一个日内动量信号，究竟是被每次调仓穿越盘口付出的价差拖死的，还是被费率表拖死的。除了这三分法之外，一个稳健的成本模型还会保留{{c5::三档情景——激进、居中、保守}}，而不是一个单点估计，因为用一个乐观的成本假设去判定一个策略是否真实存在，有可能放行一个只在最好情况的流动性下才显得盈利的策略；惯例是用{{c6::保守}}档去判定策略生死（比如做 deflated-Sharpe 检验），把居中档留给日常的盈亏预期使用。

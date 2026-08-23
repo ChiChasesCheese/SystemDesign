@@ -1,0 +1,26 @@
+---
+id: execution-impact-temporary-vs-permanent
+node: execution.impact
+type: qa
+---
+## Q
+You need to buy 2% of a stock's daily volume. If you execute it in one aggressive burst versus spreading it evenly across the whole day, one component of your market impact shrinks dramatically and the other barely changes at all. Which is which, and why does that split determine how you should schedule the order at all?
+
+## A
+**Temporary impact shrinks with a slower schedule; permanent impact doesn't, because the two have different causes — one is a liquidity cost, the other is an information cost.**
+
+- **Temporary impact** is the price concession needed to get immediate execution against the liquidity currently resting in the book — it's the cost of *demanding* size faster than the book can naturally absorb it. Trade the same 2% aggressively in five minutes and you consume many price levels at once, paying a large temporary concession; spread it over six hours and each slice barely dents available liquidity, since the book replenishes between slices. This component **decays after your trading stops** — it's a rental cost for speed, not a lasting price change.
+- **Permanent impact** is the portion of the price move that persists — the market interpreting your trading as a signal that informed demand exists, and re-pricing to reflect it. This depends on the **total quantity you trade**, not on how fast you trade it: buying 2% of ADV moves the "fair" price by roughly the same permanent amount whether you take five minutes or six hours, because the market eventually infers the same total demand either way.
+
+This split is *why* execution scheduling exists as a discipline at all: since permanent impact is roughly fixed by the size you must trade regardless of schedule, the only thing a schedule can actually control is temporary impact — trading slower reduces it, at the cost of longer market exposure (timing risk, covered on the algos leaf). If both components scaled the same way with speed, there would be no trade-off to optimize and no reason for VWAP, POV, or arrival-price algorithms to exist as distinct strategies.
+
+## Q zh
+你需要买入相当于日成交量 2% 的量。如果你用一次激进的爆发式执行完成，相对于把它均匀铺满全天执行，你的市场冲击中有一个分量会大幅缩小，而另一个分量几乎不变。哪个是哪个？为什么这个拆分决定了你到底该怎么安排这笔订单的执行节奏？
+
+## A zh
+**放慢节奏能压缩暂时冲击（temporary impact），但压不动永久冲击（permanent impact），因为二者的成因根本不同——一个是流动性成本，一个是信息成本。**
+
+- **暂时冲击**是为了立刻从盘口现有的挂单中获得成交而必须付出的价格让步——它是你以快于盘口自然吸收能力的速度"索取"数量所要付出的代价。同样是这 2% 的量，如果在 5 分钟内激进地成交，你会一次性吃掉好几个价位，付出很大的暂时性让步；如果铺满 6 个小时，每一小片都几乎不会伤到当时可用的流动性，因为盘口会在两片之间重新补充。这个分量在你**停止交易之后会衰减消失**——它是为了速度支付的租金，而不是一个持久的价格变化。
+- **永久冲击**是价格变动中会持续留存的那部分——市场把你的交易解读为有知情需求存在的信号，因此重新定价以反映它。这取决于你**交易的总数量**，而不是交易速度：无论你花 5 分钟还是 6 小时买入 2% 的 ADV，"公允"价格被推动的永久幅度大致相同，因为市场最终会推断出同样规模的总需求。
+
+这个拆分正是执行调度（execution scheduling）之所以能成为一门专门学问的原因：既然永久冲击大致由你必须交易的数量固定，与调度节奏无关，那调度节奏真正能控制的就只有暂时冲击——交易越慢，暂时冲击越小，但代价是更长的市场暴露时间（时机风险，详见 algos 那一支）。如果这两个分量都以同样的方式随速度变化，那就没有什么权衡可优化，也就没有理由让 VWAP、POV、到达价算法作为彼此不同的策略而存在。
