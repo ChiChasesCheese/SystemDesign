@@ -9,6 +9,9 @@ The simplicity principles and their failure mode — premature abstraction and s
 ## Readings
 - [[fowler-yagni|Yagni (Martin Fowler, bliki)]]
 
+## Cases
+- [[qs-unify-the-declaration-fork-the-implementation|Unify the declaration, fork the implementation]] — `quant-stroller`
+
 ## Cards (5)
 - [[principles-dry-limit]]
 - [[principles-shallow-abstraction-test]]

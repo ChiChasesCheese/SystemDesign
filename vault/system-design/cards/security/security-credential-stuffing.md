@@ -16,3 +16,17 @@ What detects and blocks it:
 - **Passkeys / WebAuthn** remove the attack class entirely — there is no reusable shared secret to replay.
 
 Avoid: locking accounts after N failures (turns stuffing into a **DoS against your users**), and relying on CAPTCHA alone (solver farms cost cents per thousand).
+
+## Q zh
+凭证填充 vs 暴力破解：为什么按账户速率限制帮助不大，什么实际检测？
+
+## A zh
+暴力是*许多猜测对一个账户*；**填充在百万账户跨重放泄露的用户名+密码对** — 通常**每账户一两次尝试**，来自大型住宅代理池。它从不触发按账户限制器，密码正确，所以哈希成本也不重要。
+
+什么检测和阻止：
+- **舰队级信号，不是按请求**：全局登录**失败率**的突然转变，一个客户/ASN 触及数千个不同用户名，或不寻常的成功聚集。按 IP **和**按 ASN/指纹**和**全局按端点速率限制。
+- **泄露凭证筛查**在注册、登录和密码改变（HIBP k-anonymity 范围 API — 你发 5 哈希字符，绝不密码）。
+- **基于风险的升级**：新设备/IP/地理 → 需第二因素或邮件确认，而不是直接阻止。
+- **Passkey / WebAuthn** 完全移除攻击类 — 无可重用共享秘密重放。
+
+避免：N 次失败后锁定账户（把填充变成针对你用户的 **DoS**），仅依赖 CAPTCHA（求解器农场每千次成本几美分）。

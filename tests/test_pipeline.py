@@ -236,8 +236,9 @@ def test_real_repo_wikilinks_resolve():
         skeleton = load_skeleton(skel_file)
         targets |= {n.id for n in skeleton.walk()}
         vault = REPO / "vault" / skeleton.domain
+        from trellis.cases import load_cases
         for loader, sub in ((load_cards, "cards"), (load_readings, "readings"),
-                            (load_drills, "drills")):
+                            (load_drills, "drills"), (load_cases, "cases")):
             if (vault / sub).exists():
                 items, _ = loader(vault / sub)
                 targets |= {getattr(i, "id", None) or i.link_target for i in items}
@@ -288,3 +289,17 @@ def test_every_deck_link_resolves_to_exactly_one_note(tmp_path):
             for match in re.finditer(r"obsidian://open\?vault=[^&]+&file=([^\"]+)", flds):
                 target = unquote(match.group(1))
                 assert names[target] == 1, f"{target!r} resolves to {names[target]} notes"
+
+
+def test_build_all_skips_a_skeleton_only_domain(project):
+    """A new domain starts as a map with no cards — the normal early state
+    of authoring a skeleton first, and not something CI should fail on."""
+    from trellis.cli import main
+
+    (project / "skeleton" / "fresh.yaml").write_text(
+        "domain: fresh\ntitle: Fresh\nnodes:\n  - id: alpha\n    title: Alpha\n",
+        encoding="utf-8",
+    )
+    assert main(["--root", str(project), "--all", "build"]) == 0
+    assert (project / "dist" / "demo.apkg").exists()
+    assert not (project / "dist" / "fresh.apkg").exists()

@@ -55,6 +55,17 @@ class Card:
     text: str = ""  # cloze body
     tags: list[str] = field(default_factory=list)
     source: str = ""
+    tr: dict = field(default_factory=dict)  # lang -> {question, answer} | {text}
+
+    def render(self, lang: str = "") -> tuple[str, str]:
+        """(question, answer) for a qa card, (text, "") for a cloze —
+        in `lang` where it exists, in English where it does not, so an
+        untranslated card still builds."""
+        parts = self.tr.get(lang, {}) if lang else {}
+        if self.type == "cloze":
+            return parts.get("text") or self.text, ""
+        return (parts.get("question") or self.question,
+                parts.get("answer") or self.answer)
 
 
 def _split_frontmatter(raw: str, path: Path) -> tuple[dict, str]:
@@ -70,13 +81,128 @@ def _split_frontmatter(raw: str, path: Path) -> tuple[dict, str]:
     return meta, body.strip()
 
 
-def _split_qa(body: str, path: Path) -> tuple[str, str]:
-    match = re.match(r"^##\s*Q\s*\n(.*?)\n##\s*A\s*\n(.*)$", body, re.DOTALL)
-    if not match:
-        raise CardError(f"{path}: qa card body must be '## Q' section then '## A' section")
-    question, answer = match.group(1).strip(), match.group(2).strip()
+_SECTION_RE = re.compile(r"^##[ \t]+(.+?)[ \t]*$", re.MULTILINE)
+_LANG_RE = re.compile(r"^(?:(q|a)[ \t]+)?([a-z]{2}(?:-[a-z]{2})?)$")
+
+
+def _sections(body: str) -> tuple[str, dict[str, str]]:
+    """Split a card body into its `##` sections, keeping whatever precedes
+    the first heading (a cloze card is written without headings)."""
+    marks = list(_SECTION_RE.finditer(body))
+    preamble = (body[: marks[0].start()] if marks else body).strip()
+    out: dict[str, str] = {}
+    for i, mark in enumerate(marks):
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(body)
+        name = mark.group(1).strip().lower()
+        if name in out:
+            # Two writers appending a translation to the same card would
+            # otherwise leave one silently shadowing the other.
+            raise CardError(f"repeated section '## {mark.group(1).strip()}'")
+        out[name] = body[mark.end():end].strip()
+    return preamble, out
+
+
+def _translations(sections: dict[str, str], path: Path, cloze: bool,
+                  sections_text: str = "") -> dict:
+    """Language variants written beside the English body: `## Q zh` and
+    `## A zh` for a qa card, `## zh` for a cloze. English is never
+    replaced, so a translation can always be redone or dropped."""
+    langs: dict[str, dict[str, str]] = {}
+    for name, content in sections.items():
+        if name in ("q", "a"):
+            continue
+        match = _LANG_RE.match(name)
+        if not match:
+            raise CardError(
+                f"{path}: unknown section '## {name}' — expected 'Q'/'A', "
+                "a translated 'Q <lang>'/'A <lang>', or '<lang>' for a cloze"
+            )
+        part, lang = match.group(1), match.group(2)
+        if cloze and part is None:
+            langs.setdefault(lang, {})["text"] = content
+        elif not cloze and part is not None:
+            langs.setdefault(lang, {})["question" if part == "q" else "answer"] = content
+        else:
+            raise CardError(f"{path}: '## {name}' does not fit a {'cloze' if cloze else 'qa'} card")
+    for lang, parts in langs.items():
+        missing = ({"question", "answer"} if not cloze else {"text"}) - set(parts)
+        if missing:
+            raise CardError(f"{path}: {lang} translation is missing {sorted(missing)}")
+
+        if cloze:
+            _check_cloze_faithful(sections_text, parts["text"], lang, path)
+    return langs
+
+
+def suspect_translations(card: "Card") -> list[str]:
+    """Languages whose translation looks rewritten rather than translated.
+
+    A translation carrying a code block its English side never had is the
+    signature of a model that answered the question from its own knowledge
+    instead of translating it — measured on a real batch, it marked
+    corrupted cards and nothing else. It is reported rather than raised:
+    the English card is still correct and must keep building. What it does
+    block is shipping that language (see `build --lang`).
+    """
+    out = []
+    english_len = len(card.question) + len(card.answer) if card.type == "qa" else len(card.text)
+    for lang, parts in card.tr.items():
+        for part, english in (("question", card.question), ("answer", card.answer)):
+            if parts.get(part, "").count("```") > english.count("```"):
+                out.append(lang)
+                break
+        else:
+            # A translation far longer than its source is padding or, as
+            # happened here, a second copy of the card pasted underneath by
+            # a concurrent writer — invisible to the repeated-heading check
+            # because the duplicate carries no heading of its own.
+            if english_len and sum(map(len, parts.values())) > english_len * 1.6:
+                out.append(lang)
+    return out
+
+
+_CLOZE_FULL_RE = re.compile(r"\{\{c(\d+)::(.*?)\}\}", re.DOTALL)
+_NUMBER_RE = re.compile(r"\d+(?:[.,]\d+)*")
+
+
+def _check_cloze_faithful(english: str, translated: str, lang: str, path: Path) -> None:
+    """A translated cloze must test exactly what the English one tests.
+
+    Prose inside a deletion may be translated — an answer you are meant to
+    produce should be in the language you are studying in. What may not
+    change is which deletions exist and the numbers inside them: a dropped
+    deletion silently removes a probe, and a re-worded quantity teaches
+    something false. Both were produced by translation models in practice,
+    which is why this is enforced rather than asked for.
+    """
+    src = _CLOZE_FULL_RE.findall(english)
+    dst = _CLOZE_FULL_RE.findall(translated)
+    if not dst:
+        raise CardError(f"{path}: {lang} cloze translation has no {{{{c1::...}}}} deletion")
+    src_idx = sorted({i for i, _ in src})
+    dst_idx = sorted({i for i, _ in dst})
+    if src_idx != dst_idx:
+        raise CardError(
+            f"{path}: {lang} translation has deletions {dst_idx} but the English "
+            f"card has {src_idx} — a translation may not add or drop a probe"
+        )
+    by_index: dict[str, str] = {}
+    for i, text in dst:
+        by_index[i] = by_index.get(i, "") + " " + text
+    for i, text in src:
+        want = set(_NUMBER_RE.findall(text))
+        missing = sorted(want - set(_NUMBER_RE.findall(by_index.get(i, ""))))
+        if missing:
+            raise CardError(
+                f"{path}: {lang} deletion c{i} lost the number(s) {missing} — "
+                "quantities inside a deletion are the answer and must survive"
+            )
+
+
+def _split_qa(sections: dict[str, str], path: Path) -> tuple[str, str]:
+    question, answer = sections.get("q", ""), sections.get("a", "")
     if not question or not answer:
-        raise CardError(f"{path}: empty question or answer")
+        raise CardError(f"{path}: qa card body must be '## Q' section then '## A' section")
     return question, answer
 
 
@@ -108,9 +234,16 @@ def parse_card(path: str | Path) -> Card:
         tags=list(tags),
         source=str(meta.get("source", "") or ""),
     )
+    try:
+        preamble, sections = _sections(body)
+    except CardError as exc:
+        raise CardError(f"{path}: {exc}") from None
     if card_type == "qa":
-        card.question, card.answer = _split_qa(body, path)
+        card.question, card.answer = _split_qa(sections, path)
+        card.tr = _translations(sections, path, cloze=False)
     else:
+        body = preamble
+        card.tr = _translations(sections, path, cloze=True, sections_text=preamble)
         if not body:
             raise CardError(f"{path}: empty cloze body")
         if not _CLOZE_RE.search(body):

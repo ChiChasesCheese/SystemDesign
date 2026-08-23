@@ -4,6 +4,9 @@
 
 Multi-datacenter writes, conflict detection and resolution, why LWW loses data.
 
+## Cases
+- [[qs-two-writers-and-the-conflict-you-cannot-see|Two writers and the conflict you cannot see]] — `quant-stroller`
+
 ## Cards (5)
 - [[distributed-conflict-detection-siblings]]
 - [[distributed-multi-leader-conflict-timing]]

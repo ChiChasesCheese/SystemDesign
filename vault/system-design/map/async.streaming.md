@@ -9,6 +9,9 @@ Change data capture, materialized views, windows, and keeping derived data fresh
 - [[the-log-jay-kreps|The Log: What every software engineer should know (Jay Kreps)]]
 - [[turning-the-database-inside-out|Turning the Database Inside-Out (Kleppmann)]]
 
+## Cases
+- [[qs-one-implementation-two-drivers-replay-parity|One implementation, two drivers: replay/live parity]] — `quant-stroller`
+
 ## Cards (6)
 - [[async-cdc-initial-snapshot]]
 - [[async-cdc-mechanism]]

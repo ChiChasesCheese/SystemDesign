@@ -14,3 +14,15 @@ If posting maintains a materialized balance row, every transaction serializes on
 - Reserve synchronous check-and-post for accounts where overdraft actually matters (customer wallets).
 
 Interview line: hot accounts are why "row-lock the balance" doesn't survive scale — pick per-account strategy by its invariant.
+
+## Q zh
+平台费账户出现在每笔交易中 — 每天百万条分录针对一个账本账户。为什么它会熔断，怎样设计来规避？
+
+## A zh
+如果过账维护物化 balance 行，每笔交易在那**唯一行锁**上序列化 — 费账户成全局吞吐量天花板。
+
+- **不维护它的同步 balance**：追加分录无锁；**异步**推导 balance（投影 / 快照 + 增量，[[correctness-balance-derivation]]）。这合理是因为内部 omnibus/费账户在写入时没有要强制的禁止透支规则。
+- 如果 balance 约束**确实**需要：**分片成子账户**（fee-01..fee-32，哈希路由），各自序列化；跨分片报 SUM。
+- 预留同步检查-过账给禁止透支真的重要的账户（客户钱包）。
+
+面试金句：热账户是为什么"行锁 balance"无法扩展的原因 — 按账户的不变量选择策略。

@@ -6,6 +6,8 @@ Seams, constructor injection, test double taxonomy, and why static/global state 
 
 **Requires:** [[principles.coupling|Coupling, Cohesion & DI]]
 
+**Unlocks:** [[quality.fitness-functions|Fitness Functions]]
+
 ## Readings
 - [[fowler-mocks-arent-stubs|Mocks Aren't Stubs (Martin Fowler)]]
 

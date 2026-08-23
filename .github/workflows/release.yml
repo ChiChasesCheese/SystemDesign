@@ -22,6 +22,16 @@ jobs:
       - run: pip install -e .
       - run: trellis --all validate
       - run: trellis --all build
+      - name: Build the translated decks beside them
+        run: |
+          for d in skeleton/*.yaml; do
+            domain=$(basename "$d" .yaml)
+            # A language only ships when nothing in it looks rewritten;
+            # an untranslated domain simply has no zh deck.
+            trellis --domain "$domain" build --lang zh \
+              -o "dist/$domain.zh.apkg" 2>/dev/null || \
+              echo "no zh deck for $domain"
+          done
       - name: Create release with decks attached
         env:
           GH_TOKEN: ${{ github.token }}

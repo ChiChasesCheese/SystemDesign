@@ -26,6 +26,7 @@
         - [[storage.relational.operations|Operating at Scale]]
     - [[storage.internals|B-trees vs LSM-trees]]
     - [[storage.nosql|NoSQL Families]]
+    - [[storage.record-modeling|Record Modeling]]
     - [[storage.object|Object Storage & Separation]]
     - [[storage.search|Search Indexes]]
     - [[storage.encoding|Encoding & Evolution]]

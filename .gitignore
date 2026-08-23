@@ -8,3 +8,7 @@ dist/
 # people's writing — do not make this repository public again without
 # removing them (`git rm -r --cached vault/*/clippings` and restoring this
 # ignore rule).
+.trellis/
+
+# Browser-automation scratch output (screenshots, page snapshots) — never source
+.playwright-mcp/

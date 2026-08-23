@@ -94,6 +94,7 @@ def go_deeper(
     node_id: str,
     vault: str | None = None,
     clippings: dict[str, Clipping] | None = None,
+    cases: list[Reading] | None = None,
 ) -> list[GoDeeper]:
     """Footer links for a card on `node_id`.
 
@@ -104,6 +105,12 @@ def go_deeper(
     `vault/`). The clipped article rides along embedded inside that note.
     """
     out: list[GoDeeper] = []
+    # Cases come first: "a real system did this, and here is what it cost"
+    # is what makes the leaf's principle stick. They are vault notes, so
+    # they are addressed by name like everything else.
+    if vault:
+        out += [GoDeeper(c.title, open_uri(vault, c.path.stem), None)
+                for c in cases or [] if node_id in c.nodes]
     for reading in sources_for(skeleton, readings, node_id, clippings=clippings):
         if vault:
             out.append(

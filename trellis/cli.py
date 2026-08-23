@@ -15,6 +15,7 @@ validate/sync/build/stats/path over every domain.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from collections import Counter
 from dataclasses import dataclass, field
@@ -31,6 +32,8 @@ from .clippings import (
     load_clippings,
     write_clipping,
 )
+from .cases import CASES_DIRNAME, load_cases
+from .codebases import CodebaseError, artefacts, fetch, load_codebase
 from .drills import Drill, load_drills
 from .obsidian import vault_name
 from .path import study_path
@@ -38,6 +41,7 @@ from .readings import Reading, load_readings
 from .scaffold import import_cards, scaffold_prompt
 from .skeleton import Skeleton, SkeletonError, load_skeleton
 from .sync import sync, write_managed
+from .triage import accept, codebase_index, triage_prompt
 from .validate import validate
 
 
@@ -55,12 +59,15 @@ class Project:
     reading_errors: list[str] = field(default_factory=list)
     drills: list[Drill] = field(default_factory=list)
     drill_errors: list[str] = field(default_factory=list)
+    cases: list[Reading] = field(default_factory=list)
+    case_errors: list[str] = field(default_factory=list)
     clippings: dict[str, Clipping] = field(default_factory=dict)
 
     def report(self):
         return validate(self.skeleton, self.cards, self.card_errors,
                         self.readings, self.reading_errors,
-                        self.drills, self.drill_errors, self.clippings)
+                        self.drills, self.drill_errors, self.clippings,
+                        self.cases, self.case_errors)
 
     def content_dir(self, root: Path) -> Path:
         """This domain's folder inside the Obsidian vault. Not the vault
@@ -101,6 +108,8 @@ def _load(root: Path, domain: str) -> Project:
         project.readings, project.reading_errors = load_readings(vault / "readings")
     if (vault / "drills").exists():
         project.drills, project.drill_errors = load_drills(vault / "drills")
+    if (vault / CASES_DIRNAME).exists():
+        project.cases, project.case_errors = load_cases(vault / CASES_DIRNAME)
     if (vault / CLIPPINGS_DIRNAME).exists():
         project.clippings = load_clippings(vault / CLIPPINGS_DIRNAME)
     return project
@@ -126,6 +135,7 @@ def cmd_validate(args, project: Project) -> int:
     s = project.skeleton
     print(f"{s.title}: {len(s.walk())} nodes, {len(project.cards)} cards, "
           f"{len(project.readings)} readings, {len(project.drills)} drills, "
+          f"{len(project.cases)} cases, "
           f"{len(report.errors)} error(s), {len(report.warnings)} warning(s)")
     return 0 if report.ok else 1
 
@@ -133,7 +143,8 @@ def cmd_validate(args, project: Project) -> int:
 def cmd_sync(args, project: Project) -> int:
     _checked(project, "syncing")
     result = sync(project.skeleton, project.cards, project.content_dir(args.root),
-                  project.readings, project.drills, project.clippings)
+                  project.readings, project.drills, project.cases,
+                  project.clippings)
     print(f"{project.skeleton.domain}: updated {len(result['written'])} note(s)")
     for orphan in result["orphans"]:
         print(f"warning: orphan map note (node no longer in skeleton): {orphan}")
@@ -143,12 +154,32 @@ def cmd_sync(args, project: Project) -> int:
 def cmd_build(args, project: Project) -> int:
     _checked(project, "building")
     if not project.cards:
+        # A skeleton with no cards yet is the normal early state of a new
+        # domain, not an error: the map and its sources are authored first
+        # and cards are grown branch by branch.
+        if getattr(args, "all", False):
+            print(f"{project.skeleton.domain}: skeleton only, no cards to build yet")
+            return 0
         _fail(f"{project.skeleton.domain}: no cards to build")
+    if args.lang:
+        from .cards import suspect_translations
+        suspect = [c for c in project.cards if args.lang in suspect_translations(c)]
+        if suspect and not args.force:
+            for card in suspect[:5]:
+                print(f"  {card.path.name}", file=sys.stderr)
+            more = f" (and {len(suspect) - 5} more)" if len(suspect) > 5 else ""
+            _fail(
+                f"{len(suspect)} card(s){more} have a {args.lang} translation that "
+                "looks rewritten rather than translated — repair them, or pass "
+                "--force to ship the deck anyway"
+            )
     out = args.output or args.root / "dist" / f"{project.skeleton.domain}.apkg"
     result = build_package(
         project.skeleton, project.cards, out, project.readings,
         vault=args.vault_name or vault_name(args.root / "vault"),
         clippings=project.clippings,
+        cases=project.cases,
+        lang=args.lang,
     )
     print(f"wrote {result['path']}: {result['notes']} notes in {result['decks']} decks")
     return 0
@@ -166,6 +197,15 @@ def cmd_stats(args, project: Project) -> int:
           f"{len(project.drills)} drills, link coverage {pct}, "
           f"readable sources {readable}/{len(s.leaves())} leaves, "
           f"{len(project.card_errors)} unparseable")
+    from .cards import suspect_translations
+    flagged = Counter(lang for c in project.cards for lang in suspect_translations(c))
+    for lang, n in sorted(flagged.items()):
+        print(f"  warning: {n} {lang} translation(s) look rewritten rather than "
+              f"translated — `build --lang {lang}` refuses until repaired")
+    langs = Counter(lang for c in project.cards for lang in c.tr)
+    for lang, n in sorted(langs.items()):
+        print(f"  translated into {lang}: {n}/{len(project.cards)} cards "
+              f"({n / len(project.cards):.0%})")
     for root_node in s.roots:
         subtree = [root_node] + [n for n in s.walk()
                                  if n.id.startswith(root_node.id + ".")]
@@ -270,6 +310,69 @@ def cmd_anki_align(args, project: Project) -> int:
     return 0
 
 
+def _all_skeletons(root: Path) -> dict:
+    return {d: _load(root, d).skeleton for d in _domains(root)}
+
+
+def _vault_note_names(root: Path) -> set[str]:
+    """Every note name in the vault. Names must stay unique because card
+    links resolve a note by name, not by path."""
+    return {p.stem for p in (root / "vault").rglob("*.md")}
+
+
+def cmd_triage(args) -> int:
+    try:
+        codebase = load_codebase(args.root / "codebases" / f"{args.codebase}.yaml")
+    except CodebaseError as exc:
+        _fail(str(exc))
+    print(f"fetching {codebase.repo}@{codebase.ref} ...", file=sys.stderr)
+    try:
+        sha = fetch(codebase, args.root)
+    except CodebaseError as exc:
+        _fail(str(exc))
+    found = artefacts(codebase, args.root)
+    if args.kinds:
+        wanted = set(args.kinds.split(","))
+        found = [a for a in found if a.kind in wanted]
+    if not found:
+        _fail("no artefacts matched")
+    skeletons = _all_skeletons(args.root)
+    if args.lens:
+        skeletons = {k: v for k, v in skeletons.items() if k in args.lens.split(",")}
+    prompt = triage_prompt(codebase, sha, found, skeletons, prefix=args.prefix)
+    out = args.output or args.root / "proposals" / f"{codebase.name}.prompt.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(prompt, encoding="utf-8")
+    print(f"{len(found)} artefact(s) at {sha[:12]} -> {out}")
+    return 0
+
+
+def cmd_accept(args) -> int:
+    skeletons = _all_skeletons(args.root)
+    written, errors, gaps = accept(
+        args.file, args.root, skeletons, _vault_note_names(args.root)
+    )
+    if errors:
+        for e in errors:
+            print(f"error: {e}", file=sys.stderr)
+        _fail("nothing accepted")
+    for path in written:
+        print(f"wrote {path}")
+    for gap in gaps:
+        print(f"gap: {gap.get('lens')} needs {gap.get('proposed_leaf')!r} "
+              f"— {gap.get('why', '')}")
+    if written:
+        name = json.loads(Path(args.file).read_text(encoding="utf-8"))["codebase"]
+        index = args.root / "vault" / "Codebases" / f"{name}.md"
+        index.parent.mkdir(parents=True, exist_ok=True)
+        write_managed(index, codebase_index(args.root, name, _domains(args.root)))
+        print(f"index: {index}")
+    print(f"accepted {len(written)} case(s), {len(gaps)} skeleton gap(s) proposed")
+    return 0
+
+
+CROSS_DOMAIN = {"triage": cmd_triage, "accept": cmd_accept}
+
 HANDLERS = {
     "clip": cmd_clip,
     "anki-align": cmd_anki_align,
@@ -301,6 +404,15 @@ def main(argv: list[str] | None = None) -> int:
     p_build = sub.add_parser("build", help="compile vault into an Anki .apkg")
     p_build.add_argument("-o", "--output", type=Path)
     p_build.add_argument(
+        "--force", action="store_true",
+        help="build a language even though some translations look rewritten")
+    p_build.add_argument(
+        "--lang", default="",
+        help="render cards in this language where a translation exists "
+             "(e.g. zh); card ids are unchanged, so re-importing swaps the "
+             "text in place and keeps review history",
+    )
+    p_build.add_argument(
         "--vault-name",
         help="Obsidian vault name used in obsidian:// links "
              "(default: the vault directory's name)",
@@ -318,6 +430,19 @@ def main(argv: list[str] | None = None) -> int:
     p_scaffold.add_argument("node")
     p_scaffold.add_argument("-n", "--count", type=int, default=8)
     p_scaffold.add_argument("-o", "--output", type=Path)
+    p_triage = sub.add_parser(
+        "triage",
+        help="prepare a triage prompt for a declared codebase "
+             "(codebases/<name>.yaml)",
+    )
+    p_triage.add_argument("codebase")
+    p_triage.add_argument("--kinds", help="only these harvest kinds, comma separated")
+    p_triage.add_argument("--lens", help="only offer these lenses, comma separated")
+    p_triage.add_argument("--prefix", default="", help="slug prefix for proposals")
+    p_triage.add_argument("-o", "--output", type=Path)
+    p_accept = sub.add_parser(
+        "accept", help="validate a triage proposal and write the cases it accepts")
+    p_accept.add_argument("file", type=Path)
     p_import = sub.add_parser("import", help="import LLM-generated JSON as cards")
     p_import.add_argument("file", type=Path)
     p_align = sub.add_parser(
@@ -333,6 +458,9 @@ def main(argv: list[str] | None = None) -> int:
         _fail(f"{args.command} needs a single domain")
     if args.all and args.command == "build" and args.output:
         _fail("build --all uses dist/<domain>.apkg; drop -o")
+
+    if args.command in CROSS_DOMAIN:
+        return CROSS_DOMAIN[args.command](args)
 
     exit_code = 0
     for domain in _resolve_domains(args.root, args):

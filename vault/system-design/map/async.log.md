@@ -13,6 +13,9 @@ The append-only log as system of record; partitions, consumer groups, offsets, r
 - [[the-log-jay-kreps|The Log: What every software engineer should know (Jay Kreps)]]
 - [[turning-the-database-inside-out|Turning the Database Inside-Out (Kleppmann)]]
 
+## Cases
+- [[qs-write-model-is-a-log-read-model-is-a-projection|Write model as immutable log, read model as projection]] — `quant-stroller`
+
 ## Drills
 - [[design-payment-ledger|Drill: Design a payment ledger service]]
 

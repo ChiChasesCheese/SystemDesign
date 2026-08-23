@@ -90,6 +90,10 @@ nodes:
         title: Designing for Tests
         summary: Seams, constructor injection, test double taxonomy, and why static/global state kills testability.
         requires: [principles.coupling]
+      - id: quality.fitness-functions
+        title: Fitness Functions
+        summary: Tests whose subject is the codebase rather than a unit — executable architecture probes, positive controls, and allowlists that may only shrink.
+        requires: [quality.testability]
       - id: quality.errors
         title: Error Handling Design
         summary: Exceptions vs result types, validation at boundaries, designing failure paths as first-class flows.

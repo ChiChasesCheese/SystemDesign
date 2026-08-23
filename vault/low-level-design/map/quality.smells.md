@@ -8,6 +8,9 @@ Bloaters, OO abusers, change preventers, dispensables, couplers — and the refa
 - [[codinghorror-code-smells|Code Smells (Jeff Atwood, Coding Horror)]]
 - [[refactoring-guru-smells|Code Smells & Refactoring Catalog (refactoring.guru)]]
 
+## Cases
+- [[qs-deleting-code-needs-positive-evidence|Dead code needs positive evidence, not silence]] — `quant-stroller`
+
 ## Cards (4)
 - [[quality-bloaters-refactorings]]
 - [[quality-couplers-refactorings]]

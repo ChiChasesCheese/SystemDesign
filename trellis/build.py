@@ -109,11 +109,12 @@ def _sources_html(
     node_id: str,
     vault: str | None = None,
     clippings: dict | None = None,
+    cases: list | None = None,
 ) -> str:
     """Clickable further-reading footer from the node's (and ancestors')
     readings — the card's road onward, tappable in Anki. Clipped readings
     open inside Obsidian; the web original stays available as ↗."""
-    links = go_deeper(skeleton, readings, node_id, vault, clippings)
+    links = go_deeper(skeleton, readings, node_id, vault, clippings, cases)
     if not links:
         return ""
     rendered = []
@@ -132,6 +133,8 @@ def build_package(
     readings: list[Reading] | None = None,
     vault: str | None = None,
     clippings: dict | None = None,
+    cases: list | None = None,
+    lang: str = "",
 ) -> dict:
     """Write the .apkg. Returns {'notes': int, 'decks': int, 'path': str}."""
     readings = readings or []
@@ -152,18 +155,20 @@ def build_package(
         tags = [skeleton.domain + "::" + card.node.replace(".", "::")] + card.tags
         if card.source:
             tags.append(f"src::{card.source}")
-        footer = _sources_html(skeleton, readings, card.node, vault, clippings)
+        footer = _sources_html(skeleton, readings, card.node, vault,
+                               clippings, cases)
+        question, answer = card.render(lang)
         if card.type == "qa":
             note = genanki.Note(
                 model=qa_model,
-                fields=[_html(card.question), _html(card.answer) + footer, crumb],
+                fields=[_html(question), _html(answer) + footer, crumb],
                 guid=genanki.guid_for(f"trellis:{card.id}"),
                 tags=tags,
             )
         else:
             note = genanki.Note(
                 model=cloze_model,
-                fields=[_html(card.text) + footer, crumb],
+                fields=[_html(question) + footer, crumb],
                 guid=genanki.guid_for(f"trellis:{card.id}"),
                 tags=tags,
             )
