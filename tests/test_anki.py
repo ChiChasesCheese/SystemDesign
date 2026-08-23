@@ -51,6 +51,8 @@ class FakeAnki:
             return None
         if action == "deckNames":
             return list(self.decks)
+        if action in ("sync", "importPackage"):
+            return None
         if action == "deleteDecks":
             for name in params["decks"]:
                 del self.decks[name]
@@ -83,3 +85,26 @@ def test_align_noop_on_clean_collection(tmp_path):
     result = align(skeleton, call=fake)
     assert result["moved"] == 0 and result["deleted"] == []
     assert len(fake.calls) > calls_before  # it did re-check, found nothing
+
+
+def test_push_syncs_before_importing_and_after_aligning(tmp_path):
+    """The order is the reason this is one command: pulling first means
+    the import lands on the phone's current scheduling, and pushing last
+    is what actually gets the new cards onto the phone."""
+    from trellis.anki import push
+
+    path = tmp_path / "s.yaml"
+    path.write_text(SKELETON, encoding="utf-8")
+    skeleton = load_skeleton(path)
+    fake = FakeAnki()
+    apkg = tmp_path / "demo.apkg"
+    apkg.write_bytes(b"not really a package")
+
+    result = push(skeleton, apkg, call=fake)
+
+    ordered = [c for c in fake.calls if c in ("sync", "importPackage", "changeDeck")]
+    assert ordered[0] == "sync"
+    assert ordered.index("importPackage") < ordered.index("changeDeck")
+    assert ordered[-1] == "sync"
+    assert result["moved"] == 1
+    assert any("imported demo.apkg" in s for s in result["steps"])

@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import urllib.request
+from pathlib import Path
 from typing import Callable
 
 from .skeleton import Skeleton
@@ -75,3 +76,36 @@ def align(skeleton: Skeleton, call: Callable = invoke, url: str = DEFAULT_URL) -
     if stale:
         call("deleteDecks", url, decks=stale, cardsToo=True)
     return {"moved": moved, "deleted": stale}
+
+
+def push(
+    skeleton: Skeleton,
+    apkg: Path,
+    call: Callable = invoke,
+    url: str = DEFAULT_URL,
+) -> dict:
+    """Publish a freshly built deck into the running Anki and out to AnkiWeb.
+
+    The order matters and is the whole point of having this as one
+    command. Syncing *first* pulls whatever the phone reviewed since the
+    last push, so the import lands on top of current scheduling instead
+    of a stale collection. Only then is the package imported, aligned to
+    the skeleton's decks, and pushed back out — so the phone ends up with
+    the new cards and its own review history intact.
+    """
+    steps: list[str] = []
+
+    call("sync", url)
+    steps.append("pulled from AnkiWeb")
+
+    call("importPackage", url, path=str(Path(apkg).resolve()))
+    steps.append(f"imported {Path(apkg).name}")
+
+    moved = align(skeleton, call=call, url=url)
+    steps.append(f"moved {moved['moved']} card(s), removed "
+                 f"{len(moved['deleted'])} stale deck(s)")
+
+    call("sync", url)
+    steps.append("pushed to AnkiWeb")
+
+    return {"steps": steps, **moved}
