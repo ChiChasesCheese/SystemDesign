@@ -19,14 +19,21 @@ Cards and readings reference each other with ordinary wikilinks, and every node'
 generated map note lists both — so the Obsidian graph connects topic ↔ reading ↔
 card.
 
-Ships with two domains. **System Design** — a 92-node map (391 cards, 72
-readings) structured against DDIA 2nd edition and spanning the interview canon
+Ships with five domains (three fully carded, plus Markets & Factors and Quant
+Infrastructure as skeleton + readings). **System Design** — a 92-node map
+(391 cards, 72 readings) structured against DDIA 2nd edition and spanning the interview canon
 plus what the 2017-era resources miss: consensus, CRDTs, encoding and schema
 evolution, delivery semantics, idempotency/outbox/saga/ledger, OLAP and
 lakehouse, SLOs, multi-region, AI serving. **Low-Level Design** — a 33-node map
 (125 cards) covering the machine-coding round: object modelling, SOLID as
 refactoring triggers, the GoF catalogue by intent, code smells, concurrency,
-and program structure. Every leaf in both is covered.
+and program structure. **Code Core** — an 86-node map (379 cards, 35 readings,
+9 drills) for the timed coding round that is not LeetCode: reading a multi-part
+spec, parsing stdin into records, modelling state that survives a reversal,
+money and threshold arithmetic, time and intervals, byte-exact output, the
+data-structure and algorithm toolbox, complexity budgets, language fluency,
+correctness discipline, and how the same core transfers to another company's
+assessment. Every leaf in all three is covered.
 
 ## Why a skeleton
 

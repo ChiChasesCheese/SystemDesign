@@ -1,0 +1,19 @@
+%% trellis:begin %%
+# Reading the Constraints
+*Complexity & Budgets*
+
+Translating 10^5 or 10^6 into an allowed complexity class, the operations-per-second budget of an interpreted language, and choosing before coding.
+
+## Drills
+- [[least-loaded-assignment-heap|Drill: least-loaded assignment under a performance budget]]
+- [[settlement-minimum-transfers|Drill: settling a group of debts in the fewest transfers]]
+
+## Cards (5)
+- [[cc-performance-budget-bounds-multiply]]
+- [[cc-performance-budget-decide-before-coding]]
+- [[cc-performance-budget-from-n]]
+- [[cc-performance-budget-ops-per-second]]
+- [[cc-performance-budget-small-n-unlocks]]
+%% trellis:end %%
+
+## Notes

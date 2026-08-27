@@ -1,0 +1,24 @@
+%% trellis:begin %%
+# Idioms That Save Minutes
+*Language Fluency*
+
+Comprehensions, unpacking, `sorted(key=...)`, `cmp_to_key`, `enumerate`/`zip`, f-string formatting, and `dict.setdefault` vs `defaultdict`.
+
+## Readings
+- [[python-functools|functools — higher-order functions and operations on callables]]
+- [[python-itertools|itertools — functions creating iterators for efficient looping]]
+- [[python-sorting-howto|Sorting Techniques (Python HOWTO)]]
+- [[python-string-format|string — Format Specification Mini-Language]]
+
+## Drills
+- [[exact-output-port-sprint|Drill: twenty minutes to an exact-output contract]]
+
+## Cards (5)
+- [[cc-python-idioms-comprehensions]]
+- [[cc-python-idioms-fstring-format]]
+- [[cc-python-idioms-setdefault-vs-defaultdict]]
+- [[cc-python-idioms-sorted-key-mechanics]]
+- [[cc-python-idioms-unpacking-enumerate-zip]]
+%% trellis:end %%
+
+## Notes
