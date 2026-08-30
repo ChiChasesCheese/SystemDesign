@@ -30,8 +30,8 @@
       "cards": ["storage-compaction-interference", "storage-btree-single-copy-locking"]
     },
     "storage.encoding": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["storage-language-serialization-trap", "storage-avro-evolution-defaults", "storage-dataflow-modes", "storage-unknown-field-roundtrip"]
     },
     "storage.record-modeling": {
       "status": "todo",

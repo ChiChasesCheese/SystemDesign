@@ -9,12 +9,18 @@
       ]
     },
     "distributed.replication.multi-leader": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-multi-leader-retrofit-hazards",
+        "distributed-collab-editing-replication"
+      ]
     },
     "distributed.replication.leaderless": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-leaderless-failed-write",
+        "distributed-leaderless-staleness-monitoring"
+      ]
     },
     "distributed.partitioning.schemes": {
       "status": "todo",
