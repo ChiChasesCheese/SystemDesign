@@ -51,8 +51,11 @@
       ]
     },
     "distributed.transactions.concurrency-control": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-actual-serial-execution",
+        "distributed-ssi-detection-points"
+      ]
     },
     "distributed.transactions.distributed": {
       "status": "todo",
