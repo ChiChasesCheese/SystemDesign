@@ -79,8 +79,11 @@
       ]
     },
     "distributed.time.clocks": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-clock-error-sources",
+        "distributed-hybrid-logical-clocks"
+      ]
     },
     "distributed.time.failure": {
       "status": "todo",
