@@ -58,8 +58,10 @@
       ]
     },
     "distributed.transactions.distributed": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-internal-vs-heterogeneous-2pc"
+      ]
     },
     "distributed.consensus": {
       "status": "todo",
