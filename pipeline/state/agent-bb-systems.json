@@ -1,0 +1,102 @@
+{
+  "agent": "bb-systems",
+  "domain": "basketball",
+  "leaves": {
+    "readings-and-videos": {
+      "status": "todo",
+      "cards": []
+    },
+    "drills": {
+      "status": "todo",
+      "cards": []
+    },
+    "systems.motion": {
+      "status": "todo",
+      "cards": []
+    },
+    "systems.princeton": {
+      "status": "todo",
+      "cards": []
+    },
+    "systems.triangle": {
+      "status": "todo",
+      "cards": []
+    },
+    "systems.sets": {
+      "status": "todo",
+      "cards": []
+    },
+    "systems.flow": {
+      "status": "todo",
+      "cards": []
+    },
+    "systems.modern": {
+      "status": "todo",
+      "cards": []
+    },
+    "analytics.four-factors": {
+      "status": "todo",
+      "cards": []
+    },
+    "analytics.shot-quality": {
+      "status": "todo",
+      "cards": []
+    },
+    "analytics.lineups": {
+      "status": "todo",
+      "cards": []
+    },
+    "analytics.tracking": {
+      "status": "todo",
+      "cards": []
+    },
+    "physical.movement": {
+      "status": "todo",
+      "cards": []
+    },
+    "physical.strength": {
+      "status": "todo",
+      "cards": []
+    },
+    "physical.injury": {
+      "status": "todo",
+      "cards": []
+    },
+    "physical.recovery": {
+      "status": "todo",
+      "cards": []
+    },
+    "practice.deliberate": {
+      "status": "todo",
+      "cards": []
+    },
+    "practice.constraints": {
+      "status": "todo",
+      "cards": []
+    },
+    "practice.film": {
+      "status": "todo",
+      "cards": []
+    },
+    "practice.workout": {
+      "status": "todo",
+      "cards": []
+    },
+    "rules.travel-gather": {
+      "status": "todo",
+      "cards": []
+    },
+    "rules.contact": {
+      "status": "todo",
+      "cards": []
+    },
+    "rules.goaltending": {
+      "status": "todo",
+      "cards": []
+    },
+    "rules.variants": {
+      "status": "todo",
+      "cards": []
+    }
+  }
+}

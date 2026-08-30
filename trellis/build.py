@@ -119,7 +119,8 @@ def _sources_html(
         return ""
     rendered = []
     for link in links:
-        html = f'<a href="{link.href}">{link.title}</a>'
+        marker = "▶ " if link.is_video else ""
+        html = f'<a href="{link.href}">{marker}{link.title}</a>'
         if link.web_href:
             html += f' <a href="{link.web_href}" class="web" title="open the original online">↗</a>'
         rendered.append(html)

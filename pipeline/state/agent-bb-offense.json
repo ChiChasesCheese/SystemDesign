@@ -1,0 +1,102 @@
+{
+  "agent": "bb-offense",
+  "domain": "basketball",
+  "leaves": {
+    "foundations.court-map": {
+      "status": "todo",
+      "cards": []
+    },
+    "foundations.efficiency": {
+      "status": "todo",
+      "cards": []
+    },
+    "foundations.shot-value": {
+      "status": "todo",
+      "cards": []
+    },
+    "foundations.advantage": {
+      "status": "todo",
+      "cards": []
+    },
+    "foundations.spacing": {
+      "status": "todo",
+      "cards": []
+    },
+    "foundations.possession-math": {
+      "status": "todo",
+      "cards": []
+    },
+    "skills.footwork": {
+      "status": "todo",
+      "cards": []
+    },
+    "skills.shooting": {
+      "status": "todo",
+      "cards": []
+    },
+    "skills.finishing": {
+      "status": "todo",
+      "cards": []
+    },
+    "skills.handle": {
+      "status": "todo",
+      "cards": []
+    },
+    "skills.passing": {
+      "status": "todo",
+      "cards": []
+    },
+    "oneonone.triple-threat": {
+      "status": "todo",
+      "cards": []
+    },
+    "oneonone.attack-angles": {
+      "status": "todo",
+      "cards": []
+    },
+    "oneonone.change-of-pace": {
+      "status": "todo",
+      "cards": []
+    },
+    "oneonone.counters": {
+      "status": "todo",
+      "cards": []
+    },
+    "oneonone.post-play": {
+      "status": "todo",
+      "cards": []
+    },
+    "oneonone.iso-reads": {
+      "status": "todo",
+      "cards": []
+    },
+    "twoman.screening": {
+      "status": "todo",
+      "cards": []
+    },
+    "twoman.pnr-handler": {
+      "status": "todo",
+      "cards": []
+    },
+    "twoman.pnr-screener": {
+      "status": "todo",
+      "cards": []
+    },
+    "twoman.handoff": {
+      "status": "todo",
+      "cards": []
+    },
+    "twoman.offball-screens": {
+      "status": "todo",
+      "cards": []
+    },
+    "twoman.cutting": {
+      "status": "todo",
+      "cards": []
+    },
+    "twoman.relocation": {
+      "status": "todo",
+      "cards": []
+    }
+  }
+}

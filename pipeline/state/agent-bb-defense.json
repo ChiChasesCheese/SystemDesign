@@ -1,0 +1,114 @@
+{
+  "agent": "bb-defense",
+  "domain": "basketball",
+  "leaves": {
+    "offense.principles": {
+      "status": "todo",
+      "cards": []
+    },
+    "offense.drive-and-kick": {
+      "status": "todo",
+      "cards": []
+    },
+    "offense.paint-touch": {
+      "status": "todo",
+      "cards": []
+    },
+    "offense.transition": {
+      "status": "todo",
+      "cards": []
+    },
+    "offense.zone-attack": {
+      "status": "todo",
+      "cards": []
+    },
+    "offense.press-break": {
+      "status": "todo",
+      "cards": []
+    },
+    "offense.offensive-rebounding": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.stance-closeout": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.onball": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.offball": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.pnr-coverages": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.rotations": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.post-defense": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.rebounding": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.transition-d": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.zone": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.pressure": {
+      "status": "todo",
+      "cards": []
+    },
+    "defense.scheme-choice": {
+      "status": "todo",
+      "cards": []
+    },
+    "reads.numbers": {
+      "status": "todo",
+      "cards": []
+    },
+    "reads.help-recognition": {
+      "status": "todo",
+      "cards": []
+    },
+    "reads.shot-selection": {
+      "status": "todo",
+      "cards": []
+    },
+    "reads.timing": {
+      "status": "todo",
+      "cards": []
+    },
+    "reads.clock": {
+      "status": "todo",
+      "cards": []
+    },
+    "situations.inbounds": {
+      "status": "todo",
+      "cards": []
+    },
+    "situations.late-game-offense": {
+      "status": "todo",
+      "cards": []
+    },
+    "situations.fouling": {
+      "status": "todo",
+      "cards": []
+    },
+    "situations.after-timeout": {
+      "status": "todo",
+      "cards": []
+    }
+  }
+}
