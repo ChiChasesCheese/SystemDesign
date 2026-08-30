@@ -32,8 +32,11 @@
       ]
     },
     "offense.zone-attack": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-offense-zone-gaps-not-around",
+        "bb-offense-zone-overload"
+      ]
     },
     "offense.press-break": {
       "status": "todo",
