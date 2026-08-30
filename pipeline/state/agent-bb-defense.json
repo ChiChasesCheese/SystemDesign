@@ -31,12 +31,18 @@
       "cards": []
     },
     "defense.stance-closeout": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-defense-closeout-shooter-vs-driver",
+        "bb-defense-closeout-mechanics-cloze"
+      ]
     },
     "defense.onball": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-defense-force-side-and-hand",
+        "bb-defense-contain-over-steal"
+      ]
     },
     "defense.offball": {
       "status": "todo",
