@@ -18,8 +18,8 @@
       "cards": ["storage-replica-lag-ops"]
     },
     "storage.internals.btree": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["storage-btree-branching-depth", "storage-btree-page-split", "storage-btree-latches", "storage-btree-clustered-vs-heap"]
     },
     "storage.internals.lsm": {
       "status": "todo",
