@@ -86,36 +86,60 @@
       ]
     },
     "analytics.four-factors": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-four-factors-weights",
+        "bb-four-factors-fix-first"
+      ]
     },
     "analytics.shot-quality": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-shot-quality-vs-shot-making",
+        "bb-shot-chart-reading"
+      ]
     },
     "analytics.lineups": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-lineup-small-sample",
+        "bb-onoff-fit-over-talent"
+      ]
     },
     "analytics.tracking": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-tracking-gravity-deterrence",
+        "bb-hockey-assist-value"
+      ]
     },
     "physical.movement": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-deceleration-over-vertical",
+        "bb-elastic-vs-strength-qualities"
+      ]
     },
     "physical.strength": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-strength-for-contact",
+        "bb-core-real-job"
+      ]
     },
     "physical.injury": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-acl-noncontact-mechanism",
+        "bb-ankle-sprain-prevention"
+      ]
     },
     "physical.recovery": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-weekly-load-management",
+        "bb-sleep-primary-recovery"
+      ]
     },
     "practice.deliberate": {
       "status": "todo",

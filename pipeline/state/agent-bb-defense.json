@@ -39,12 +39,18 @@
       ]
     },
     "offense.press-break": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-offense-press-break-spacing",
+        "bb-offense-sideline-trap-trap"
+      ]
     },
     "offense.offensive-rebounding": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-offense-crash-or-retreat",
+        "bb-offense-oreb-angles"
+      ]
     },
     "defense.stance-closeout": {
       "status": "done",
