@@ -2,8 +2,11 @@
   "agent": "ddia-distributed",
   "leaves": {
     "distributed.replication.leader": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-new-follower-setup",
+        "distributed-semi-sync-fallback"
+      ]
     },
     "distributed.replication.multi-leader": {
       "status": "todo",
