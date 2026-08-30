@@ -1,6 +1,6 @@
 ---
 id: async-materialized-view-refresh
-node: async.streaming
+node: async.streaming.processing
 type: qa
 ---
 ## Q

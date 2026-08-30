@@ -4,7 +4,7 @@
 
 The append-only log as system of record; partitions, consumer groups, offsets, retention.
 
-**Requires:** [[storage.internals|B-trees vs LSM-trees]]
+**Requires:** [[storage.internals|Storage Engine Internals]]
 
 **Unlocks:** [[analytics.derived|Derived Data & Materialized Views]]
 
@@ -19,11 +19,13 @@ The append-only log as system of record; partitions, consumer groups, offsets, r
 ## Drills
 - [[design-payment-ledger|Drill: Design a payment ledger service]]
 
-## Cards (6)
+## Cards (8)
 - [[async-consumer-groups-offsets]]
+- [[async-consumer-lag-monitoring]]
 - [[async-log-backfill-reprocessing]]
 - [[async-log-compaction]]
 - [[async-log-ordering-partitions]]
+- [[async-log-throughput-design]]
 - [[async-log-vs-queue]]
 - [[async-rebalancing-protocols]]
 %% trellis:end %%

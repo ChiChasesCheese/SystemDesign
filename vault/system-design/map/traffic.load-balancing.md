@@ -5,6 +5,7 @@
 L4 vs L7, balancing algorithms, health checks, and LB high availability itself.
 
 ## Readings
+- [[aws-shuffle-sharding|Workload isolation using shuffle-sharding (AWS Builders' Library)]]
 - [[maglev-load-balancer|Maglev: A Fast and Reliable Software Network Load Balancer (NSDI '16)]]
 - [[modern-load-balancing-matt-klein|Introduction to Modern Network Load Balancing and Proxying (Matt Klein)]]
 

@@ -20,8 +20,8 @@ generated map note lists both — so the Obsidian graph connects topic ↔ readi
 card.
 
 Ships with five domains (three fully carded, plus Markets & Factors and Quant
-Infrastructure as skeleton + readings). **System Design** — a 92-node map
-(391 cards, 72 readings) structured against DDIA 2nd edition and spanning the interview canon
+Infrastructure as skeleton + readings). **System Design** — a 100-node map
+(465 cards, 81 readings) structured against DDIA 2nd edition and spanning the interview canon
 plus what the 2017-era resources miss: consensus, CRDTs, encoding and schema
 evolution, delivery semantics, idempotency/outbox/saga/ledger, OLAP and
 lakehouse, SLOs, multi-region, AI serving. **Low-Level Design** — a 33-node map

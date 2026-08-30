@@ -1,6 +1,6 @@
 ---
 id: storage-btree-vs-lsm
-node: storage.internals
+node: storage.internals.tradeoffs
 type: qa
 ---
 ## Q

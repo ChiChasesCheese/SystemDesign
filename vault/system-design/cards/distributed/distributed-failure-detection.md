@@ -1,6 +1,6 @@
 ---
 id: distributed-failure-detection
-node: distributed.time
+node: distributed.time.failure
 type: qa
 ---
 ## Q

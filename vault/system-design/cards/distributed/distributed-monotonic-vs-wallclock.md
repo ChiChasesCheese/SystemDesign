@@ -1,6 +1,6 @@
 ---
 id: distributed-monotonic-vs-wallclock
-node: distributed.time
+node: distributed.time.clocks
 type: qa
 ---
 ## Q

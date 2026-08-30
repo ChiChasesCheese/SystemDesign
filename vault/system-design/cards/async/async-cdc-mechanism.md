@@ -1,6 +1,6 @@
 ---
 id: async-cdc-mechanism
-node: async.streaming
+node: async.streaming.cdc
 type: qa
 ---
 ## Q

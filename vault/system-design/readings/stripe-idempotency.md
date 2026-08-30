@@ -1,7 +1,7 @@
 ---
 nodes: [correctness.idempotency]
 url: https://stripe.com/blog/idempotency
-tags: [canonical, fintech]
+tags: [canonical, fintech, stripe]
 ---
 # Designing robust and predictable APIs with idempotency (Stripe)
 

@@ -1,6 +1,6 @@
 ---
 id: storage-compaction-strategies
-node: storage.internals
+node: storage.internals.lsm
 type: qa
 ---
 ## Q

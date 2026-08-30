@@ -1,7 +1,7 @@
 ---
 nodes: [networking.api-styles]
 url: https://aws.amazon.com/compare/the-difference-between-grpc-and-rest/
-tags: [intro, reference]
+tags: [intro, reference, amazon]
 ---
 # The Difference Between gRPC and REST (AWS "Compare" series)
 

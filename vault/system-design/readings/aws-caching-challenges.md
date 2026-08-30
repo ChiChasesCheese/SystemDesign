@@ -1,7 +1,7 @@
 ---
 nodes: [caching]
 url: https://aws.amazon.com/builders-library/caching-challenges-and-strategies/
-tags: [canonical]
+tags: [canonical, amazon]
 ---
 # Caching Challenges and Strategies (AWS Builders' Library)
 

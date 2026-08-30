@@ -1,7 +1,7 @@
 ---
 nodes: [reliability.multi-region]
 url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
-tags: [canonical]
+tags: [canonical, amazon]
 ---
 # Static stability using Availability Zones (AWS Builders' Library)
 

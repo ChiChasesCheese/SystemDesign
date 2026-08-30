@@ -1,6 +1,6 @@
 ---
 id: storage-inmemory-advantage
-node: storage.internals
+node: storage.internals.tradeoffs
 type: qa
 ---
 ## Q
