@@ -64,8 +64,12 @@
       ]
     },
     "distributed.consensus": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-flp-and-escape",
+        "distributed-election-disruption",
+        "distributed-coordination-service-primitives"
+      ]
     },
     "distributed.consistency": {
       "status": "todo",
