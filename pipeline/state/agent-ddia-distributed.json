@@ -138,8 +138,11 @@
       ]
     },
     "analytics.batch": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "analytics-intermediate-state-pipelining",
+        "analytics-data-locality-shift"
+      ]
     },
     "analytics.derived": {
       "status": "todo",

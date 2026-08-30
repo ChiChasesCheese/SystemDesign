@@ -31,8 +31,8 @@
       "cards": ["reliability-canonical-log-lines"]
     },
     "infra.delivery": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["infra-rollback-safety", "infra-two-phase-format-rollout"]
     },
     "storage.relational.operations-migrations": {
       "status": "done",
