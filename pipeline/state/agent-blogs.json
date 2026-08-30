@@ -13,28 +13,30 @@
       "readings": ["stripe-idempotency.md", "stripe-rate-limiters.md", "aws-caching-challenges.md", "aws-grpc-vs-rest.md", "aws-queue-backlogs.md", "aws-static-stability.md", "aws-timeouts-retries-jitter.md", "dynamo-paper.md"]
     },
     "correctness.ledger": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["correctness-ledger-clearing-metric"],
+      "note": "immutable-events/derived-balances angle dropped as dup of correctness-ledger-immutability + correctness-balance-derivation"
     },
     "traffic.rate-limiting": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["traffic-rate-vs-concurrency-limiter", "traffic-critical-capacity-reservation"],
+      "note": "generic drop-by-priority angle dropped as dup of traffic-rate-limiting-vs-load-shedding; reframed as capacity reservation"
     },
     "reliability.resilience.containment": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["reliability-shuffle-sharding-mechanism", "reliability-shuffle-sharding-blast-radius", "reliability-avoid-fallback", "reliability-constant-work"]
     },
     "reliability.observability": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["reliability-canonical-log-lines"]
     },
     "infra.delivery": {
       "status": "todo",
       "cards": []
     },
     "storage.relational.operations-migrations": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["storage-online-migration-four-phase", "storage-online-migration-vs-one-shot"]
     }
   }
 }

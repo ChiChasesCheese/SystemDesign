@@ -86,36 +86,56 @@
       ]
     },
     "distributed.time.failure": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-process-pause-causes",
+        "distributed-network-delay-queueing"
+      ]
     },
     "distributed.crdt": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-sequence-crdt-positions"
+      ]
     },
     "async.log": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "async-log-throughput-design",
+        "async-consumer-lag-monitoring"
+      ]
     },
     "async.delivery.guarantees": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "async-loss-vs-duplicate-asymmetry"
+      ]
     },
     "async.delivery.exactly-once": {
-      "status": "todo",
+      "status": "done",
       "cards": []
     },
     "async.streaming.cdc": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "async-compacted-topic-bootstrap",
+        "async-command-vs-event"
+      ]
     },
     "async.streaming.processing": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "async-window-types",
+        "async-late-event-policy",
+        "async-streaming-state-recovery"
+      ]
     },
     "analytics.olap": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "analytics-data-cubes",
+        "analytics-replica-analytics-limits"
+      ]
     },
     "analytics.batch": {
       "status": "todo",
