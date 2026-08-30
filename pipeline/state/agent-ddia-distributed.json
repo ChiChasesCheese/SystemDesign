@@ -43,8 +43,12 @@
       "cards": []
     },
     "distributed.transactions.isolation": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-lost-update-vs-write-skew",
+        "distributed-dirty-write",
+        "distributed-materializing-conflicts"
+      ]
     },
     "distributed.transactions.concurrency-control": {
       "status": "todo",
