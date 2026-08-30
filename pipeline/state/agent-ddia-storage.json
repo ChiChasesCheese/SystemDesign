@@ -10,12 +10,12 @@
       "cards": ["storage-document-locality-cost", "storage-keyvalue-fit", "storage-document-to-graph-signal"]
     },
     "storage.relational.indexing": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["storage-multicolumn-vs-bitmap-and", "storage-hash-index-limits"]
     },
     "storage.relational.operations": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["storage-replica-lag-ops"]
     },
     "storage.internals.btree": {
       "status": "todo",
