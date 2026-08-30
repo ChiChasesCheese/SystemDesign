@@ -1,6 +1,6 @@
 ---
 id: storage-lsm-read-path
-node: storage.internals
+node: storage.internals.lsm
 type: qa
 ---
 ## Q

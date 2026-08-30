@@ -1,0 +1,41 @@
+{
+  "agent": "ddia-storage",
+  "leaves": {
+    "foundations.tradeoffs": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.nosql": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.relational.indexing": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.relational.operations": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.internals.btree": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.internals.lsm": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.internals.tradeoffs": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.encoding": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.record-modeling": {
+      "status": "todo",
+      "cards": []
+    }
+  }
+}

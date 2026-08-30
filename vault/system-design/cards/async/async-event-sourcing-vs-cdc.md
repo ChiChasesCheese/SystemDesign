@@ -1,6 +1,6 @@
 ---
 id: async-event-sourcing-vs-cdc
-node: async.streaming
+node: async.streaming.cdc
 type: qa
 ---
 ## Q

@@ -1,6 +1,6 @@
 ---
 id: distributed-system-models
-node: distributed.time
+node: distributed.time.failure
 type: qa
 ---
 ## Q

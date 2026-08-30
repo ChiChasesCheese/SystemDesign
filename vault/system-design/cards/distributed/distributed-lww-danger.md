@@ -1,6 +1,6 @@
 ---
 id: distributed-lww-danger
-node: distributed.time
+node: distributed.time.clocks
 type: qa
 ---
 ## Q

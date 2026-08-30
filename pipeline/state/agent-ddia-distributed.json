@@ -1,0 +1,97 @@
+{
+  "agent": "ddia-distributed",
+  "leaves": {
+    "distributed.replication.leader": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.replication.multi-leader": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.replication.leaderless": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.partitioning.schemes": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.partitioning.rebalancing": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.partitioning.skew": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.partitioning.indexes": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.transactions.isolation": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.transactions.concurrency-control": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.transactions.distributed": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.consensus": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.consistency": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.time.clocks": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.time.failure": {
+      "status": "todo",
+      "cards": []
+    },
+    "distributed.crdt": {
+      "status": "todo",
+      "cards": []
+    },
+    "async.log": {
+      "status": "todo",
+      "cards": []
+    },
+    "async.delivery.guarantees": {
+      "status": "todo",
+      "cards": []
+    },
+    "async.delivery.exactly-once": {
+      "status": "todo",
+      "cards": []
+    },
+    "async.streaming.cdc": {
+      "status": "todo",
+      "cards": []
+    },
+    "async.streaming.processing": {
+      "status": "todo",
+      "cards": []
+    },
+    "analytics.olap": {
+      "status": "todo",
+      "cards": []
+    },
+    "analytics.batch": {
+      "status": "todo",
+      "cards": []
+    },
+    "analytics.derived": {
+      "status": "todo",
+      "cards": []
+    }
+  }
+}

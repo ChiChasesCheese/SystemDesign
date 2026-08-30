@@ -4,7 +4,7 @@
 
 Why analytical scans want column layout, compression, and vectorized execution instead of B-trees.
 
-**Requires:** [[storage.internals|B-trees vs LSM-trees]]
+**Requires:** [[storage.internals|Storage Engine Internals]]
 
 ## Readings
 - [[clickhouse-vldb-paper|ClickHouse — Lightning Fast Analytics for Everyone (VLDB 2024)]]

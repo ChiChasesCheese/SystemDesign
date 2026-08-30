@@ -4,7 +4,7 @@
 
 The append-only log as system of record; partitions, consumer groups, offsets, retention.
 
-**Requires:** [[storage.internals|B-trees vs LSM-trees]]
+**Requires:** [[storage.internals|Storage Engine Internals]]
 
 **Unlocks:** [[analytics.derived|Derived Data & Materialized Views]]
 

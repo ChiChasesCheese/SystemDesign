@@ -1,6 +1,6 @@
 ---
 id: storage-btree-wal-recovery
-node: storage.internals
+node: storage.internals.btree
 type: qa
 ---
 ## Q

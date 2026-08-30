@@ -1,6 +1,6 @@
 ---
 id: async-stream-joins
-node: async.streaming
+node: async.streaming.processing
 type: qa
 ---
 ## Q

@@ -1,0 +1,37 @@
+{
+  "agent": "blogs",
+  "leaves": {
+    "readings-and-clippings": {
+      "status": "todo",
+      "cards": []
+    },
+    "tag-existing-stripe-amazon-readings": {
+      "status": "todo",
+      "cards": []
+    },
+    "correctness.ledger": {
+      "status": "todo",
+      "cards": []
+    },
+    "traffic.rate-limiting": {
+      "status": "todo",
+      "cards": []
+    },
+    "reliability.resilience.containment": {
+      "status": "todo",
+      "cards": []
+    },
+    "reliability.observability": {
+      "status": "todo",
+      "cards": []
+    },
+    "infra.delivery": {
+      "status": "todo",
+      "cards": []
+    },
+    "storage.relational.operations-migrations": {
+      "status": "todo",
+      "cards": []
+    }
+  }
+}

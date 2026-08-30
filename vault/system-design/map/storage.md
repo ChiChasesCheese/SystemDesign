@@ -5,7 +5,7 @@ Choosing and operating the systems of record.
 
 ## Topics
 - [[storage.relational|Relational Databases]]
-- [[storage.internals|B-trees vs LSM-trees]]
+- [[storage.internals|Storage Engine Internals]]
 - [[storage.nosql|NoSQL Families]]
 - [[storage.record-modeling|Record Modeling]]
 - [[storage.object|Object Storage & Separation]]

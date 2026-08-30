@@ -1,6 +1,6 @@
 ---
 id: distributed-lamport-vs-vector
-node: distributed.time
+node: distributed.time.clocks
 type: qa
 ---
 ## Q

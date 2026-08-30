@@ -88,8 +88,18 @@ nodes:
             title: Operating at Scale
             summary: Connection pooling, read replicas, federation, MVCC maintenance, and when a single Postgres is the right answer.
       - id: storage.internals
-        title: B-trees vs LSM-trees
-        summary: The two storage engine families; read, write, and space amplification trade-offs.
+        title: Storage Engine Internals
+        summary: How the write path actually hits disk — the two engine families beneath every database choice.
+        children:
+          - id: storage.internals.btree
+            title: B-tree Mechanics
+            summary: Fixed-size pages, splits, the WAL and crash recovery, in-place updates and their concurrency cost.
+          - id: storage.internals.lsm
+            title: LSM-tree Mechanics
+            summary: Memtable to SSTables, compaction strategies (size-tiered vs leveled), Bloom filters, tombstones.
+          - id: storage.internals.tradeoffs
+            title: Engine Trade-offs
+            summary: Read, write, and space amplification; when B-trees beat LSM-trees and vice versa; in-memory engines.
       - id: storage.nosql
         title: NoSQL Families
         summary: Key-value, document, wide-column, graph — the access patterns each one exists to serve.
@@ -168,6 +178,13 @@ nodes:
       - id: distributed.time
         title: Clocks & Ordering
         summary: Why wall clocks lie, logical clocks, and detecting failure with timeouts you can defend.
+        children:
+          - id: distributed.time.clocks
+            title: Clocks & Timestamps
+            summary: Time-of-day vs monotonic clocks, NTP drift, timestamp ordering hazards, confidence intervals, logical clocks.
+          - id: distributed.time.failure
+            title: Failure Detection & Pauses
+            summary: Timeouts as the only failure detector, process pauses (GC, VM suspend), system models, and defending a chosen timeout.
       - id: distributed.crdt
         title: CRDTs & Local-First
         summary: Conflict-free replicated data types, merge semantics, and offline-capable multi-writer apps.
@@ -198,6 +215,13 @@ nodes:
       - id: async.streaming
         title: Stream Processing & CDC
         summary: Change data capture, materialized views, windows, and keeping derived data fresh.
+        children:
+          - id: async.streaming.cdc
+            title: CDC & Event Sourcing
+            summary: Change data capture mechanics, initial snapshots, log compaction, and event sourcing as a contrast.
+          - id: async.streaming.processing
+            title: Stream Processing
+            summary: Event time vs processing time, windows and watermarks, stream joins, and fault-tolerant state.
 
   - id: analytics
     order: 8
