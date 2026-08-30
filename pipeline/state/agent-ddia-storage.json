@@ -26,8 +26,8 @@
       "cards": ["storage-lsm-write-path", "storage-sstable-structure", "storage-bloom-filter-properties", "storage-lsm-range-scan"]
     },
     "storage.internals.tradeoffs": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["storage-compaction-interference", "storage-btree-single-copy-locking"]
     },
     "storage.encoding": {
       "status": "todo",
