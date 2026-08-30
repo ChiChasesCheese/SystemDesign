@@ -23,19 +23,23 @@
       ]
     },
     "distributed.partitioning.schemes": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-partition-hash-properties"
+      ]
     },
     "distributed.partitioning.rebalancing": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-rebalancing-strategy-choice"
+      ]
     },
     "distributed.partitioning.skew": {
-      "status": "todo",
+      "status": "done",
       "cards": []
     },
     "distributed.partitioning.indexes": {
-      "status": "todo",
+      "status": "done",
       "cards": []
     },
     "distributed.transactions.isolation": {
