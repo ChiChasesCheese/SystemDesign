@@ -15,3 +15,8 @@ in this vault are graded against.
 - Reading the second defender rather than the one in front of you.
 - Why the same shot is a good decision for one player and a bad one for another.
 - How to phrase a read as a question you can ask yourself in a live rep.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=YDQR0Jds2_E)
+%% trellis:end %%

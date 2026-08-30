@@ -15,3 +15,8 @@ with pauses between them.
 - Drag and delay entries that continue transition instead of stopping it.
 - The decision to push or pull it out, and who owns that decision.
 - Why calling a set should be the last resort rather than the default.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=jE8-OGaEqxQ)
+%% trellis:end %%

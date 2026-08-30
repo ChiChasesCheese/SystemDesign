@@ -15,3 +15,8 @@ you need to get a shot off against a closeout.
 - Which one trades release height for release speed, and what that costs against a longer defender.
 - Why changing families mid-season is expensive, and when a smaller repair beats a rebuild.
 - The cue you can self-check on video without a coach standing next to you.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=NMKl4zR5GlE)
+%% trellis:end %%

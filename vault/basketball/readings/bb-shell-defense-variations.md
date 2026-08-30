@@ -15,3 +15,8 @@ the template for the closeout drill in this vault.
 - Who the low man is in each variation, and what he gives up to help.
 - The closeout that takes the shot without conceding the straight-line drive.
 - Why the drill is scored on rotation timing rather than on stops.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=Vds7fGlf4WU)
+%% trellis:end %%

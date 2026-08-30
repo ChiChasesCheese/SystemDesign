@@ -15,3 +15,8 @@ predicts which of your reps will survive contact with a game.
 - Why blocked reps feel productive during the session and transfer poorly afterwards.
 - The point in learning a skill where you should switch schedules.
 - How to build randomness into a session without making it chaos.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=gUTwfnjTD9c)
+%% trellis:end %%

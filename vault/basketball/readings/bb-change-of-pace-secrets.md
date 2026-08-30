@@ -15,3 +15,8 @@ improving long after your vertical stops.
 - Decelerating as the move rather than as the thing before the move.
 - Where the ball has to be for a change of pace to still threaten the rim.
 - The drills that isolate the quality, so you can build them into a solo workout.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=WBQ9SJSo2Ok)
+%% trellis:end %%

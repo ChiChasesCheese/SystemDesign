@@ -15,3 +15,11 @@ start using eFG% and turnover rate to argue about why your team lost.
 - The commonly quoted weights, where they came from, and how much to trust them.
 - That every factor has an offensive and a defensive twin — eight numbers, not four.
 - Why shooting dominates, and what that implies about which problem to fix first.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://squared2020.com/2017/09/05/introduction-to-olivers-four-factors/)
+
+## Archived copy
+![[bb-four-factors-clip]]
+%% trellis:end %%

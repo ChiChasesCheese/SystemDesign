@@ -15,3 +15,8 @@ a "system" starts feeling like choreography.
 - Why a cut has to end somewhere, and what happens to spacing when it does not.
 - How the same rules produce different shapes in five-out versus four-out-one-in.
 - What the coach teaches first when installing it, and what he deliberately leaves undefined.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=cJb44DUgORQ)
+%% trellis:end %%

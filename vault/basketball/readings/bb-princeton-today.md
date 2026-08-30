@@ -15,3 +15,8 @@ this the most directly applicable system video in the vault.
 - The backdoor cut as a punishment for overplaying rather than as a set play.
 - How the offence forces a choice between denying passes and protecting the rim.
 - Which pieces of it survive into modern spacing, and which do not.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=zoYkihO2BAw)
+%% trellis:end %%

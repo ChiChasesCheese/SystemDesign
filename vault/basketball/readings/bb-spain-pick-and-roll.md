@@ -14,3 +14,8 @@ stop memorising sets and start recognising the problem each one poses.
 - Why the screener's defender cannot both help on the roll and recover to the screener's screener.
 - The three scoring outlets the action produces, and which one the defence chooses for you.
 - How the same idea gets hidden inside Horns and other entries.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=voTAC74NxD8)
+%% trellis:end %%

@@ -15,3 +15,8 @@ position and the correction.
 - Landing soft through hip and knee instead of stopping the fall at the knee.
 - Single-leg control, since that is how the injury actually happens in a game.
 - What a warm-up has to contain to be worth the time it costs you.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=lCxMeAhj8A0)
+%% trellis:end %%

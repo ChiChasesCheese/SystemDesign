@@ -15,3 +15,8 @@ than a play-calling one.
 - Why holding the ball to "make a good decision" usually destroys the decision.
 - How a rule like this replaces memorised plays for players who already know how to read.
 - The connection between quick decisions and the extra pass that beats a rotation.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=8vrCcTEn1nY)
+%% trellis:end %%

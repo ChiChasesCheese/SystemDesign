@@ -15,3 +15,8 @@ worth more than a good scorer standing in the wrong one.
 - Gravity: the shooter who scores nothing on a possession and still creates the shot.
 - Why the empty side exists and what it removes from the defence.
 - The trade five-out accepts on the offensive glass, and whether it is worth it.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=DITiFB5Aft4)
+%% trellis:end %%

@@ -15,3 +15,8 @@ attached, which is what makes it useful rather than just interesting.
 - The eccentric loading demand a hard stop puts on the leg, and how it is trained.
 - How braking capacity feeds directly into a change-of-direction move.
 - What to add to a week that already has playing and lifting in it.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=dfXbQ_gN_y8)
+%% trellis:end %%

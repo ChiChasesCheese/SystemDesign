@@ -15,3 +15,8 @@ argument.
 - How you would measure something that by definition did not happen.
 - The offensive mirror image — gravity, and the shot a shooter creates by standing still.
 - Why box-score counting stats systematically undervalue both.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=7W7HETB4Umc)
+%% trellis:end %%

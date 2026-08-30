@@ -15,3 +15,8 @@ starts — this fixes both in about ten minutes.
 - The two steps that are legal after the gather, demonstrated rather than described.
 - Why the step-through looks like a travel and is not.
 - The genuine violations that go uncalled, so you know what you are getting away with.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=J5xGKioMsIo)
+%% trellis:end %%

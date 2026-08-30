@@ -15,3 +15,8 @@ here drop straight into a pickup run.
 - Examples worth stealing — dribble limits, scoring zones, touch requirements.
 - Why 3-on-3 exposes more decisions per minute than 5-on-5.
 - How to tell a constraint that teaches from one that just makes the game harder.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=wTKe5_xAFsw)
+%% trellis:end %%

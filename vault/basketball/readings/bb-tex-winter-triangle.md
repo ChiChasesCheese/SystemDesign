@@ -15,3 +15,8 @@ the same shapes in offences that are never called a triangle.
 - The two-man game away from the ball that makes the triangle more than a post-up.
 - Reading the defence from the strong-side post outward.
 - How the shape refills itself after each pass instead of resetting.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=91Wx8gT3kRw)
+%% trellis:end %%

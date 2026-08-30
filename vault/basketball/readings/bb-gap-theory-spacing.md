@@ -15,3 +15,8 @@ stops looking like magic and starts looking like arithmetic.
 - The distance between teammates that keeps a help defender from covering both.
 - How one player standing in the wrong place removes a drive that was there a second ago.
 - Why creating the advantage and transporting it are two separate problems.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=6tb3W3T-s3s)
+%% trellis:end %%

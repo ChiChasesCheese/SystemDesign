@@ -15,3 +15,8 @@ where the advantage is either created or thrown away.
 - Why coming off too early is the most common way a good screen produces nothing.
 - The reject read, and what the screener's defender has to show for it to be available.
 - Turning the corner versus snaking, and which defensive stance decides it.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.youtube.com/watch?v=-R0uDzwd61E)
+%% trellis:end %%

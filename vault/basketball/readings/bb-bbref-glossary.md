@@ -15,3 +15,11 @@ the whole difference between reading a number and misreading it.
 - eFG% and TS% side by side, and which one accounts for free throws.
 - The rate stats (usage, rebound percentage) and why per-game versions mislead.
 - Which listed metrics are descriptive and which are estimates with error bars.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.basketball-reference.com/about/glossary.html)
+
+## Archived copy
+![[bb-bbref-glossary-clip]]
+%% trellis:end %%

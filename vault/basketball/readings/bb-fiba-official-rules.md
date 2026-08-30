@@ -15,3 +15,8 @@ what the defence is allowed to do to you.
 - Arc and court dimensions, and what that does to corner spacing.
 - Timeout and possession-arrow rules, and how they alter late-game management.
 - Where FIBA's goaltending and travelling wording differs from the NBA's.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://refereeing.fiba.basketball/en/rules)
+%% trellis:end %%
