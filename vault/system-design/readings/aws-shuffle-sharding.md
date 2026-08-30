@@ -16,3 +16,11 @@ shard" into "one bad client hurts almost no one".
 - The combinatorial math for 2-of-8 style virtual shards and partial overlap.
 - Why clients must retry across their shard members for the isolation to pay off.
 - Where it applies beyond DNS: queues, load balancers, multi-tenant control planes.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/workload-isolation-using-shuffle-sharding/)
+
+## Archived copy
+![[aws-shuffle-sharding-clip]]
+%% trellis:end %%

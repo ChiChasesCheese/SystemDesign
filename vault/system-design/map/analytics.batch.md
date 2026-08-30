@@ -11,9 +11,11 @@ MapReduce lineage to Spark; shuffles, distributed joins, idempotent reruns, and 
 ## Cases
 - [[qs-embedded-warehouse-and-a-hand-rolled-commit-log|An embedded warehouse and a hand-rolled commit log]] — `quant-stroller`
 
-## Cards (5)
+## Cards (7)
 - [[analytics-batch-vs-stream]]
+- [[analytics-data-locality-shift]]
 - [[analytics-idempotent-reruns]]
+- [[analytics-intermediate-state-pipelining]]
 - [[analytics-join-strategies]]
 - [[analytics-shuffle-mechanics]]
 - [[analytics-skew-stragglers]]

@@ -7,10 +7,11 @@ At-most-once vs at-least-once, ordering scope, dead-letter queues and poison pil
 ## Readings
 - [[treat-exactly-once-delivery|You Cannot Have Exactly-Once Delivery (Tyler Treat)]]
 
-## Cards (5)
+## Cards (6)
 - [[async-delivery-semantics-cloze]]
 - [[async-dlq-poison-pill]]
 - [[async-exactly-once-myth]]
+- [[async-loss-vs-duplicate-asymmetry]]
 - [[async-redelivery-causes]]
 - [[async-stale-event-ordering]]
 %% trellis:end %%

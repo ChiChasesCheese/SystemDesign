@@ -5,6 +5,7 @@
 Nines, serial vs parallel composition, redundancy patterns, failover modes and their data-loss windows.
 
 ## Readings
+- [[aws-constant-work|Reliability, constant work, and a good cup of coffee (AWS Builders' Library)]]
 - [[google-sre-embracing-risk|Embracing Risk (Google SRE Book, ch. 3)]]
 
 ## Cards (6)

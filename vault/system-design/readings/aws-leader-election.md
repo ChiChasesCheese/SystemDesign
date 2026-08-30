@@ -16,3 +16,11 @@ Raft/Paxos theory in how AWS actually deploys leadered systems.
 - Fencing: why a deposed leader must be prevented from acting, and how fencing tokens work.
 - Heartbeats, lease length, and the availability/failover-time trade-off.
 - When to avoid a leader entirely (partition the work, or make operations idempotent).
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/leader-election-in-distributed-systems/)
+
+## Archived copy
+![[aws-leader-election-clip]]
+%% trellis:end %%

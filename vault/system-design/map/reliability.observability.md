@@ -6,8 +6,10 @@ Structured logs, metrics, distributed traces; correlation ids and cardinality co
 
 ## Readings
 - [[google-sre-monitoring|Monitoring Distributed Systems (Google SRE Book, ch. 6)]]
+- [[stripe-canonical-log-lines|Fast and flexible observability with canonical log lines (Stripe)]]
 
-## Cards (6)
+## Cards (7)
+- [[reliability-canonical-log-lines]]
 - [[reliability-exemplars]]
 - [[reliability-logs-metrics-traces]]
 - [[reliability-metric-cardinality]]

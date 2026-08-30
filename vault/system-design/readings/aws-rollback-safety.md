@@ -16,3 +16,11 @@ sequence in detail.
 - Two-phase changes: ship code that can read the new format first, only then ship code that writes it.
 - Why mixed-version fleets during rolling deploys create the same constraint as rollback.
 - Upgrade-downgrade testing as an automated pipeline gate.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/)
+
+## Archived copy
+![[aws-rollback-safety-clip]]
+%% trellis:end %%

@@ -15,3 +15,11 @@ system that can never stop serving traffic.
 - Why each phase is independently verifiable and reversible.
 - How they rate-limited and checkpointed the backfill over live production data.
 - Using comparison/consistency checks between old and new paths as the gate for cut-over.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://stripe.com/blog/online-migrations)
+
+## Archived copy
+![[stripe-online-migrations-clip]]
+%% trellis:end %%

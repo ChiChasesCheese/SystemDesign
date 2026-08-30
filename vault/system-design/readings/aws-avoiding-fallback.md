@@ -15,3 +15,11 @@ and this piece explains the alternatives that actually survive incidents.
 - The bimodal-behavior objection: two operating modes means the rare mode is always broken.
 - Alternatives: fail fast, improve the primary path, run the "fallback" work all the time (constant work), static stability.
 - When fallback is acceptable (rare, simple, continuously exercised).
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/avoiding-fallback-in-distributed-systems/)
+
+## Archived copy
+![[aws-avoiding-fallback-clip]]
+%% trellis:end %%

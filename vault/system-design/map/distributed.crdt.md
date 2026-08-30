@@ -9,12 +9,13 @@ Conflict-free replicated data types, merge semantics, and offline-capable multi-
 ## Readings
 - [[crdt-tech|CRDT.tech — Conflict-free Replicated Data Types]]
 
-## Cards (5)
+## Cards (6)
 - [[distributed-crdt-convergence]]
 - [[distributed-crdt-counters]]
 - [[distributed-crdt-state-vs-op]]
 - [[distributed-local-first-limits]]
 - [[distributed-or-set]]
+- [[distributed-sequence-crdt-positions]]
 %% trellis:end %%
 
 ## Notes

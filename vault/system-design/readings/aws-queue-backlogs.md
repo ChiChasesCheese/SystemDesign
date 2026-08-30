@@ -18,4 +18,7 @@ queues — the failure modes interviewers actually probe.
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/)
+
+## Archived copy
+![[aws-queue-backlogs-clip]]
 %% trellis:end %%

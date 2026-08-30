@@ -7,8 +7,11 @@ Read committed to serializable through the anomalies each level permits — dirt
 ## Readings
 - [[hermitage-isolation-levels|Hermitage: Testing the "I" in ACID (Kleppmann)]]
 
-## Cards (5)
+## Cards (8)
+- [[distributed-dirty-write]]
 - [[distributed-isolation-anomalies]]
+- [[distributed-lost-update-vs-write-skew]]
+- [[distributed-materializing-conflicts]]
 - [[distributed-phantoms-predicate-locks]]
 - [[distributed-read-committed-anomalies]]
 - [[distributed-repeatable-read-dialects]]

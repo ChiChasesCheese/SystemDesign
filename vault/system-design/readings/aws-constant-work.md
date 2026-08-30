@@ -16,3 +16,11 @@ health checks and hyperplane state propagation are the worked examples.
 - The full-table/full-file push: replace, don't patch; idempotent by construction.
 - How overprovisioning for the constant load buys predictable recovery.
 - Cost trade-off: deliberately wasted work as an availability investment.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://aws.amazon.com/builders-library/reliability-and-constant-work/)
+
+## Archived copy
+![[aws-constant-work-clip]]
+%% trellis:end %%

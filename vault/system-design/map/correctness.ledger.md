@@ -8,13 +8,15 @@ Double-entry design, immutability, balance derivation, and reconciliation as the
 
 ## Readings
 - [[modern-treasury-ledgers|Ledgers (Modern Treasury Learn series)]]
+- [[stripe-ledger|Ledger: Stripe's system for tracking and validating money movement]]
 
 ## Drills
 - [[design-payment-ledger|Drill: Design a payment ledger service]]
 
-## Cards (8)
+## Cards (9)
 - [[correctness-balance-derivation]]
 - [[correctness-double-entry-invariant]]
+- [[correctness-ledger-clearing-metric]]
 - [[correctness-ledger-cutoff-settlement]]
 - [[correctness-ledger-hot-accounts]]
 - [[correctness-ledger-immutability]]

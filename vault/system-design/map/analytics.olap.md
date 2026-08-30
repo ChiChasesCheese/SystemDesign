@@ -10,9 +10,11 @@ Why analytical scans want column layout, compression, and vectorized execution i
 - [[clickhouse-vldb-paper|ClickHouse — Lightning Fast Analytics for Everyone (VLDB 2024)]]
 - [[ddia-2e|Designing Data-Intensive Applications, 2nd ed. (Kleppmann & Riccomini, 2026)]]
 
-## Cards (5)
+## Cards (7)
 - [[analytics-column-store-writes]]
 - [[analytics-columnar-compression]]
+- [[analytics-data-cubes]]
+- [[analytics-replica-analytics-limits]]
 - [[analytics-row-vs-column-layout]]
 - [[analytics-star-schema]]
 - [[analytics-vectorized-execution]]

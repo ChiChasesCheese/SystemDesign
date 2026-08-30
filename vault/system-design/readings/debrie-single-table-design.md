@@ -16,3 +16,11 @@ to do it.
 - Designing from access patterns backward, not from entities forward.
 - The downsides: rigid to new access patterns, hostile to analytics, steep learning curve.
 - When to skip it (rapidly evolving product, GraphQL-style flexible queries, small scale).
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://www.alexdebrie.com/posts/dynamodb-single-table/)
+
+## Archived copy
+![[debrie-single-table-design-clip]]
+%% trellis:end %%

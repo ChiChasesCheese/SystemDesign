@@ -7,9 +7,12 @@ Key-value, document, wide-column, graph — the access patterns each one exists 
 ## Readings
 - [[fowler-nosql|NoSQL Guide (Martin Fowler)]]
 
-## Cards (6)
+## Cards (9)
+- [[storage-document-locality-cost]]
+- [[storage-document-to-graph-signal]]
 - [[storage-document-vs-relational]]
 - [[storage-graph-db-fit]]
+- [[storage-keyvalue-fit]]
 - [[storage-schema-on-read]]
 - [[storage-secondary-index-partitioning]]
 - [[storage-tombstone-deletes]]

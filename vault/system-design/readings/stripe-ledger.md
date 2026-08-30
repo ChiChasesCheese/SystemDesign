@@ -16,3 +16,11 @@ the money numbers are right?" at interview depth.
 - Mapping heterogeneous upstream systems onto one common ledger abstraction.
 - Discrepancy detection as a metric: what "clearing" a discrepancy means and how teams are held to it.
 - The trust-but-verify loop between the ledger and the source systems it mirrors.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://stripe.com/blog/ledger-stripe-system-for-tracking-and-validating-money-movement)
+
+## Archived copy
+![[stripe-ledger-clip]]
+%% trellis:end %%

@@ -16,3 +16,11 @@ for observability questions.
 - Why one wide line per request beats grepping many narrow lines.
 - How the lines feed ad-hoc SQL-style querying during incidents.
 - Relationship to (not replacement of) metrics and tracing.
+
+%% trellis:begin %%
+## Source
+[Open the original ↗](https://stripe.com/blog/canonical-log-lines)
+
+## Archived copy
+![[stripe-canonical-log-lines-clip]]
+%% trellis:end %%

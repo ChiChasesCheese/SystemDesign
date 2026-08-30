@@ -18,4 +18,7 @@ Related cards: [[reliability-retry-storm]], [[reliability-deadline-propagation]]
 %% trellis:begin %%
 ## Source
 [Open the original ↗](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/)
+
+## Archived copy
+![[aws-timeouts-retries-jitter-clip]]
 %% trellis:end %%

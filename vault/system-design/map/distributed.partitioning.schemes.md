@@ -4,9 +4,10 @@
 
 Hash and range partitioning trade-offs; consistent hashing and virtual nodes.
 
-## Cards (5)
+## Cards (6)
 - [[distributed-consistent-hashing]]
 - [[distributed-hash-vs-range]]
+- [[distributed-partition-hash-properties]]
 - [[distributed-rendezvous-hashing]]
 - [[distributed-shard-key-one-way-door]]
 - [[distributed-vnode-count]]
