@@ -1,7 +1,7 @@
 ---
 nodes: [async.queues]
 url: https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/
-tags: [canonical]
+tags: [canonical, amazon]
 ---
 # Avoiding insurmountable queue backlogs (AWS Builders' Library)
 

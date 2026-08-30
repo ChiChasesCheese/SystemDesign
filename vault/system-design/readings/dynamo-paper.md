@@ -1,7 +1,7 @@
 ---
 nodes: [distributed.partitioning, distributed.replication, distributed.consistency]
 url: https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf
-tags: [canonical, paper]
+tags: [canonical, paper, amazon]
 ---
 # Dynamo: Amazon's Highly Available Key-value Store (2007)
 

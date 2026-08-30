@@ -1,7 +1,7 @@
 ---
 nodes: [traffic.rate-limiting]
 url: https://stripe.com/blog/rate-limiters
-tags: [canonical]
+tags: [canonical, stripe]
 ---
 # Scaling your API with Rate Limiters (Stripe)
 

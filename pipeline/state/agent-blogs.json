@@ -6,8 +6,9 @@
       "cards": []
     },
     "tag-existing-stripe-amazon-readings": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [],
+      "readings": ["stripe-idempotency.md", "stripe-rate-limiters.md", "aws-caching-challenges.md", "aws-grpc-vs-rest.md", "aws-queue-backlogs.md", "aws-static-stability.md", "aws-timeouts-retries-jitter.md", "dynamo-paper.md"]
     },
     "correctness.ledger": {
       "status": "todo",

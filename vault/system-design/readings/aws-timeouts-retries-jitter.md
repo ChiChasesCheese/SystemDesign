@@ -1,7 +1,7 @@
 ---
 nodes: [reliability.resilience]
 url: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
-tags: [canonical]
+tags: [canonical, amazon]
 ---
 # Timeouts, Retries, and Backoff with Jitter (AWS Builders' Library)
 
