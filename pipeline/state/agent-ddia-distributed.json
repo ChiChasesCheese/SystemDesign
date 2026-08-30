@@ -72,8 +72,11 @@
       ]
     },
     "distributed.consistency": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "distributed-consistency-ladder",
+        "distributed-causal-in-practice"
+      ]
     },
     "distributed.time.clocks": {
       "status": "todo",
