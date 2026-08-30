@@ -71,3 +71,40 @@ def test_rejects_requires_cycle(tmp_path):
                         "  - id: beta\n    title: Beta\n    requires: [alpha.two]\n")
     with pytest.raises(SkeletonError, match="cycle"):
         load_skeleton(write(tmp_path, text))
+
+
+def test_global_options_work_on_either_side_of_the_subcommand(tmp_path, capsys):
+    """The multi-domain error tells you to pass --all, so where you type it
+    must not decide whether the command runs."""
+    from trellis.cli import main
+
+    (tmp_path / "skeleton").mkdir()
+    for domain in ("alpha", "beta"):
+        (tmp_path / "skeleton" / f"{domain}.yaml").write_text(
+            f"domain: {domain}\ntitle: {domain.title()}\nnodes:\n"
+            f"  - id: root\n    title: Root\n",
+            encoding="utf-8",
+        )
+
+    before = main(["--root", str(tmp_path), "--all", "validate"])
+    after = main(["validate", "--root", str(tmp_path), "--all"])
+    assert before == after == 0
+    out = capsys.readouterr().out
+    assert out.count("Alpha") == out.count("Beta") == 2  # both runs, both domains
+
+
+def test_a_domain_named_after_the_subcommand_still_wins(tmp_path):
+    """An option given after the subcommand overrides the one before it,
+    rather than being silently dropped."""
+    from trellis.cli import main
+
+    (tmp_path / "skeleton").mkdir()
+    for domain in ("alpha", "beta"):
+        (tmp_path / "skeleton" / f"{domain}.yaml").write_text(
+            f"domain: {domain}\ntitle: {domain.title()}\nnodes:\n"
+            f"  - id: root\n    title: Root\n",
+            encoding="utf-8",
+        )
+
+    assert main(["--domain", "alpha", "validate", "--domain", "beta",
+                 "--root", str(tmp_path)]) == 0

@@ -436,9 +436,24 @@ def main(argv: list[str] | None = None) -> int:
                         help="run over every domain in skeleton/")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("validate", help="check skeleton, cards, readings, drills")
-    sub.add_parser("sync", help="regenerate Obsidian map notes from the skeleton")
-    p_build = sub.add_parser("build", help="compile vault into an Anki .apkg")
+    # The global options are accepted on either side of the subcommand name:
+    # `trellis --all anki-align` and `trellis anki-align --all` both work.
+    # The error you get for a multi-domain project tells you to pass --all,
+    # so where you type it must not decide whether the command runs.
+    # SUPPRESS is what makes this safe: an option left off after the
+    # subcommand stays unset instead of overwriting the value given before it.
+    after_command = argparse.ArgumentParser(add_help=False)
+    after_command.add_argument("--root", type=Path, default=argparse.SUPPRESS)
+    after_command.add_argument("--domain", default=argparse.SUPPRESS)
+    after_command.add_argument("--all", action="store_true",
+                               default=argparse.SUPPRESS)
+
+    def _subcommand(name: str, **kwargs) -> argparse.ArgumentParser:
+        return sub.add_parser(name, parents=[after_command], **kwargs)
+
+    _subcommand("validate", help="check skeleton, cards, readings, drills")
+    _subcommand("sync", help="regenerate Obsidian map notes from the skeleton")
+    p_build = _subcommand("build", help="compile vault into an Anki .apkg")
     p_build.add_argument("-o", "--output", type=Path)
     p_build.add_argument(
         "--force", action="store_true",
@@ -454,20 +469,20 @@ def main(argv: list[str] | None = None) -> int:
         help="Obsidian vault name used in obsidian:// links "
              "(default: the vault directory's name)",
     )
-    p_clip = sub.add_parser(
+    p_clip = _subcommand(
         "clip",
         help="archive readings' pages as markdown in the vault, so cards can "
              "open them in Obsidian instead of a browser",
     )
     p_clip.add_argument("--node", help="only readings under this node id")
-    sub.add_parser("stats", help="card counts and leaf coverage per branch")
-    p_path = sub.add_parser("path", help="write the linear study path into the vault")
+    _subcommand("stats", help="card counts and leaf coverage per branch")
+    p_path = _subcommand("path", help="write the linear study path into the vault")
     p_path.add_argument("--weeks", type=int)
-    p_scaffold = sub.add_parser("scaffold", help="emit an LLM prompt for a node")
+    p_scaffold = _subcommand("scaffold", help="emit an LLM prompt for a node")
     p_scaffold.add_argument("node")
     p_scaffold.add_argument("-n", "--count", type=int, default=8)
     p_scaffold.add_argument("-o", "--output", type=Path)
-    p_triage = sub.add_parser(
+    p_triage = _subcommand(
         "triage",
         help="prepare a triage prompt for a declared codebase "
              "(codebases/<name>.yaml)",
@@ -477,12 +492,12 @@ def main(argv: list[str] | None = None) -> int:
     p_triage.add_argument("--lens", help="only offer these lenses, comma separated")
     p_triage.add_argument("--prefix", default="", help="slug prefix for proposals")
     p_triage.add_argument("-o", "--output", type=Path)
-    p_accept = sub.add_parser(
+    p_accept = _subcommand(
         "accept", help="validate a triage proposal and write the cases it accepts")
     p_accept.add_argument("file", type=Path)
-    p_import = sub.add_parser("import", help="import LLM-generated JSON as cards")
+    p_import = _subcommand("import", help="import LLM-generated JSON as cards")
     p_import.add_argument("file", type=Path)
-    p_push = sub.add_parser(
+    p_push = _subcommand(
         "anki-push",
         help="publish a built deck into the running Anki and out to "
              "AnkiWeb: sync, import, align to the skeleton, sync again",
@@ -490,7 +505,7 @@ def main(argv: list[str] | None = None) -> int:
     p_push.add_argument("--lang", default="", help="publish this language's build")
     p_push.add_argument("--apkg", type=Path, help="override the package path")
     p_push.add_argument("--anki-url", default="http://127.0.0.1:8765")
-    p_align = sub.add_parser(
+    p_align = _subcommand(
         "anki-align",
         help="move cards in a live Anki collection to the decks the current "
              "skeleton defines, and delete stale empty decks (run after "
