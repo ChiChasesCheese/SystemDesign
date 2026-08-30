@@ -145,8 +145,10 @@
       ]
     },
     "analytics.derived": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "analytics-lambda-vs-kappa"
+      ]
     }
   }
 }
