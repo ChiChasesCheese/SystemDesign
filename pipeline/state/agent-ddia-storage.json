@@ -6,8 +6,8 @@
       "cards": ["foundations-three-pillars", "foundations-utilization-latency-knee"]
     },
     "storage.nosql": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": ["storage-document-locality-cost", "storage-keyvalue-fit", "storage-document-to-graph-signal"]
     },
     "storage.relational.indexing": {
       "status": "todo",
