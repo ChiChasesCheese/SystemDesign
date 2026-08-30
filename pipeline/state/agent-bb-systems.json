@@ -3,36 +3,87 @@
   "domain": "basketball",
   "leaves": {
     "readings-and-videos": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-acl-landing-mechanics.md",
+        "bb-bbref-glossary.md",
+        "bb-change-of-pace-secrets.md",
+        "bb-constraints-led-approach.md",
+        "bb-deceleration-training.md",
+        "bb-decision-making-concepts.md",
+        "bb-fiba-official-rules.md",
+        "bb-five-out-revolution.md",
+        "bb-four-factors.md",
+        "bb-gap-theory-spacing.md",
+        "bb-gather-step.md",
+        "bb-half-second-offense.md",
+        "bb-late-game-special-situations.md",
+        "bb-motion-offense-concepts.md",
+        "bb-nba-rulebook.md",
+        "bb-one-vs-two-motion-shot.md",
+        "bb-practice-design-blocked-random.md",
+        "bb-princeton-today.md",
+        "bb-rim-deterrence.md",
+        "bb-shell-defense-variations.md",
+        "bb-spain-pick-and-roll.md",
+        "bb-tex-winter-triangle.md",
+        "bb-transition-to-flow.md",
+        "bb-using-ball-screens.md"
+      ]
     },
     "drills": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "3on3-pnr-coverage-diagnosis.md",
+        "closeout-rotation-shell.md",
+        "film-study-count-decisions.md",
+        "live-catch-1v1-two-dribble.md",
+        "solo-workout-that-ends-in-decisions.md"
+      ]
     },
     "systems.motion": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-motion-rules-not-plays",
+        "bb-motion-cut-must-end"
+      ]
     },
     "systems.princeton": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-princeton-backdoor-trigger",
+        "bb-princeton-high-post-hub",
+        "bb-princeton-beats-athleticism"
+      ]
     },
     "systems.triangle": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-triangle-sideline-geometry",
+        "bb-triangle-strongside-read"
+      ]
     },
     "systems.sets": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-set-vs-offense-distinction",
+        "bb-spain-pnr-mechanism"
+      ]
     },
     "systems.flow": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-flow-delay-entry",
+        "bb-flow-push-or-pull"
+      ]
     },
     "systems.modern": {
-      "status": "todo",
-      "cards": []
+      "status": "done",
+      "cards": [
+        "bb-five-out-gravity",
+        "bb-long-two-death",
+        "bb-empty-side-purpose"
+      ]
     },
     "analytics.four-factors": {
       "status": "todo",
