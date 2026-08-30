@@ -32,6 +32,14 @@ def has_inline_link(card: Card) -> bool:
 # down and read: a book you must own, an index you must navigate.
 _POINTER_TAGS = {"book", "index"}
 
+# A video is the resource itself, not a page about one. It can never be
+# clipped — extracting a watch page yields chrome — but tapping it puts the
+# material in front of you as directly as an archived article does, so it
+# counts as readable and is not ranked below clipped prose. In a domain
+# learned by watching (a movement, a drill, a defensive rotation), the video
+# is the primary source and the writing about it is the summary.
+VIDEO_TAG = "video"
+
 
 def sources_for(
     skeleton: Skeleton,
@@ -61,12 +69,13 @@ def sources_for(
         if near is None:
             continue
         clip = clippings.get(canonical_url(reading.url))
+        at_hand = (clip is not None and clip.is_substantive) or is_video(reading)
         rank = (
             # A book or an index is last whatever else is true of it: its
             # homepage archiving cleanly does not put the chapter in your
             # hands. Tag a genuine full chapter `canonical`, not `book`.
             1 if _POINTER_TAGS & set(reading.tags) else 0,
-            0 if (clip is not None and clip.is_substantive) else 1,
+            0 if at_hand else 1,
             near,
         )
         key = canonical_url(reading.url)
@@ -82,6 +91,7 @@ class GoDeeper:
     title: str
     href: str            # obsidian:// when a clipping exists, else the web URL
     web_href: str | None  # the original URL, kept as a fallback when href is local
+    is_video: bool = False
 
     @property
     def is_local(self) -> bool:
@@ -112,21 +122,32 @@ def go_deeper(
         out += [GoDeeper(c.title, open_uri(vault, c.path.stem), None)
                 for c in cases or [] if node_id in c.nodes]
     for reading in sources_for(skeleton, readings, node_id, clippings=clippings):
-        if vault:
+        video = is_video(reading)
+        if vault and not video:
             out.append(
                 GoDeeper(reading.title, open_uri(vault, reading.path.stem), reading.url)
             )
         else:
-            out.append(GoDeeper(reading.title, reading.url, None))
+            # A video has nothing embedded in its note to open — send the tap
+            # straight to the footage.
+            out.append(GoDeeper(reading.title, reading.url, None, is_video=video))
     return out
+
+
+def is_video(reading: Reading) -> bool:
+    """A reading whose material is the footage itself."""
+    return VIDEO_TAG in reading.tags and bool(reading.url)
 
 
 def is_readable_source(reading: Reading, clippings: dict[str, Clipping]) -> bool:
     """True when this reading is something you can actually sit down and
-    read: archived in the vault, with real prose, and not a pointer at a
-    book you must own or an index you must navigate."""
+    take in: archived in the vault with real prose, or a video that plays
+    on tap — and not a pointer at a book you must own or an index you must
+    navigate."""
     if _POINTER_TAGS & set(reading.tags):
         return False
+    if is_video(reading):
+        return True
     clip = clippings.get(canonical_url(reading.url))
     return clip is not None and clip.is_substantive
 

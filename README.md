@@ -19,7 +19,7 @@ Cards and readings reference each other with ordinary wikilinks, and every node'
 generated map note lists both — so the Obsidian graph connects topic ↔ reading ↔
 card.
 
-Ships with five domains (three fully carded, plus Markets & Factors and Quant
+Ships with six domains (four fully carded, plus Markets & Factors and Quant
 Infrastructure as skeleton + readings). **System Design** — a 100-node map
 (465 cards, 81 readings) structured against DDIA 2nd edition and spanning the interview canon
 plus what the 2017-era resources miss: consensus, CRDTs, encoding and schema
@@ -33,7 +33,21 @@ spec, parsing stdin into records, modelling state that survives a reversal,
 money and threshold arithmetic, time and intervals, byte-exact output, the
 data-structure and algorithm toolbox, complexity budgets, language fluency,
 correctness discipline, and how the same core transfers to another company's
-assessment. Every leaf in all three is covered.
+assessment. **Basketball** — an 86-node map (161 cards, 24 readings, 5 drills)
+for the advanced amateur: the geometry of advantage and spacing, one-on-one,
+the two-man game, team offense, the named systems (motion, Princeton,
+triangle, five-out), all eleven defensive leaves from closeout to pick-and-roll
+coverage to the rotation that actually breaks, the reads that make up
+basketball IQ, special situations, analytics you can play with, physical
+preparation, practice design, and the rules that change decisions. Every leaf
+in all four is covered.
+
+That last domain is why a **video** is a first-class source: tag a reading
+`video` and it counts as readable without being clipped — a watch page
+archives as navigation chrome, never content — ranks beside archived prose,
+and its card footer link goes straight to the footage, marked ▶ so you know
+what a tap will do. A subject learned by watching is now as well-served as
+one learned by reading.
 
 ## Why a skeleton
 
